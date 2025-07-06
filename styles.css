@@ -1,0 +1,313 @@
+/* 1. Paleta kolorów i fonty */
+:root {
+  --ring-blue:   #0081C8;
+  --ring-yellow: #F9C300;
+  --ring-black:  #000;
+  --ring-green: #009B48;
+  --ring-red:    #DF0024;
+  --bg-light:    #fff;
+  --text-main:   #333;
+}
+
+/* 2. Podstawowe fonty */
+body {
+  font-family: 'Open Sans', sans-serif;
+  color: var(--text-main);
+  background: var(--bg-light);
+  margin: 0;
+  padding: 0;
+}
+h1,h2,h3 {
+  font-family: 'Montserrat', sans-serif;
+  color: var(--ring-black);
+}
+/* --- Twój dotychczasowy kod: reset i style ogólne --- */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: sans-serif; line-height: 1.6; padding: 20px; }
+nav ul { list-style: none; display: flex; gap: 10px; }
+nav a { text-decoration: none; color: #333; padding: 5px 10px; }
+nav a.active { background: #333; color: #fff; border-radius: 4px; }
+main { margin-top: 20px; }
+
+/* --- Twoje istniejące style dla dużych tabel (wyniki itp.) --- */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+th, td {
+  border: 1px solid #ccc;
+  padding: 8px 12px;
+  text-align: left;
+}
+th {
+  background-color: #f4f4f4;
+}
+tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+/* =======================================================
+   PONIŻEJ DOPISZ NOWY BLOK – STYL DLA MAŁYCH TABEL GRUPOWYCH
+   ======================================================= */
+
+/* kontener 6 tabel w układzie 3×2 */
+.groups-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-top: 20px;
+}
+
+/* każda mała tabelka */
+.group-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* obramowania i padding */
+.group-table th,
+.group-table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
+}
+
+/* delikatne tło nagłówków */
+.group-table th {
+  background-color: #f4f4f4;
+}
+
+/* ================================
+   Flanki – faza grupowa (2×2 tabele)
+   ================================ */
+.flanki-group-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 20px;
+}
+.flanki-group-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.flanki-group-table th,
+.flanki-group-table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
+}
+.flanki-group-table th {
+  background-color: #e8f4fc;
+}
+/* zaznaczenie awansów (dwie górne pozycje) */
+.flanki-group-table tbody tr:first-child td {
+  background-color: #e0f85a;
+}
+
+/* ===================
+   Flanki – sekcja finałów
+   =================== */
+.final-section {
+  text-align: center;
+  margin-top: 40px;
+}
+#flanki-final {
+  width: 60%;
+  margin: 0 auto;
+  border-collapse: collapse;
+}
+#flanki-final th,
+#flanki-final td {
+  border: 1px solid #ccc;
+  padding: 8px;
+}
+
+/* ===================
+   Flanki – mistrzowie
+   =================== */
+.champ-section {
+  text-align: center;
+  margin-top: 40px;
+}
+#flanki-champ {
+  width: 40%;
+  margin: 0 auto;
+  border-collapse: collapse;
+  border: 2px solid gold;
+}
+#flanki-champ th,
+#flanki-champ td {
+  border: 1px solid #ccc;
+  padding: 8px;
+}
+/* ================================
+   BeerPong – faza grupowa (2×2 tabele)
+   ================================ */
+.beerpong-group-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 20px;
+}
+.beerpong-group-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.beerpong-group-table th,
+.beerpong-group-table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
+}
+.beerpong-group-table th {
+  background-color: #e8f4fc;
+}
+/* tylko zwycięzca grupy (pierwszy wiersz) */
+.beerpong-group-table tbody tr:first-child td {
+  background-color: #d4edda;
+}
+
+/* ===================
+   BeerPong – sekcja finałów
+   =================== */
+.final-section {
+  text-align: center;
+  margin-top: 40px;
+}
+#beerpong-final {
+  width: 60%;
+  margin: 0 auto;
+  border-collapse: collapse;
+}
+#beerpong-final th,
+#beerpong-final td {
+  border: 1px solid #ccc;
+  padding: 8px;
+}
+
+/* ===================
+   BeerPong – mistrzowie
+   =================== */
+.champ-section {
+  text-align: center;
+  margin-top: 40px;
+}
+#beerpong-champ {
+  width: 40%;
+  margin: 0 auto;
+  border-collapse: collapse;
+  border: 2px solid gold;
+}
+#beerpong-champ th,
+#beerpong-champ td {
+  border: 1px solid #ccc;
+  padding: 8px;
+}
+/* --- Site Header --- */
+/* ====================================================
+   Site Header – wyśrodkowane logo + tytuł, bez tła
+   ==================================================== */
+.site-header {
+  display: flex;
+  justify-content: center;   /* wyśrodkuj poziomo */
+  align-items: center;
+  padding: 20px;
+  background: none;          /* usunięte gradientowe tło */
+  position: relative;
+  z-index: 10;
+}
+
+.site-logo {
+  width: 100px;              /* ustaw jednolity rozmiar */
+  height: 100px;
+  border-radius: 50%;        /* obetnij w kółko */
+  object-fit: cover;         /* logo nie będzie zniekształcone */
+}
+
+.site-header h1 {
+  margin: 0 0 0 16px;        /* mały odstęp od logo */
+  font-size: 2.5rem;         /* możesz zwiększyć, jeśli trzeba */
+  color: var(--ring-black);
+}
+
+
+/* subtelne pierścienie w tle headera */
+.site-header::after {
+  content: "";
+  position: absolute;
+  top: 50%; right: 10%;
+  width: 150px; height: 150px;
+  background: url('rings-sprite.png') no-repeat center/contain;
+  opacity: 0.3;  /* delikatniejsze niż poprzednio */
+  transform: translateY(-30%);
+}
+
+/* dekoracyjne pierścieie w headerze */
+.site-header::after {
+  content: "";
+  position: absolute;
+  top: 50%; right: 10%;
+  width: 150px; height: 150px;
+  background: url('rings-sprite.png') no-repeat center/contain;
+  opacity: 0.5;
+  transform: translateY(-50%);
+}
+
+/* ====================================================
+   Hero Section – transparentne tło z pochodnią
+   ==================================================== */
+.hero {
+  position: relative;        /* potrzebne dla pseudo-elementu */
+  padding: 80px 20px;
+  text-align: center;
+  color: #fff;
+}
+
+.hero h2 {
+  font-size: 3rem;
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
+  margin-bottom: 12px;
+}
+.hero p {
+  font-size: 1.25rem;
+}
+
+/* pseudo-element, żeby tło było półprzezroczyste */
+.hero::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: url('torch-bg.jpg') center/cover no-repeat;
+  opacity: 0.7;              /* 30% nieprzezroczystości = 70% transparentności */
+  z-index: -1;
+}
+/* =================================================
+   Strona – tło z logo-olimpijskie.png (80% transparentności)
+   =================================================
+*/
+body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: url('logo-olimpijskie.png') center/cover no-repeat;
+  opacity: 0.2;   /* 20% nieprzezroczystości = 80% transparentności */
+  pointer-events: none;
+  z-index: -1;
+}
+/* =================================================
+   Wspólne tło i styl dla wszystkich tabel
+   ================================================= */
+table {
+  background: rgba(255, 255, 255, 0.85); /* 85% nieprzezroczystości */
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* Dodatkowo zachowaj dotychczasowe obramowania i padding */
+table th,
+table td {
+  background: transparent; /* nie nadpisujemy własnych bg komórek */
+}

@@ -1,31 +1,41 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Alkolimpiada – Rekordy</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Rekordy – Alkolimpiada</title>
+  <link rel="stylesheet" href="styles.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Open+Sans&display=swap" rel="stylesheet">
 </head>
-<body class="bg-gray-100 text-gray-800">
-  <header class="bg-white shadow p-4">
-    <div class="container mx-auto flex items-center justify-between">
-      <img src="assets/logo.png" alt="Logo" class="h-12">
-      <nav class="space-x-4">
-        <a href="index.html" class="hover:underline">Home</a>
-        <a href="wyniki.html" class="hover:underline">Wyniki</a>
-        <a href="zespoly.html" class="hover:underline">Zespoły</a>
-        <a href="flanki.html" class="hover:underline">Flanki</a>
-        <a href="beerpong.html" class="hover:underline">BeerPong</a>
-        <a href="rekordy.html" class="hover:underline">Rekordy</a>
-        <a href="zazalenia.html" class="hover:underline">Zażalenia</a>
-      </nav>
-    </div>
+<body>
+    <header class="site-header">
+    <img src="logo-olimpijskie.png" alt="Alkolimpiada Logo" class="site-logo">
+    <h1>Alkolimpiada 2025</h1>
   </header>
-  <main class="container mx-auto p-6">
-    <h1 class="text-2xl font-bold mb-4">Rekordy</h1>
-    <table id="rekordy-table" class="min-w-full bg-white border-collapse border border-gray-200"></table>
+  <nav>
+    <ul>
+      <li><a href="index.html">Start</a></li>
+      <li><a href="wyniki.html">Wyniki</a></li>
+      <li><a href="zespoly.html">Zespoły</a></li>
+      <li><a href="flanki.html">Flanki</a></li>
+      <li><a href="beerpong.html">BeerPong</a></li>
+      <li><a href="rekordy.html" class="active">Rekordy</a></li>
+      <li><a href="zazalenia.html">Zażalenia</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <h1>Rekordy</h1>
+    <table id="rekordy">
+      <thead>
+        <!-- wypełni JS z nagłówka arkusza -->
+      </thead>
+      <tbody>
+        <!-- wypełni JS -->
+      </tbody>
+    </table>
   </main>
-  <footer class="bg-white shadow p-4 text-center">© 2025 Alkolimpiada</footer>
-  <script src="assets/js/data.js"></script>
+
+  <script src="scripts.js"></script>
 </body>
 </html>
