@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Alkolimpiada – Zażalenia</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800">
+  <header class="bg-white shadow p-4">
+    <div class="container mx-auto flex items-center justify-between">
+      <img src="assets/logo.png" alt="Logo" class="h-12">
+      <nav class="space-x-4">
+        <a href="index.html" class="hover:underline">Home</a>
+        <a href="wyniki.html" class="hover:underline">Wyniki</a>
+        <a href="zespoly.html" class="hover:underline">Zespoły</a>
+        <a href="flanki.html" class="hover:underline">Flanki</a>
+        <a href="beerpong.html" class="hover:underline">BeerPong</a>
+        <a href="rekordy.html` class="hover:underline">Rekordy</a>
+        <a href="zazalenia.html` class="hover:underline">Zażalenia</a>
+      </nav>
+    </div>
+  </header>
+  <main class="container mx-auto p-6">
+    <h1 class="text-2xl font-bold mb-4">Zażalenia</h1>
+    <form id="complaint-form" class="space-y-4">
+      <textarea id="complaint-text" rows="5" placeholder="Tu wpisz swoje zażalenie..." class="w-full border p-2 rounded"></textarea>
+      <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Wyślij</button>
+    </form>
+  </main>
+  <footer class="bg-white shadow p-4 text-center">© 2025 Alkolimpiada</footer>
+  <script>
+    document.getElementById('complaint-form').addEventListener('submit', e => {
+      e.preventDefault();
+      alert('Dziękujemy za przesłanie zażalenia!');
+      document.getElementById('complaint-text').value = '';
+    });
+  </script>
+</body>
+</html>
