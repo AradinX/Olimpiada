@@ -1,38 +1,86 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-  
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Alkolimpiada – Strona Główna</title>
-  <link rel="stylesheet" href="styles.css">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Open+Sans&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css"/>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Open+Sans&display=swap"
+    rel="stylesheet"
+  />
 </head>
 <body>
-    <header class="site-header">
-    <img src="logo-olimpijskie.png" alt="Alkolimpiada Logo" class="site-logo">
+  <!-- Site Header -->
+  <header class="site-header">
+    <img src="logo-olimpijskie.png" alt="Logo Alkolimpiady" class="site-logo">
     <h1>Alkolimpiada 2025</h1>
   </header>
-  <nav>
-    <ul>
-      <li><a href="index.html" class="active">Start</a></li>
-      <li><a href="wyniki.html">Wyniki</a></li>
-      <li><a href="zespoly.html">Zespoły</a></li>
-      <li><a href="flanki.html">Flanki</a></li>
-      <li><a href="beerpong.html">BeerPong</a></li>
-      <li><a href="rekordy.html">Rekordy</a></li>
-      <li><a href="zazalenia.html">Zażalenia</a></li>
-    </ul>
-  </nav>
-<section class="hero">
-  <h2>Witamy na Alkolimpiadzie!</h2>
-  <p>Emocje, rywalizacja i… odrobina dobrej zabawy.</p>
-</section>
+
+  <!-- Nawigacja -->
+  <nav class="navbar">
+  <button class="hamburger" aria-label="Menu">
+    <span class="bar"></span>
+    <span class="bar"></span>
+    <span class="bar"></span>
+  </button>
+  <ul class="nav-links">
+    <li><a href="index.html" >Start</a></li>
+    <li><a href="wyniki.html">Wyniki</a></li>
+    <li><a href="zespoly.html">Zespoły</a></li>
+    <li><a href="flanki.html">Flanki</a></li>
+    <li><a href="beerpong.html">BeerPong</a></li>
+    <li><a href="rekordy.html">Rekordy</a></li>
+    <li><a href="zazalenia.html">Zażalenia</a></li>
+  </ul>
+</nav>
+
   <main>
-    <h1>Witaj na Alkolimpiadzie!</h1>
-    <p>Tu będą ogólne informacje o imprezie.</p>
+    <!-- Powitanie -->
+    <section class="welcome">
+      <h2>Witamy na Alkolimpiadzie!</h2>
+    </section>
+
+    <!-- Countdown -->
+    <section class="countdown">
+      <div id="timer">
+        <span id="days">00</span>d&nbsp;
+        <span id="hours">00</span>g&nbsp;
+        <span id="minutes">00</span>m&nbsp;
+        <span id="seconds">00</span>s
+      </div>
+    </section>
+
+    <!-- Info o starcie -->
+    <section class="event-info">
+      <p class="event-date">
+        Event startuje o godz. <strong>16:00</strong> dnia <strong>26.07.2025</strong> (sobota).
+      </p>
+      <p class="event-note">Prosimy o punktualne przybycie!</p>
+    </section>
+
+    <!-- Lokalizacja -->
+    <section class="location">
+      <div class="location-container">
+        <a href="https://maps.app.goo.gl/9E5ipbBy2KBdhq6e7" target="_blank">
+          <img
+            src="mapka.png"
+            alt="Ośrodek olimpiojski w Sobine"
+            class="map-image"
+          >
+        </a>
+        <div class="caption-box">
+          <span class="caption-arrow">➤</span>
+          <div class="caption-text">
+            <p class="caption-title">Miejsce eventu</p>
+            <p class="location-name">Ośrodek olimpiojski w Sobine</p>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 
+  <!-- Wszystkie skrypty, w tym countdown -->
   <script src="scripts.js"></script>
 </body>
 </html>

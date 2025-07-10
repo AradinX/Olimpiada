@@ -229,3 +229,69 @@ if (document.getElementById('rekordy')) {
   loadRekordy();
   setInterval(loadRekordy, 60000);
 }
+// Countdown do 26.07.2025 16:00
+(function(){
+  const timerEl = document.getElementById('timer');
+  if (!timerEl) return;
+
+  const targetDate = new Date('2025-07-26T16:00:00');
+  const daysEl    = document.getElementById('days');
+  const hoursEl   = document.getElementById('hours');
+  const minutesEl = document.getElementById('minutes');
+  const secondsEl = document.getElementById('seconds');
+
+  function updateCountdown(){
+    const now  = new Date();
+    const diff = targetDate - now;
+    if (diff <= 0) {
+      timerEl.textContent = 'START!';
+      clearInterval(interval);
+      return;
+    }
+    const d = Math.floor(diff / (1000*60*60*24));
+    const h = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+    const m = Math.floor((diff % (1000*60*60)) / (1000*60));
+    const s = Math.floor((diff % (1000*60)) / 1000);
+
+    daysEl.textContent    = String(d).padStart(2,'0');
+    hoursEl.textContent   = String(h).padStart(2,'0');
+    minutesEl.textContent = String(m).padStart(2,'0');
+    secondsEl.textContent = String(s).padStart(2,'0');
+  }
+
+  updateCountdown();
+  const interval = setInterval(updateCountdown, 1000);
+})();
+// === Hamburger menu toggle ===
+(function(){
+  const navbar    = document.querySelector('.navbar');
+  const burgerBtn = document.querySelector('.hamburger');
+
+  if (!navbar || !burgerBtn) return;
+
+  burgerBtn.addEventListener('click', () => {
+    navbar.classList.toggle('open');
+  });
+
+  // Opcjonalnie – zamknij menu po kliknięciu w link
+  document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', () => {
+      if (navbar.classList.contains('open')) {
+        navbar.classList.remove('open');
+      }
+    });
+  });
+})();
+// === Auto-highlight current nav link ===
+(function(){
+  const links = document.querySelectorAll('.nav-links a');
+  // pobieramy tylko nazwę pliku, np. "flanki.html"
+  let path = window.location.pathname.split('/').pop();
+  if (!path) path = 'index.html'; // jeśli jest pusty (root), traktujemy jako homepage
+
+  links.forEach(link => {
+    if (link.getAttribute('href') === path) {
+      link.classList.add('active');
+    }
+  });
+})();
