@@ -32,22 +32,17 @@
   <main>
     <h1>Boli cie coś? Masz problem? Coś ci się nie podobało?</h1>
     <form id="zazalenie-form">
+      <label for="imie">Imię:</label>
+      <input id="imie" name="imie" type="text" placeholder="Twoje imię" required>
       <label for="tekst">Opisz swoje zażalenie:</label>
       <textarea id="tekst" name="tekst" placeholder="Napisz tutaj..." required></textarea>
       <button type="submit">Wyślij zażalenie</button>
     </form>
     <p id="msg" style="display:none;">
-      Twoja opinia nie została nawet zapisana. 
-      Pozdrawiam Zarząd Alkoolimpiady!
+      Zażalenie zapisane. Zarząd udaje, że analizuje temat.
     </p>
   </main>
 
-  <script>
-    document.getElementById('zazalenie-form').addEventListener('submit', function(e) {
-      e.preventDefault();
-      this.style.display = 'none';
-      document.getElementById('msg').style.display = 'block';
-    });
-  </script>
+  <script src="scripts.js"></script>
 </body>
 </html>

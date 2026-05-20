@@ -62,7 +62,16 @@ function renderTable(rows, tableId) {
   const table = document.getElementById(tableId);
   if (!table) return;
 
-  const [header, ...dataRows] = rows;
+  if (tableId === 'rekordy') {
+    renderRekordySprint(rows);
+    return;
+  }
+
+  const [header, ...rawDataRows] = rows;
+  const dataRows = tableId === 'wyniki'
+    ? sortRowsByMedals(header, rawDataRows.filter(row => row.some(Boolean)))
+    : rawDataRows;
+
   table.querySelector('thead').innerHTML =
     '<tr>' + header.map(h => `<th>${escapeHTML(h)}</th>`).join('') + '</tr>';
 
@@ -151,16 +160,25 @@ function renderSplitTables(rows, containerId) {
       <th>${escapeHTML(header[i])}</th>
       <th>${escapeHTML(header[i+1] || '')}</th>
     </tr>`;
+    if (containerId === 'flanki-group-container') {
+      thead.innerHTML = `<tr>
+        <th>Pozycja</th>
+        <th>${escapeHTML(header[i])}</th>
+        <th>${escapeHTML(header[i+1] || '')}</th>
+      </tr>`;
+    }
     table.appendChild(thead);
 
     // body: cztery wiersze, top2 oznaczone class="advanced"
     const tbody = document.createElement('tbody');
     dataRows.forEach((row, idx) => {
       const tr = document.createElement('tr');
-      if (idx < 2) tr.classList.add('advanced');
+      if (containerId !== 'flanki-group-container' && idx < 2) tr.classList.add('advanced');
       const c1 = row[i]   || '';
       const c2 = row[i+1] || '';
-      tr.innerHTML = `<td>${escapeHTML(c1)}</td><td>${escapeHTML(c2)}</td>`;
+      tr.innerHTML = containerId === 'flanki-group-container'
+        ? `<td>${idx + 1}</td><td>${escapeHTML(c1)}</td><td>${escapeHTML(c2)}</td>`
+        : `<td>${escapeHTML(c1)}</td><td>${escapeHTML(c2)}</td>`;
       tbody.appendChild(tr);
     });
     table.appendChild(tbody);
@@ -372,6 +390,18 @@ function getRowMedals(row, header, competitionIndexes) {
   return counts;
 }
 
+function sortRowsByMedals(header, rows) {
+  const competitionIndexes = getCompetitionIndexes(header);
+  return [...rows].sort((a, b) => {
+    const medalsA = getRowMedals(a, header, competitionIndexes);
+    const medalsB = getRowMedals(b, header, competitionIndexes);
+    return medalsB.gold - medalsA.gold ||
+      medalsB.silver - medalsA.silver ||
+      medalsB.bronze - medalsA.bronze ||
+      a.join('').localeCompare(b.join(''), 'pl');
+  });
+}
+
 const renderHomePodium = function renderHomeMedalists(rows) {
   const podium = document.getElementById('home-podium');
   if (!podium || rows.length < 2) return;
@@ -469,6 +499,87 @@ function renderTimelineMedal(type, label, names) {
   `;
 }
 
+function getSprintRecordColumns(eventHeader) {
+  return eventHeader
+    .map((eventName, index) => ({ eventName, index }))
+    .filter(item => normalizeText(item.eventName).includes('sprint na 500'));
+}
+
+function renderRekordySprint(rows) {
+  const table = document.getElementById('rekordy');
+  if (!table || rows.length < 3) return;
+
+  const eventHeader = rows[0] || [];
+  const yearHeader = rows[1] || [];
+  const dataRows = rows.slice(2).filter(row => row.some(Boolean));
+  const nameIndex = findColumnIndex(yearHeader, ['zawodnik', 'uczestnik', 'osoba', 'imie', 'imi'], 0);
+  const sprintColumns = getSprintRecordColumns(eventHeader)
+    .filter(column => column.index !== nameIndex);
+  const newestSprintColumn = sprintColumns
+    .map(column => ({ ...column, year: parseInt(String(yearHeader[column.index]).trim(), 10) }))
+    .filter(column => Number.isFinite(column.year))
+    .sort((a, b) => b.year - a.year)[0];
+
+  const sortedRows = [...dataRows].sort((a, b) => {
+    const valueA = newestSprintColumn ? parseNumber(a[newestSprintColumn.index]) : Number.POSITIVE_INFINITY;
+    const valueB = newestSprintColumn ? parseNumber(b[newestSprintColumn.index]) : Number.POSITIVE_INFINITY;
+    const safeA = valueA > 0 ? valueA : Number.POSITIVE_INFINITY;
+    const safeB = valueB > 0 ? valueB : Number.POSITIVE_INFINITY;
+    return safeA - safeB || String(a[nameIndex] || '').localeCompare(String(b[nameIndex] || ''), 'pl');
+  });
+
+  table.querySelector('thead').innerHTML = `
+    <tr>
+      <th>Zawodnik</th>
+      ${sprintColumns.map(column => `<th>${escapeHTML(yearHeader[column.index] || eventHeader[column.index])}</th>`).join('')}
+    </tr>
+  `;
+
+  const tbody = table.querySelector('tbody');
+  tbody.innerHTML = '';
+  sortedRows.forEach(row => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${escapeHTML(row[nameIndex] || '')}</td>
+      ${sprintColumns.map(column => `<td>${escapeHTML(row[column.index] || '')}</td>`).join('')}
+    `;
+    tbody.appendChild(tr);
+  });
+
+  renderRekordyTop3(rows, sprintColumns, nameIndex);
+}
+
+function renderRekordyTop3(rows, sprintColumns, nameIndex) {
+  const container = document.getElementById('rekordy-top3');
+  if (!container) return;
+
+  const yearHeader = rows[1] || [];
+  const dataRows = rows.slice(2).filter(row => row.some(Boolean));
+  const entries = [];
+
+  sprintColumns.forEach(column => {
+    dataRows.forEach(row => {
+      const result = parseNumber(row[column.index]);
+      if (!Number.isFinite(result) || result <= 0) return;
+      entries.push({
+        name: row[nameIndex] || 'Zawodnik',
+        year: yearHeader[column.index] || '',
+        result
+      });
+    });
+  });
+
+  const topEntries = entries.sort((a, b) => a.result - b.result).slice(0, 3);
+  container.innerHTML = topEntries.map((entry, index) => `
+    <article class="record-top-card">
+      <span>${index + 1}</span>
+      <strong>${escapeHTML(entry.name)}</strong>
+      <small>${escapeHTML(entry.year)}</small>
+      <b>${escapeHTML(formatRecordTime(entry.result))}</b>
+    </article>
+  `).join('');
+}
+
 function renderHomeRecords(rows) {
   const records = document.getElementById('home-records');
   if (!records || rows.length < 3) return;
@@ -554,6 +665,65 @@ if (document.getElementById('home-records')) {
   loadHomeRecords();
   setInterval(loadHomeRecords, 60000);
 }
+
+const COMPLAINTS_STORAGE_KEY = 'alkoolimpiada-complaints';
+
+function getStoredComplaints() {
+  try {
+    return JSON.parse(localStorage.getItem(COMPLAINTS_STORAGE_KEY) || '[]');
+  } catch {
+    return [];
+  }
+}
+
+function saveStoredComplaints(complaints) {
+  localStorage.setItem(COMPLAINTS_STORAGE_KEY, JSON.stringify(complaints.slice(-20)));
+}
+
+function initComplaintForm() {
+  const form = document.getElementById('zazalenie-form');
+  if (!form) return;
+
+  form.addEventListener('submit', event => {
+    event.preventDefault();
+    const name = form.querySelector('#imie')?.value.trim();
+    const text = form.querySelector('#tekst')?.value.trim();
+    if (!name || !text) return;
+
+    const complaints = getStoredComplaints();
+    complaints.push({
+      name,
+      text,
+      createdAt: new Date().toISOString()
+    });
+    saveStoredComplaints(complaints);
+
+    form.reset();
+    const message = document.getElementById('msg');
+    if (message) message.style.display = 'block';
+  });
+}
+
+function initComplaintTicker() {
+  const track = document.getElementById('complaint-ticker-track');
+  if (!track) return;
+
+  const complaints = getStoredComplaints();
+  const items = complaints.length
+    ? complaints.slice(-8).reverse()
+    : [{ name: 'Zarząd', text: 'Brak świeżych zażaleń. To podejrzane.' }];
+  const tickerText = items
+    .map(item => `${item.name}: ${item.text}`)
+    .join('   •   ');
+
+  track.innerHTML = `
+    <span>${escapeHTML(tickerText)}</span>
+    <span aria-hidden="true">${escapeHTML(tickerText)}</span>
+  `;
+}
+
+initComplaintForm();
+initComplaintTicker();
 
 // Status wydarzenia do 25.07.2026 16:00
 (function(){
