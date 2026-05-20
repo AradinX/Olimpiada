@@ -292,6 +292,19 @@ async function loadHomePodium() {
   }
 }
 
+async function loadHomeRecords() {
+  try {
+    const rows = await fetchCSV(SHEET_URL_REKORDY);
+    renderHomeRecords(rows);
+  } catch (e) {
+    const records = document.getElementById('home-records');
+    if (records) {
+      records.innerHTML = '<p class="status-copy">Nie udało się pobrać rekordów. Spróbuj odświeżyć stronę.</p>';
+    }
+    console.error('Błąd pobierania rekordów na stronę główną:', e);
+  }
+}
+
 function normalizeText(value) {
   return String(value ?? '')
     .trim()
@@ -456,9 +469,90 @@ function renderTimelineMedal(type, label, names) {
   `;
 }
 
+function renderHomeRecords(rows) {
+  const records = document.getElementById('home-records');
+  if (!records || rows.length < 3) return;
+
+  const eventHeader = rows[0] || [];
+  const yearHeader = rows[1] || [];
+  const dataRows = rows.slice(2).filter(row => row.some(Boolean));
+  const nameIndex = findColumnIndex(yearHeader, ['zawodnik', 'uczestnik', 'osoba', 'imie', 'imi'], 0);
+  const currentYear = new Date().getFullYear();
+  const allowedYears = [currentYear, currentYear - 1];
+  const groups = [];
+
+  yearHeader.forEach((year, columnIndex) => {
+    const parsedYear = parseInt(String(year).trim(), 10);
+    const eventName = eventHeader[columnIndex] || '';
+    if (!allowedYears.includes(parsedYear) || columnIndex === nameIndex || !normalizeText(eventName).includes('sprint na 500')) return;
+    const entries = [];
+
+    dataRows.forEach(row => {
+      const result = parseNumber(row[columnIndex]);
+      if (!Number.isFinite(result) || result <= 0) return;
+
+      entries.push({
+        name: row[nameIndex] || 'Zawodnik',
+        event: eventHeader[columnIndex] || 'Rekord',
+        result
+      });
+    });
+
+    if (entries.length) {
+      groups.push({
+        event: eventHeader[columnIndex] || 'Rekord',
+        year: parsedYear,
+        entries: entries.sort((a, b) => a.result - b.result).slice(0, 5)
+      });
+    }
+  });
+
+  records.innerHTML = '';
+  const newestGroup = groups.sort((a, b) => b.year - a.year)[0];
+
+  if (newestGroup) {
+    const groupEl = document.createElement('article');
+    groupEl.className = 'record-group';
+    groupEl.innerHTML = `
+      <div class="record-group-title">
+        <strong>${escapeHTML(newestGroup.event)}</strong>
+        <small>TOP ${newestGroup.entries.length} / ${newestGroup.year}</small>
+      </div>
+      <div class="record-group-list">
+        ${newestGroup.entries.map((entry, index) => `
+          <div class="record-row">
+            <div class="record-rank">${index + 1}</div>
+            <div class="record-copy">
+              <strong>${escapeHTML(entry.name)}</strong>
+            </div>
+            <div class="record-time">${escapeHTML(formatRecordTime(entry.result))}</div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+    records.appendChild(groupEl);
+  }
+
+  if (!records.children.length) {
+    records.innerHTML = '<p class="status-copy">Rekordy Sprintu na 500 dla obecnego lub poprzedniego roku czekają na uzupełnienie.</p>';
+  }
+}
+
+function formatRecordTime(value) {
+  return `${Number(value).toLocaleString('pl-PL', {
+    minimumFractionDigits: value % 1 ? 1 : 0,
+    maximumFractionDigits: 2
+  })} s`;
+}
+
 if (document.getElementById('home-podium')) {
   loadHomePodium();
   setInterval(loadHomePodium, 60000);
+}
+
+if (document.getElementById('home-records')) {
+  loadHomeRecords();
+  setInterval(loadHomeRecords, 60000);
 }
 
 // Status wydarzenia do 25.07.2026 16:00

@@ -3863,3 +3863,164 @@ tr.advanced td {
     padding-top: clamp(208px, 58vw, 260px);
   }
 }
+
+/* Replace the old shortcut tiles with a denser records board. */
+.greek-home .arena-temple {
+  display: grid;
+  grid-template-columns: minmax(320px, 0.85fr) minmax(0, 1.15fr);
+  gap: 0;
+}
+
+.greek-home .records-module {
+  min-height: 100%;
+  padding: clamp(16px, 2vw, 24px);
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.home-records {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr));
+  gap: 12px;
+}
+
+.record-group {
+  min-width: 0;
+  border: 1px solid rgba(20, 38, 58, 0.12);
+  background:
+    linear-gradient(180deg, rgba(255, 248, 233, 0.42), rgba(196, 160, 95, 0.16));
+}
+
+.record-group-title {
+  min-height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 13px;
+  border-bottom: 1px solid rgba(20, 38, 58, 0.1);
+  background: rgba(32, 54, 77, 0.08);
+}
+
+.record-group-title strong {
+  min-width: 0;
+  color: var(--ink-blue);
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.05rem, 1.45vw, 1.55rem);
+  font-weight: 900;
+  line-height: 1;
+  overflow-wrap: anywhere;
+  text-transform: uppercase;
+}
+
+.record-group-title small {
+  flex: 0 0 auto;
+  color: #6f2f39;
+  font-size: 0.68rem;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.record-group-list {
+  display: grid;
+  gap: 1px;
+}
+
+.record-row {
+  min-height: 52px;
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 11px;
+  border: 0;
+  border-bottom: 1px solid rgba(20, 38, 58, 0.08);
+  background:
+    linear-gradient(90deg, rgba(255, 248, 233, 0.58), rgba(196, 160, 95, 0.2));
+}
+
+.record-row:last-child {
+  border-bottom: 0;
+}
+
+.record-rank {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  color: var(--stone-surface-light);
+  background: linear-gradient(180deg, #20364d, #102236);
+  font-size: 0.85rem;
+  font-weight: 950;
+}
+
+.record-copy {
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+}
+
+.record-copy strong {
+  color: var(--ink-blue);
+  font-size: clamp(0.95rem, 1vw, 1.08rem);
+  font-weight: 950;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.record-copy small {
+  color: #6f2f39;
+  font-size: 0.74rem;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.record-time {
+  min-width: 68px;
+  justify-self: end;
+  padding: 7px 9px;
+  color: #17283a;
+  background: rgba(255, 248, 233, 0.52);
+  border: 1px solid rgba(20, 38, 58, 0.1);
+  font-family: 'Cinzel', serif;
+  font-size: clamp(0.98rem, 1.25vw, 1.24rem);
+  font-weight: 900;
+  line-height: 1;
+  text-align: right;
+}
+
+@media (max-width: 980px) {
+  .greek-home .arena-temple {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .greek-home .records-module {
+    border: 1px solid var(--engrave);
+    background:
+      linear-gradient(180deg, rgba(238, 221, 184, 0.94), rgba(198, 165, 103, 0.48));
+    box-shadow: var(--shadow-stone);
+  }
+}
+
+@media (max-width: 560px) {
+  .record-group-title {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .record-row {
+    grid-template-columns: 38px minmax(0, 1fr);
+  }
+
+  .record-time {
+    grid-column: 2;
+    justify-self: start;
+  }
+}
