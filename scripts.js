@@ -19,7 +19,42 @@ async function fetchCSV(url) {
   return text
     .trim()
     .split('\n')
-    .map(line => line.split(','));
+    .map(parseCSVLine);
+}
+
+function parseCSVLine(line) {
+  const cells = [];
+  let cell = '';
+  let quoted = false;
+
+  for (let i = 0; i < line.length; i++) {
+    const char = line[i];
+    const next = line[i + 1];
+
+    if (char === '"' && quoted && next === '"') {
+      cell += '"';
+      i++;
+    } else if (char === '"') {
+      quoted = !quoted;
+    } else if (char === ',' && !quoted) {
+      cells.push(cell.trim());
+      cell = '';
+    } else {
+      cell += char;
+    }
+  }
+
+  cells.push(cell.trim());
+  return cells;
+}
+
+function escapeHTML(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
 }
 
 // === 3) Render dużej tabeli Wyniki ===
@@ -29,13 +64,13 @@ function renderTable(rows, tableId) {
 
   const [header, ...dataRows] = rows;
   table.querySelector('thead').innerHTML =
-    '<tr>' + header.map(h => `<th>${h}</th>`).join('') + '</tr>';
+    '<tr>' + header.map(h => `<th>${escapeHTML(h)}</th>`).join('') + '</tr>';
 
   const tbody = table.querySelector('tbody');
   tbody.innerHTML = '';
   dataRows.forEach(row => {
     const tr = document.createElement('tr');
-    tr.innerHTML = row.map(cell => `<td>${cell}</td>`).join('');
+    tr.innerHTML = row.map(cell => `<td>${escapeHTML(cell)}</td>`).join('');
     tbody.appendChild(tr);
   });
 }
@@ -54,7 +89,7 @@ function renderColumnTables(rows, containerId) {
 
     // nagłówek z nazwą grupy
     const thead = document.createElement('thead');
-    thead.innerHTML = `<tr><th>${groupName}</th></tr>`;
+    thead.innerHTML = `<tr><th>${escapeHTML(groupName)}</th></tr>`;
     table.appendChild(thead);
 
     // body: do 5 wierszy z tej kolumny
@@ -62,7 +97,7 @@ function renderColumnTables(rows, containerId) {
     dataRows.slice(0, 5).forEach(row => {
       const cell = row[colIdx] || '';
       const tr = document.createElement('tr');
-      tr.innerHTML = `<td>${cell}</td>`;
+      tr.innerHTML = `<td>${escapeHTML(cell)}</td>`;
       tbody.appendChild(tr);
     });
     table.appendChild(tbody);
@@ -113,8 +148,8 @@ function renderSplitTables(rows, containerId) {
     // nagłówek dwóch kolumn
     const thead = document.createElement('thead');
     thead.innerHTML = `<tr>
-      <th>${header[i]}</th>
-      <th>${header[i+1] || ''}</th>
+      <th>${escapeHTML(header[i])}</th>
+      <th>${escapeHTML(header[i+1] || '')}</th>
     </tr>`;
     table.appendChild(thead);
 
@@ -125,7 +160,7 @@ function renderSplitTables(rows, containerId) {
       if (idx < 2) tr.classList.add('advanced');
       const c1 = row[i]   || '';
       const c2 = row[i+1] || '';
-      tr.innerHTML = `<td>${c1}</td><td>${c2}</td>`;
+      tr.innerHTML = `<td>${escapeHTML(c1)}</td><td>${escapeHTML(c2)}</td>`;
       tbody.appendChild(tr);
     });
     table.appendChild(tbody);
@@ -229,23 +264,233 @@ if (document.getElementById('rekordy')) {
   loadRekordy();
   setInterval(loadRekordy, 60000);
 }
-// Countdown do 26.07.2025 16:00
+// Home podium
+function findColumnIndex(header, candidates, fallback) {
+  const normalized = header.map(normalizeText);
+  const found = candidates
+    .map(candidate => normalized.findIndex(cell => cell.includes(normalizeText(candidate))))
+    .find(index => index >= 0);
+
+  return found ?? fallback;
+}
+
+async function loadHomePodium() {
+  try {
+    const rows = await fetchCSV(SHEET_URL_WYNIKI);
+    renderHomePodium(rows);
+    renderCompetitionTimeline(rows);
+  } catch (e) {
+    const podium = document.getElementById('home-podium');
+    const timeline = document.getElementById('competition-timeline');
+    if (podium) {
+      podium.innerHTML = '<p class="status-copy">Nie udało się pobrać podium. Spróbuj odświeżyć stronę.</p>';
+    }
+    if (timeline) {
+      timeline.innerHTML = '<p class="status-copy">Nie udało się pobrać konkurencji. Spróbuj odświeżyć stronę.</p>';
+    }
+    console.error('Błąd pobierania podium:', e);
+  }
+}
+
+function normalizeText(value) {
+  return String(value ?? '')
+    .trim()
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
+}
+
+function parseNumber(value) {
+  const match = String(value ?? '').replace(',', '.').match(/-?\d+(\.\d+)?/);
+  return match ? Number(match[0]) : 0;
+}
+
+function medalFromCell(value) {
+  const normalized = normalizeText(value);
+  if (!normalized) return null;
+  if (String(value).includes('🥇') || normalized.includes('zloto') || normalized === '1') return 'gold';
+  if (String(value).includes('🥈') || normalized.includes('srebro') || normalized === '2') return 'silver';
+  if (String(value).includes('🥉') || normalized.includes('braz') || normalized === '3') return 'bronze';
+  return null;
+}
+
+function getMedalSummaryIndexes(header) {
+  return {
+    gold: findColumnIndex(header, ['zloto', 'złoto', 'gold'], -1),
+    silver: findColumnIndex(header, ['srebro', 'silver'], -1),
+    bronze: findColumnIndex(header, ['braz', 'brąz', 'bronze'], -1)
+  };
+}
+
+function getCompetitionIndexes(header) {
+  const normalized = header.map(normalizeText);
+  const start = normalized.findIndex(cell => cell.includes('beer hunt'));
+  const end = normalized.findIndex(cell => cell.includes('najebany na autobus'));
+  const summary = getMedalSummaryIndexes(header);
+  const summaryIndexes = Object.values(summary).filter(index => index >= 0);
+  const firstSummary = summaryIndexes.length ? Math.min(...summaryIndexes) : header.length;
+
+  if (start >= 0 && end >= start) {
+    return Array.from({ length: end - start + 1 }, (_, offset) => start + offset);
+  }
+
+  return header
+    .map((_, index) => index)
+    .filter(index => index > 0 && index < firstSummary);
+}
+
+function getRowMedals(row, header, competitionIndexes) {
+  const summary = getMedalSummaryIndexes(header);
+  const counts = {
+    gold: summary.gold >= 0 ? parseNumber(row[summary.gold]) : 0,
+    silver: summary.silver >= 0 ? parseNumber(row[summary.silver]) : 0,
+    bronze: summary.bronze >= 0 ? parseNumber(row[summary.bronze]) : 0
+  };
+
+  if (counts.gold || counts.silver || counts.bronze) {
+    return counts;
+  }
+
+  competitionIndexes.forEach(index => {
+    const medal = medalFromCell(row[index]);
+    if (medal) counts[medal] += 1;
+  });
+
+  return counts;
+}
+
+const renderHomePodium = function renderHomeMedalists(rows) {
+  const podium = document.getElementById('home-podium');
+  if (!podium || rows.length < 2) return;
+
+  const header = rows[0] || [];
+  const dataRows = rows.slice(1).filter(row => row.some(Boolean));
+  const nameIndex = findColumnIndex(header, ['uczestnik', 'osoba', 'zawodnik', 'imie', 'imi', 'zesp', 'team', 'dru'], 0);
+  const competitionIndexes = getCompetitionIndexes(header);
+  const rankedRows = dataRows
+    .map((row, index) => {
+      const medals = getRowMedals(row, header, competitionIndexes);
+      const total = medals.gold + medals.silver + medals.bronze;
+      return { row, index, medals, total };
+    })
+    .filter(entry => entry.total > 0)
+    .sort((a, b) =>
+      b.medals.gold - a.medals.gold ||
+      b.medals.silver - a.medals.silver ||
+      b.medals.bronze - a.medals.bronze ||
+      a.index - b.index
+    )
+    .slice(0, 5);
+
+  podium.innerHTML = '';
+
+  if (!rankedRows.length) {
+    podium.innerHTML = '<p class="status-copy">Medale jeszcze czekają na wpisanie do tabeli wyników.</p>';
+    return;
+  }
+
+  rankedRows.forEach(({ row, medals }, index) => {
+    const name = row[nameIndex] || 'Zawodnik';
+    const item = document.createElement('div');
+    item.className = 'podium-row medalist-row';
+    item.innerHTML = `
+      <div class="podium-rank">${index + 1}</div>
+      <div class="podium-name">${escapeHTML(name)}</div>
+      <div class="podium-score medal-stack">
+        <span><b>Z</b>${medals.gold}</span>
+        <span><b>S</b>${medals.silver}</span>
+        <span><b>B</b>${medals.bronze}</span>
+      </div>
+    `;
+    podium.appendChild(item);
+  });
+};
+
+function renderCompetitionTimeline(rows) {
+  const timeline = document.getElementById('competition-timeline');
+  if (!timeline || rows.length < 2) return;
+
+  const header = rows[0] || [];
+  const dataRows = rows.slice(1).filter(row => row.some(Boolean));
+  const competitionIndexes = getCompetitionIndexes(header);
+  const nameIndex = findColumnIndex(header, ['uczestnik', 'osoba', 'zawodnik', 'imie', 'imi'], 0);
+
+  timeline.innerHTML = '';
+
+  competitionIndexes.forEach((columnIndex, index) => {
+    const medalists = { gold: [], silver: [], bronze: [] };
+
+    dataRows.forEach(row => {
+      const medal = medalFromCell(row[columnIndex]);
+      if (!medal) return;
+      medalists[medal].push(row[nameIndex] || 'Zawodnik');
+    });
+
+    const total = medalists.gold.length + medalists.silver.length + medalists.bronze.length;
+    const item = document.createElement('article');
+    item.className = `timeline-event ${total ? 'is-complete' : 'is-pending'}`;
+    item.innerHTML = `
+      <div class="timeline-index">${String(index + 1).padStart(2, '0')}</div>
+      <div class="timeline-card">
+        <span class="timeline-status">${total ? 'complete' : 'oczekuje'}</span>
+        <h4>${escapeHTML(header[columnIndex])}</h4>
+        <div class="timeline-medals" aria-label="Medaliści konkurencji">
+          ${renderTimelineMedal('gold', 'Złoto', medalists.gold)}
+          ${renderTimelineMedal('silver', 'Srebro', medalists.silver)}
+          ${renderTimelineMedal('bronze', 'Brąz', medalists.bronze)}
+        </div>
+      </div>
+    `;
+    timeline.appendChild(item);
+  });
+}
+
+function renderTimelineMedal(type, label, names) {
+  const text = names.length ? names.join(', ') : 'czeka';
+  return `
+    <span class="timeline-medal-line ${type}">
+      <i aria-hidden="true"></i>
+      <b>${escapeHTML(label)}</b>
+      <em>${escapeHTML(text)}</em>
+    </span>
+  `;
+}
+
+if (document.getElementById('home-podium')) {
+  loadHomePodium();
+  setInterval(loadHomePodium, 60000);
+}
+
+// Status wydarzenia do 25.07.2026 16:00
 (function(){
   const timerEl = document.getElementById('timer');
   if (!timerEl) return;
 
-  const targetDate = new Date('2025-07-26T16:00:00');
+  const targetDate = new Date('2026-07-25T16:00:00');
+  const eventEndDate = new Date('2026-07-26T04:00:00');
   const daysEl    = document.getElementById('days');
   const hoursEl   = document.getElementById('hours');
   const minutesEl = document.getElementById('minutes');
   const secondsEl = document.getElementById('seconds');
+  const labelEl = document.getElementById('event-status-label');
+  const copyEl = document.getElementById('event-status-copy');
+  let interval;
 
   function updateCountdown(){
     const now  = new Date();
     const diff = targetDate - now;
     if (diff <= 0) {
-      timerEl.textContent = 'START!';
-      clearInterval(interval);
+      timerEl.classList.add('is-finished');
+      if (now <= eventEndDate) {
+        timerEl.innerHTML = '<strong class="timer-finished">START!</strong>';
+        if (labelEl) labelEl.textContent = 'Wydarzenie trwa';
+        if (copyEl) copyEl.textContent = 'Ogień jest odpalony. Najważniejsze są teraz wyniki i konkurencje.';
+      } else {
+        timerEl.innerHTML = '<strong class="timer-finished">META</strong>';
+        if (labelEl) labelEl.textContent = 'Edycja 2026 zakończona';
+        if (copyEl) copyEl.textContent = 'Event z 25 lipca 2026 jest już historią. Na stronie zostają wyniki, rekordy i chwała.';
+      }
+      if (interval) clearInterval(interval);
       return;
     }
     const d = Math.floor(diff / (1000*60*60*24));
@@ -257,10 +502,12 @@ if (document.getElementById('rekordy')) {
     hoursEl.textContent   = String(h).padStart(2,'0');
     minutesEl.textContent = String(m).padStart(2,'0');
     secondsEl.textContent = String(s).padStart(2,'0');
+    if (labelEl) labelEl.textContent = 'Odliczanie do startu';
+    if (copyEl) copyEl.textContent = 'Start: 25 lipca 2026, godz. 16:00.';
   }
 
   updateCountdown();
-  const interval = setInterval(updateCountdown, 1000);
+  interval = setInterval(updateCountdown, 1000);
 })();
 // === Hamburger menu toggle ===
 (function(){
@@ -269,8 +516,11 @@ if (document.getElementById('rekordy')) {
 
   if (!navbar || !burgerBtn) return;
 
+  burgerBtn.setAttribute('aria-expanded', 'false');
+
   burgerBtn.addEventListener('click', () => {
-    navbar.classList.toggle('open');
+    const isOpen = navbar.classList.toggle('open');
+    burgerBtn.setAttribute('aria-expanded', String(isOpen));
   });
 
   // Opcjonalnie – zamknij menu po kliknięciu w link
@@ -278,6 +528,7 @@ if (document.getElementById('rekordy')) {
     link.addEventListener('click', () => {
       if (navbar.classList.contains('open')) {
         navbar.classList.remove('open');
+        burgerBtn.setAttribute('aria-expanded', 'false');
       }
     });
   });
@@ -294,4 +545,84 @@ if (document.getElementById('rekordy')) {
       link.classList.add('active');
     }
   });
+})();
+
+// === Motion-like polish: appear effects, spotlight, magnetic controls ===
+(function(){
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const loader = document.getElementById('temple-loader');
+  const animatedItems = document.querySelectorAll('[data-animate]');
+
+  if (loader) {
+    const hideLoader = () => {
+      window.setTimeout(() => loader.classList.add('is-hidden'), reduceMotion ? 80 : 1500);
+    };
+
+    if (document.readyState === 'complete') {
+      hideLoader();
+    } else {
+      window.addEventListener('load', hideLoader, { once: true });
+      window.setTimeout(hideLoader, 3400);
+    }
+  }
+
+  if (animatedItems.length) {
+    if (reduceMotion || !('IntersectionObserver' in window)) {
+      animatedItems.forEach(item => item.classList.add('is-visible'));
+    } else {
+      const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.16, rootMargin: '0px 0px -8% 0px' });
+
+      animatedItems.forEach((item, index) => {
+        item.style.transitionDelay = `${Math.min(index * 90, 260)}ms`;
+        revealObserver.observe(item);
+      });
+    }
+  }
+
+  if (!reduceMotion) {
+    document.querySelectorAll('[data-spotlight]').forEach(section => {
+      section.addEventListener('pointermove', event => {
+        const rect = section.getBoundingClientRect();
+        const x = ((event.clientX - rect.left) / rect.width) * 100;
+        const y = ((event.clientY - rect.top) / rect.height) * 100;
+        section.style.setProperty('--mouse-x', `${x}%`);
+        section.style.setProperty('--mouse-y', `${y}%`);
+
+        section.querySelectorAll('.parallax').forEach(layer => {
+          const depth = Number(layer.dataset.depth || 0.04);
+          const moveX = (x - 50) * depth;
+          const moveY = (y - 50) * depth;
+          layer.style.setProperty('--parallax-x', `${moveX}px`);
+          layer.style.setProperty('--parallax-y', `${moveY}px`);
+        });
+      });
+
+      section.addEventListener('pointerleave', () => {
+        section.querySelectorAll('.parallax').forEach(layer => {
+          layer.style.setProperty('--parallax-x', '0px');
+          layer.style.setProperty('--parallax-y', '0px');
+        });
+      });
+    });
+
+    document.querySelectorAll('.magnetic').forEach(item => {
+      item.addEventListener('pointermove', event => {
+        const rect = item.getBoundingClientRect();
+        const x = event.clientX - rect.left - rect.width / 2;
+        const y = event.clientY - rect.top - rect.height / 2;
+        item.style.transform = `translate(${x * 0.05}px, ${y * 0.08}px)`;
+      });
+
+      item.addEventListener('pointerleave', () => {
+        item.style.transform = '';
+      });
+    });
+  }
 })();
