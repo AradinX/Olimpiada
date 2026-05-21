@@ -843,6 +843,12 @@ tr.advanced td {
   outline: none;
 }
 
+#zazalenie-form button:disabled {
+  cursor: wait;
+  opacity: 0.68;
+  transform: none;
+}
+
 #msg {
   width: min(680px, 100%);
   margin: 22px auto 0;
@@ -4337,7 +4343,7 @@ tr.advanced td {
 
 .ticker-track span {
   min-width: 100vw;
-  padding-right: 96px;
+  padding-right: clamp(150px, 16vw, 280px);
   font-size: clamp(0.95rem, 1.25vw, 1.18rem);
   font-weight: 850;
   white-space: nowrap;

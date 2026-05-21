@@ -262,13 +262,13 @@ if (document.getElementById('flanki-champ')) {
   loadMistrzFlanki();
   setInterval(loadMistrzFlanki, 60000);
 }
-// === renderSplitTables dla BeerPong (faza grupowa) ===
+// === renderSplitTables dla Spaceru na ścieżkę (faza grupowa) ===
 async function loadBeerPongGroup() {
   try {
     const rows = await fetchCSV(SHEET_URL_BEERPONG);
     renderSplitTables(rows, 'beerpong-group-container');
   } catch (e) {
-    console.error('Błąd pobierania BeerPong (grupy):', e);
+    console.error('Błąd pobierania Spaceru na ścieżkę (grupy):', e);
   }
 }
 if (document.getElementById('beerpong-group-container')) {
@@ -276,13 +276,13 @@ if (document.getElementById('beerpong-group-container')) {
   setInterval(loadBeerPongGroup, 60000);
 }
 
-// === load BeerPong Finał ===
+// === load Spacer na ścieżkę Finał ===
 async function loadBeerPongFinal() {
   try {
     const rows = await fetchCSV(SHEET_URL_BEERPONG_FINAL);
     renderTable(rows, 'beerpong-final');
   } catch (e) {
-    console.error('Błąd pobierania BeerPong Finał:', e);
+    console.error('Błąd pobierania Spaceru na ścieżkę Finał:', e);
   }
 }
 if (document.getElementById('beerpong-final')) {
@@ -290,13 +290,13 @@ if (document.getElementById('beerpong-final')) {
   setInterval(loadBeerPongFinal, 60000);
 }
 
-// === load Mistrz BeerPong ===
+// === load Mistrz Spaceru na ścieżkę ===
 async function loadMistrzBeerPong() {
   try {
     const rows = await fetchCSV(SHEET_URL_MISTRZ_BEERPONG);
     renderTable(rows, 'beerpong-champ');
   } catch (e) {
-    console.error('Błąd pobierania Mistrz BeerPong:', e);
+    console.error('Błąd pobierania Mistrz Spaceru na ścieżkę:', e);
   }
 }
 if (document.getElementById('beerpong-champ')) {
@@ -755,6 +755,17 @@ if (document.getElementById('home-records')) {
 const COMPLAINTS_STORAGE_KEY = 'alkoolimpiada-complaints';
 // Wklej tutaj URL wdrożonego Google Apps Script Web App (/exec) podpiętego do arkusza wyników.
 const COMPLAINTS_API_URL = 'https://script.google.com/macros/s/AKfycbzzaDahZh62-mtOclvaJ0gI07wt92LYSdJavU1DTizyP6WDGU1WNiW7qiiax8B1NggUHA/exec';
+const COMPLAINTS_TIMEOUT_MS = 7000;
+
+function fetchWithTimeout(url, options = {}, timeout = COMPLAINTS_TIMEOUT_MS) {
+  const controller = new AbortController();
+  const timer = window.setTimeout(() => controller.abort(), timeout);
+
+  return fetch(url, {
+    ...options,
+    signal: controller.signal
+  }).finally(() => window.clearTimeout(timer));
+}
 
 function getStoredComplaints() {
   try {
@@ -776,7 +787,7 @@ function saveStoredComplaints(complaints) {
 async function fetchGlobalComplaints() {
   if (!COMPLAINTS_API_URL) return null;
 
-  const response = await fetch(`${COMPLAINTS_API_URL}?action=list&t=${Date.now()}`);
+  const response = await fetchWithTimeout(`${COMPLAINTS_API_URL}?action=list&t=${Date.now()}`);
   if (!response.ok) throw new Error('Nie udało się pobrać globalnych zażaleń.');
   const data = await response.json();
   return Array.isArray(data) ? data : data.complaints;
@@ -785,11 +796,12 @@ async function fetchGlobalComplaints() {
 async function saveGlobalComplaint(complaint) {
   if (!COMPLAINTS_API_URL) return false;
 
-  await fetch(COMPLAINTS_API_URL, {
+  const response = await fetchWithTimeout(COMPLAINTS_API_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
     body: JSON.stringify(complaint)
   });
+  if (!response.ok) throw new Error('Nie udało się zapisać globalnego zażalenia.');
   return true;
 }
 
@@ -799,9 +811,23 @@ function initComplaintForm() {
 
   form.addEventListener('submit', async event => {
     event.preventDefault();
+    if (form.dataset.submitting === 'true') return;
+
     const name = form.querySelector('#imie')?.value.trim();
     const text = form.querySelector('#tekst')?.value.trim();
     if (!name || !text) return;
+
+    const submitButton = form.querySelector('button[type="submit"]');
+    const message = document.getElementById('msg');
+    form.dataset.submitting = 'true';
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.textContent = 'Wysyłanie...';
+    }
+    if (message) {
+      message.textContent = 'Zażalenie trafia do kroniki. Chwila cierpliwości...';
+      message.style.display = 'block';
+    }
 
     const complaint = {
       name,
@@ -814,41 +840,54 @@ function initComplaintForm() {
     const globallySaved = await saveGlobalComplaint(complaint).catch(() => false);
 
     form.reset();
-    const message = document.getElementById('msg');
     if (message) {
       message.textContent = globallySaved
         ? 'Zażalenie zapisane globalnie. Zaraz wracasz na stronę główną, żeby zobaczyć pasek wiadomości.'
         : saved
-        ? 'Zażalenie zapisane lokalnie. Wklej URL Google Apps Script w scripts.js, żeby wpisy były globalne.'
+        ? 'Zażalenie zapisane lokalnie. Globalna kronika chwilowo nie odpowiedziała, spróbuj jeszcze raz później.'
         : 'Nie udało się zapisać zażalenia w tej przeglądarce. Sprawdź uprawnienia localStorage.';
       message.style.display = 'block';
     }
 
-    if (saved) {
+    if (saved || globallySaved) {
       window.setTimeout(() => {
         window.location.href = 'index.html#complaint-ticker';
       }, 900);
+    } else {
+      form.dataset.submitting = 'false';
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.textContent = 'Wyślij zażalenie';
+      }
     }
   });
+}
+
+function renderComplaintTicker(track, complaints) {
+  const items = complaints.length
+    ? complaints.slice(-14).reverse()
+    : [{ name: 'Zarząd', text: 'Brak świeżych zażaleń. To podejrzane.' }];
+  const separator = '\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0•\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0';
+  const tickerText = items
+    .map(item => `${item.name}: ${item.text}`)
+    .join(separator);
+
+  track.innerHTML = `
+    <span>${escapeHTML(tickerText)}</span>
+    <span aria-hidden="true">${escapeHTML(tickerText)}</span>
+  `;
 }
 
 async function initComplaintTicker() {
   const track = document.getElementById('complaint-ticker-track');
   if (!track) return;
 
+  const localComplaints = getStoredComplaints();
+  renderComplaintTicker(track, localComplaints);
   const globalComplaints = await fetchGlobalComplaints().catch(() => null);
-  const complaints = globalComplaints || getStoredComplaints();
-  const items = complaints.length
-    ? complaints.slice(-14).reverse()
-    : [{ name: 'Zarząd', text: 'Brak świeżych zażaleń. To podejrzane.' }];
-  const tickerText = items
-    .map(item => `${item.name}: ${item.text}`)
-    .join('   •   ');
-
-  track.innerHTML = `
-    <span>${escapeHTML(tickerText)}</span>
-    <span aria-hidden="true">${escapeHTML(tickerText)}</span>
-  `;
+  if (Array.isArray(globalComplaints)) {
+    renderComplaintTicker(track, globalComplaints.length ? globalComplaints : localComplaints);
+  }
 }
 
 initComplaintForm();
