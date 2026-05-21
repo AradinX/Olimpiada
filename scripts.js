@@ -387,7 +387,55 @@ function getMedalSummaryIndexes(header) {
   };
 }
 
+const OFFICIAL_COMPETITIONS = [
+  {
+    name: 'Flanki',
+    description: 'Rzucanie piłką w puszkę',
+    aliases: ['flanki']
+  },
+  {
+    name: 'Sprint na 500 ml',
+    description: 'Kubek z piwem i walka z czasem',
+    aliases: ['sprint na 500', 'sprint na 500 ml']
+  },
+  {
+    name: 'Na pół',
+    description: 'Dwa kubki na wadze balansujące równowagą',
+    aliases: ['na pol', 'na pół']
+  },
+  {
+    name: 'Smakosz',
+    description: 'Cztery piwa obok siebie',
+    aliases: ['smakosz', 'beer hunt']
+  },
+  {
+    name: 'Spacer na ścieżkę',
+    description: 'Gra zespołowa i wyścigi drużynowe',
+    aliases: ['spacer na sciezke', 'spacer na ścieżkę', 'beer pong']
+  },
+  {
+    name: 'Inwestor',
+    description: 'Zbieranie puszek',
+    aliases: ['inwestor', 'lucky shot']
+  }
+];
+
+function findCompetitionColumn(header, competition) {
+  const normalized = header.map(normalizeText);
+  return competition.aliases
+    .map(alias => normalized.findIndex(cell => cell.includes(normalizeText(alias))))
+    .find(index => index >= 0) ?? -1;
+}
+
 function getCompetitionIndexes(header) {
+  const officialIndexes = OFFICIAL_COMPETITIONS
+    .map(competition => findCompetitionColumn(header, competition))
+    .filter(index => index >= 0);
+
+  if (officialIndexes.length) {
+    return [...new Set(officialIndexes)];
+  }
+
   const normalized = header.map(normalizeText);
   const start = normalized.findIndex(cell => cell.includes('beer hunt'));
   const end = normalized.findIndex(cell => cell.includes('najebany na autobus'));
@@ -489,19 +537,21 @@ function renderCompetitionTimeline(rows) {
 
   const header = rows[0] || [];
   const dataRows = rows.slice(1).filter(row => row.some(Boolean));
-  const competitionIndexes = getCompetitionIndexes(header);
   const nameIndex = findColumnIndex(header, ['uczestnik', 'osoba', 'zawodnik', 'imie', 'imi'], 0);
 
   timeline.innerHTML = '';
 
-  competitionIndexes.forEach((columnIndex, index) => {
+  OFFICIAL_COMPETITIONS.forEach((competition, index) => {
+    const columnIndex = findCompetitionColumn(header, competition);
     const medalists = { gold: [], silver: [], bronze: [] };
 
-    dataRows.forEach(row => {
-      const medal = medalFromCell(row[columnIndex]);
-      if (!medal) return;
-      medalists[medal].push(row[nameIndex] || 'Zawodnik');
-    });
+    if (columnIndex >= 0) {
+      dataRows.forEach(row => {
+        const medal = medalFromCell(row[columnIndex]);
+        if (!medal) return;
+        medalists[medal].push(row[nameIndex] || 'Zawodnik');
+      });
+    }
 
     const total = medalists.gold.length + medalists.silver.length + medalists.bronze.length;
     const item = document.createElement('article');
@@ -510,7 +560,8 @@ function renderCompetitionTimeline(rows) {
       <div class="timeline-index">${String(index + 1).padStart(2, '0')}</div>
       <div class="timeline-card">
         <span class="timeline-status">${total ? 'complete' : 'oczekuje'}</span>
-        <h4>${escapeHTML(header[columnIndex])}</h4>
+        <h4>${escapeHTML(competition.name)}</h4>
+        <p class="timeline-rule">${escapeHTML(competition.description)}</p>
         <div class="timeline-medals" aria-label="Medaliści konkurencji">
           ${renderTimelineMedal('gold', 'Złoto', medalists.gold)}
           ${renderTimelineMedal('silver', 'Srebro', medalists.silver)}
