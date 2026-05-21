@@ -4363,3 +4363,120 @@ tr.advanced td {
     grid-template-columns: 1fr;
   }
 }
+
+/* Finishing pass: complaint form, readable tables, ceremony balance and wider tabs. */
+.greek-page main.complaints-main {
+  width: min(880px, calc(100% - clamp(24px, 8vw, 180px)));
+  padding: clamp(22px, 4vw, 42px);
+}
+
+.complaints-main > h1 {
+  max-width: 760px;
+  margin: 0 auto clamp(22px, 3vw, 34px);
+  font-size: clamp(2rem, 4.2vw, 4rem);
+  line-height: 1;
+  text-align: center;
+  text-wrap: balance;
+}
+
+.complaints-main #zazalenie-form,
+.complaints-main #msg {
+  width: min(680px, 100%);
+}
+
+.greek-page table:not(#rekordy) th,
+.greek-page table:not(#rekordy) td,
+.group-table th,
+.group-table td,
+.flanki-group-table th,
+.flanki-group-table td,
+.beerpong-group-table th,
+.beerpong-group-table td {
+  padding: clamp(14px, 1.25vw, 18px) clamp(14px, 1.4vw, 20px);
+  font-size: clamp(1rem, 1.05vw, 1.16rem);
+  line-height: 1.28;
+}
+
+.greek-page table:not(#rekordy) th,
+.group-table th,
+.flanki-group-table th,
+.beerpong-group-table th {
+  font-size: clamp(0.92rem, 1vw, 1.08rem);
+}
+
+.procession {
+  align-items: stretch;
+}
+
+.procession-copy {
+  justify-content: center;
+  min-height: 520px;
+}
+
+.procession-copy h3 {
+  margin-top: 10px;
+  font-size: clamp(3.6rem, 7vw, 7.4rem);
+  line-height: 0.9;
+}
+
+.procession-art img {
+  object-position: center 38%;
+}
+
+.greek-page .nav-links {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(126px, 1fr));
+  gap: 8px;
+}
+
+.greek-page .nav-links a {
+  width: 100%;
+  min-height: 48px;
+  padding-inline: 12px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.greek-home .temple-nav {
+  max-width: min(1120px, calc(100% - clamp(178px, 18vw, 290px)));
+  grid-template-columns: repeat(6, minmax(128px, 1fr));
+}
+
+.greek-home .temple-nav a {
+  padding-inline: 10px;
+  font-size: clamp(0.74rem, 0.66vw, 0.9rem);
+  white-space: nowrap;
+}
+
+@media (max-width: 1180px) {
+  .greek-home .temple-nav {
+    grid-template-columns: repeat(3, minmax(160px, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .greek-page .nav-links {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .procession-copy {
+    min-height: 0;
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 760px) {
+  .greek-page main.complaints-main {
+    width: min(100% - 24px, 880px);
+  }
+
+  .complaints-main > h1 {
+    font-size: clamp(1.75rem, 9vw, 3rem);
+  }
+
+  .greek-home .temple-nav a {
+    min-width: 172px;
+  }
+}
