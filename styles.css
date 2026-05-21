@@ -4089,6 +4089,87 @@ tr.advanced td {
   font-weight: 850;
 }
 
+.flanki-group-container {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.flanki-ladder-card {
+  border: 1px solid rgba(20, 38, 58, 0.16);
+  background:
+    linear-gradient(180deg, rgba(255, 248, 233, 0.62), rgba(196, 160, 95, 0.22));
+  box-shadow: 0 18px 52px rgba(55, 39, 21, 0.12);
+}
+
+.flanki-ladder-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(20, 38, 58, 0.12);
+}
+
+.flanki-ladder-head span,
+.flanki-rank-step span {
+  color: #6f2f39;
+  font-size: 0.72rem;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.flanki-ladder-head strong {
+  color: var(--ink-blue);
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.2rem, 2vw, 1.8rem);
+  line-height: 1;
+}
+
+.flanki-ladder {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+}
+
+.flanki-rank-step {
+  display: grid;
+  grid-template-columns: 58px minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  min-height: 58px;
+  padding: 10px 12px;
+  border: 1px solid rgba(20, 38, 58, 0.1);
+  background: rgba(255, 248, 233, 0.34);
+}
+
+.flanki-rank-step strong,
+.flanki-rank-step em {
+  color: var(--ink-blue);
+  font-style: normal;
+  font-weight: 900;
+  text-align: center;
+}
+
+.flanki-rank-step.rank-1 {
+  background:
+    linear-gradient(90deg, rgba(231, 196, 107, 0.34), rgba(255, 248, 233, 0.34));
+}
+
+.complaints-main > h1 {
+  max-width: 920px;
+  font-size: clamp(2.15rem, 5.2vw, 5.1rem);
+  line-height: 0.9;
+}
+
+#rekordy th,
+#rekordy td {
+  font-size: clamp(1rem, 1.35vw, 1.22rem);
+  font-weight: 850;
+}
+
+#rekordy th {
+  font-size: clamp(0.92rem, 1.1vw, 1.05rem);
+}
+
 .records-top3-section {
   margin-bottom: 22px;
 }
@@ -4169,6 +4250,7 @@ tr.advanced td {
   bottom: 0;
   z-index: 80;
   min-height: 42px;
+  width: 100%;
   display: flex;
   align-items: center;
   overflow: hidden;
@@ -4181,13 +4263,15 @@ tr.advanced td {
 
 .ticker-track {
   display: inline-flex;
+  width: max-content;
   min-width: max-content;
-  animation: tickerMove 34s linear infinite;
+  animation: tickerMove 42s linear infinite;
 }
 
 .ticker-track span {
-  padding-right: 64px;
-  font-size: 0.9rem;
+  min-width: 100vw;
+  padding-right: 96px;
+  font-size: clamp(0.95rem, 1.25vw, 1.18rem);
   font-weight: 850;
   white-space: nowrap;
 }

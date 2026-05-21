@@ -150,6 +150,11 @@ function renderSplitTables(rows, containerId) {
   const container = document.getElementById(containerId);
   container.innerHTML = '';
 
+  if (containerId === 'flanki-group-container') {
+    renderFlankiHierarchy(header, rows.slice(1, 4), container);
+    return;
+  }
+
   for (let i = 0; i < header.length; i += 2) {
     const table = document.createElement('table');
     table.classList.add('flanki-group-table');
@@ -188,6 +193,35 @@ function renderSplitTables(rows, containerId) {
 }
 
 // === loadFlankiGroup – faza grupowa ===
+function renderFlankiHierarchy(header, dataRows, container) {
+  for (let i = 0; i < header.length; i += 2) {
+    if (!header[i] && !header[i + 1]) continue;
+
+    const card = document.createElement('article');
+    card.className = 'flanki-ladder-card';
+    const rowsMarkup = dataRows.map((row, index) => {
+      const left = row[i] || '';
+      const right = row[i + 1] || '';
+      return `
+        <div class="flanki-rank-step rank-${index + 1}">
+          <span>Nr ${index + 1}</span>
+          <strong>${escapeHTML(left)}</strong>
+          ${right ? `<em>${escapeHTML(right)}</em>` : ''}
+        </div>
+      `;
+    }).join('');
+
+    card.innerHTML = `
+      <div class="flanki-ladder-head">
+        <span>Grupa</span>
+        <strong>${escapeHTML(header[i])}${header[i + 1] ? ` / ${escapeHTML(header[i + 1])}` : ''}</strong>
+      </div>
+      <div class="flanki-ladder">${rowsMarkup}</div>
+    `;
+    container.appendChild(card);
+  }
+}
+
 async function loadFlankiGroup() {
   try {
     const rows = await fetchCSV(SHEET_URL_FLANKI);
@@ -514,7 +548,8 @@ function renderRekordySprint(rows) {
   const dataRows = rows.slice(2).filter(row => row.some(Boolean));
   const nameIndex = findColumnIndex(yearHeader, ['zawodnik', 'uczestnik', 'osoba', 'imie', 'imi'], 0);
   const sprintColumns = getSprintRecordColumns(eventHeader)
-    .filter(column => column.index !== nameIndex);
+    .filter(column => column.index !== nameIndex)
+    .sort((a, b) => parseNumber(yearHeader[b.index]) - parseNumber(yearHeader[a.index]));
   const newestSprintColumn = sprintColumns
     .map(column => ({ ...column, year: parseInt(String(yearHeader[column.index]).trim(), 10) }))
     .filter(column => Number.isFinite(column.year))
@@ -667,6 +702,8 @@ if (document.getElementById('home-records')) {
 }
 
 const COMPLAINTS_STORAGE_KEY = 'alkoolimpiada-complaints';
+// Wklej tutaj URL wdrożonego Google Apps Script Web App (/exec), żeby zażalenia były globalne.
+const COMPLAINTS_API_URL = '';
 
 function getStoredComplaints() {
   try {
@@ -677,40 +714,81 @@ function getStoredComplaints() {
 }
 
 function saveStoredComplaints(complaints) {
-  localStorage.setItem(COMPLAINTS_STORAGE_KEY, JSON.stringify(complaints.slice(-20)));
+  try {
+    localStorage.setItem(COMPLAINTS_STORAGE_KEY, JSON.stringify(complaints.slice(-20)));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+async function fetchGlobalComplaints() {
+  if (!COMPLAINTS_API_URL) return null;
+
+  const response = await fetch(`${COMPLAINTS_API_URL}?action=list&t=${Date.now()}`);
+  if (!response.ok) throw new Error('Nie udało się pobrać globalnych zażaleń.');
+  const data = await response.json();
+  return Array.isArray(data) ? data : data.complaints;
+}
+
+async function saveGlobalComplaint(complaint) {
+  if (!COMPLAINTS_API_URL) return false;
+
+  await fetch(COMPLAINTS_API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify(complaint)
+  });
+  return true;
 }
 
 function initComplaintForm() {
   const form = document.getElementById('zazalenie-form');
   if (!form) return;
 
-  form.addEventListener('submit', event => {
+  form.addEventListener('submit', async event => {
     event.preventDefault();
     const name = form.querySelector('#imie')?.value.trim();
     const text = form.querySelector('#tekst')?.value.trim();
     if (!name || !text) return;
 
-    const complaints = getStoredComplaints();
-    complaints.push({
+    const complaint = {
       name,
       text,
       createdAt: new Date().toISOString()
-    });
-    saveStoredComplaints(complaints);
+    };
+    const complaints = getStoredComplaints();
+    complaints.push(complaint);
+    const saved = saveStoredComplaints(complaints);
+    const globallySaved = await saveGlobalComplaint(complaint).catch(() => false);
 
     form.reset();
     const message = document.getElementById('msg');
-    if (message) message.style.display = 'block';
+    if (message) {
+      message.textContent = globallySaved
+        ? 'Zażalenie zapisane globalnie. Zaraz wracasz na stronę główną, żeby zobaczyć pasek wiadomości.'
+        : saved
+        ? 'Zażalenie zapisane lokalnie. Wklej URL Google Apps Script w scripts.js, żeby wpisy były globalne.'
+        : 'Nie udało się zapisać zażalenia w tej przeglądarce. Sprawdź uprawnienia localStorage.';
+      message.style.display = 'block';
+    }
+
+    if (saved) {
+      window.setTimeout(() => {
+        window.location.href = 'index.html#complaint-ticker';
+      }, 900);
+    }
   });
 }
 
-function initComplaintTicker() {
+async function initComplaintTicker() {
   const track = document.getElementById('complaint-ticker-track');
   if (!track) return;
 
-  const complaints = getStoredComplaints();
+  const globalComplaints = await fetchGlobalComplaints().catch(() => null);
+  const complaints = globalComplaints || getStoredComplaints();
   const items = complaints.length
-    ? complaints.slice(-8).reverse()
+    ? complaints.slice(-14).reverse()
     : [{ name: 'Zarząd', text: 'Brak świeżych zażaleń. To podejrzane.' }];
   const tickerText = items
     .map(item => `${item.name}: ${item.text}`)
@@ -724,6 +802,9 @@ function initComplaintTicker() {
 
 initComplaintForm();
 initComplaintTicker();
+window.addEventListener('storage', event => {
+  if (event.key === COMPLAINTS_STORAGE_KEY) initComplaintTicker();
+});
 
 // Status wydarzenia do 25.07.2026 16:00
 (function(){
