@@ -4371,10 +4371,10 @@ tr.advanced td {
 }
 
 .complaints-main > h1 {
-  max-width: 760px;
+  max-width: 640px;
   margin: 0 auto clamp(22px, 3vw, 34px);
-  font-size: clamp(2rem, 4.2vw, 4rem);
-  line-height: 1;
+  font-size: clamp(1.65rem, 2.7vw, 2.85rem);
+  line-height: 1.08;
   text-align: center;
   text-wrap: balance;
 }
@@ -4473,7 +4473,7 @@ tr.advanced td {
   }
 
   .complaints-main > h1 {
-    font-size: clamp(1.75rem, 9vw, 3rem);
+    font-size: clamp(1.5rem, 7vw, 2.35rem);
   }
 
   .greek-home .temple-nav a {
