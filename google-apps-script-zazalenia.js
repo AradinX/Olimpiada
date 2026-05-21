@@ -1,4 +1,4 @@
-const SPREADSHEET_ID = 'WKLEJ_TUTAJ_ID_ARKUSZA';
+const SPREADSHEET_ID = '189_EonDKDJ-oVIU28k0dnLyjo2mKL67ZEouSs2UEAwQ';
 const SHEET_NAME = 'Zazalenia';
 
 function doGet() {

@@ -702,8 +702,8 @@ if (document.getElementById('home-records')) {
 }
 
 const COMPLAINTS_STORAGE_KEY = 'alkoolimpiada-complaints';
-// Wklej tutaj URL wdrożonego Google Apps Script Web App (/exec), żeby zażalenia były globalne.
-const COMPLAINTS_API_URL = '';
+// Wklej tutaj URL wdrożonego Google Apps Script Web App (/exec) podpiętego do arkusza wyników.
+const COMPLAINTS_API_URL = 'https://script.google.com/macros/s/AKfycbzzaDahZh62-mtOclvaJ0gI07wt92LYSdJavU1DTizyP6WDGU1WNiW7qiiax8B1NggUHA/exec';
 
 function getStoredComplaints() {
   try {
