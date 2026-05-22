@@ -777,7 +777,7 @@ function getStoredComplaints() {
 
 function saveStoredComplaints(complaints) {
   try {
-    localStorage.setItem(COMPLAINTS_STORAGE_KEY, JSON.stringify(complaints.slice(-20)));
+    localStorage.setItem(COMPLAINTS_STORAGE_KEY, JSON.stringify(complaints));
     return true;
   } catch {
     return false;
@@ -865,9 +865,10 @@ function initComplaintForm() {
 
 function renderComplaintTicker(track, complaints) {
   const items = complaints.length
-    ? complaints.slice(-14).reverse()
+    ? complaints.slice().reverse()
     : [{ name: 'Zarząd', text: 'Brak świeżych zażaleń. To podejrzane.' }];
   const separator = '\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0•\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0';
+  track.style.setProperty('--ticker-duration', `${Math.max(48, items.length * 11)}s`);
   const tickerText = items
     .map(item => `${item.name}: ${item.text}`)
     .join(separator);

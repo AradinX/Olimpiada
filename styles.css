@@ -4338,7 +4338,7 @@ tr.advanced td {
   display: inline-flex;
   width: max-content;
   min-width: max-content;
-  animation: tickerMove 42s linear infinite;
+  animation: tickerMove var(--ticker-duration, 48s) linear infinite;
 }
 
 .ticker-track span {
@@ -4476,7 +4476,113 @@ tr.advanced td {
     font-size: clamp(1.5rem, 7vw, 2.35rem);
   }
 
+  .greek-home .temple-nav {
+    left: 12px;
+    right: 12px;
+    top: clamp(108px, 30vw, 138px);
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 7px;
+    max-width: none;
+    padding: 8px;
+    overflow: visible;
+    scroll-snap-type: none;
+  }
+
   .greek-home .temple-nav a {
-    min-width: 172px;
+    min-width: 0;
+    min-height: 48px;
+    flex-direction: row;
+    gap: 0;
+    padding: 9px 8px;
+    font-size: clamp(0.74rem, 3.1vw, 0.86rem);
+    line-height: 1.08;
+    text-align: center;
+    white-space: normal;
+    scroll-snap-align: none;
+  }
+
+  .greek-home .temple-nav a::before,
+  .greek-home .temple-nav a::after {
+    content: none;
+  }
+
+  .greek-home .olympus-hero {
+    padding-top: clamp(300px, 78vw, 360px);
+  }
+}
+
+/* Mobile fixes: stable ticker, full-width data tables and contained hero headings. */
+@media (max-width: 760px) {
+  .greek-home {
+    padding-bottom: calc(58px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .complaint-ticker {
+    z-index: 120;
+    min-height: calc(48px + env(safe-area-inset-bottom, 0px));
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  .ticker-track {
+    will-change: transform;
+  }
+
+  .ticker-track span {
+    padding-right: clamp(190px, 32vw, 360px);
+    font-size: clamp(0.88rem, 3.7vw, 1rem);
+  }
+
+  .greek-page table,
+  .greek-page #rekordy,
+  .group-table,
+  .beerpong-group-table,
+  #beerpong-final,
+  #beerpong-champ {
+    display: table;
+    width: 100%;
+    min-width: 100%;
+    table-layout: auto;
+    white-space: normal;
+    overflow: visible;
+  }
+
+  .greek-page table th,
+  .greek-page table td,
+  .group-table th,
+  .group-table td,
+  .beerpong-group-table th,
+  .beerpong-group-table td {
+    padding: 12px 10px;
+    font-size: clamp(0.92rem, 3.7vw, 1.04rem);
+    line-height: 1.25;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .groups-container,
+  .beerpong-group-container {
+    width: 100%;
+    justify-items: stretch;
+  }
+
+  .final-section,
+  .champ-section {
+    width: 100%;
+    padding: 14px 10px;
+  }
+
+  .greek-home .olympus-copy h2 {
+    max-width: 100%;
+    font-size: clamp(2rem, 10vw, 3.35rem);
+    line-height: 0.98;
+    overflow-wrap: anywhere;
+  }
+
+  .chronicle-heading h3 {
+    max-width: 100%;
+    font-size: clamp(2.05rem, 11vw, 3.25rem);
+    line-height: 1;
+    overflow-wrap: anywhere;
   }
 }
