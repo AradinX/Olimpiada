@@ -867,15 +867,20 @@ function renderComplaintTicker(track, complaints) {
   const items = complaints.length
     ? complaints.slice().reverse()
     : [{ name: 'Zarząd', text: 'Brak świeżych zażaleń. To podejrzane.' }];
-  const separator = '\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0•\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0';
-  track.style.setProperty('--ticker-duration', `${Math.max(48, items.length * 11)}s`);
-  const tickerText = items
-    .map(item => `${item.name}: ${item.text}`)
-    .join(separator);
+  const totalChars = items.reduce((sum, item) => sum + String(item.name || '').length + String(item.text || '').length, 0);
+  const tickerItems = items
+    .map(item => `
+      <span class="ticker-item">
+        <b>${escapeHTML(item.name || 'Anonim')}</b>
+        <em>${escapeHTML(item.text || '')}</em>
+      </span>
+    `)
+    .join('');
 
+  track.style.setProperty('--ticker-duration', `${Math.max(52, Math.ceil(totalChars * 0.28))}s`);
   track.innerHTML = `
-    <span>${escapeHTML(tickerText)}</span>
-    <span aria-hidden="true">${escapeHTML(tickerText)}</span>
+    <div class="ticker-content">${tickerItems}</div>
+    <div class="ticker-content" aria-hidden="true">${tickerItems}</div>
   `;
 }
 

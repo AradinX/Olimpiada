@@ -4335,18 +4335,51 @@ tr.advanced td {
 }
 
 .ticker-track {
-  display: inline-flex;
+  display: flex;
+  align-items: center;
   width: max-content;
   min-width: max-content;
   animation: tickerMove var(--ticker-duration, 48s) linear infinite;
+  will-change: transform;
 }
 
-.ticker-track span {
-  min-width: 100vw;
-  padding-right: clamp(150px, 16vw, 280px);
+.ticker-content {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: clamp(82px, 10vw, 180px);
+  padding-right: clamp(82px, 10vw, 180px);
+}
+
+.ticker-item {
+  position: relative;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.45rem;
   font-size: clamp(0.95rem, 1.25vw, 1.18rem);
   font-weight: 850;
   white-space: nowrap;
+}
+
+.ticker-item::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: #e7c46b;
+  box-shadow: 0 0 0 4px rgba(231, 196, 107, 0.16);
+}
+
+.ticker-item b {
+  color: #e7c46b;
+  font-style: normal;
+  font-weight: 950;
+}
+
+.ticker-item em {
+  color: var(--stone-surface-light);
+  font-style: normal;
 }
 
 @keyframes tickerMove {
@@ -4524,12 +4557,12 @@ tr.advanced td {
     padding-bottom: env(safe-area-inset-bottom, 0px);
   }
 
-  .ticker-track {
-    will-change: transform;
+  .ticker-content {
+    gap: clamp(72px, 24vw, 120px);
+    padding-right: clamp(72px, 24vw, 120px);
   }
 
-  .ticker-track span {
-    padding-right: clamp(190px, 32vw, 360px);
+  .ticker-item {
     font-size: clamp(0.88rem, 3.7vw, 1rem);
   }
 
