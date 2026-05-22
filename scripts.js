@@ -889,11 +889,14 @@ async function initComplaintTicker() {
   if (!track) return;
 
   const localComplaints = getStoredComplaints();
-  renderComplaintTicker(track, localComplaints);
   const globalComplaints = await fetchGlobalComplaints().catch(() => null);
+
   if (Array.isArray(globalComplaints)) {
-    renderComplaintTicker(track, globalComplaints.length ? globalComplaints : localComplaints);
+    renderComplaintTicker(track, globalComplaints);
+    return;
   }
+
+  renderComplaintTicker(track, localComplaints);
 }
 
 initComplaintForm();
