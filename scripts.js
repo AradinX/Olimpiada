@@ -388,36 +388,12 @@ function getMedalSummaryIndexes(header) {
 }
 
 const OFFICIAL_COMPETITIONS = [
-  {
-    name: 'Flanki',
-    description: 'Rzucanie piłką w puszkę',
-    aliases: ['flanki']
-  },
-  {
-    name: 'Sprint na 500 ml',
-    description: 'Kubek z piwem i walka z czasem',
-    aliases: ['sprint na 500', 'sprint na 500 ml']
-  },
-  {
-    name: 'Na pół',
-    description: 'Dwa kubki na wadze balansujące równowagą',
-    aliases: ['na pol', 'na pół']
-  },
-  {
-    name: 'Smakosz',
-    description: 'Cztery piwa obok siebie',
-    aliases: ['smakosz', 'beer hunt']
-  },
-  {
-    name: 'Spacer na ścieżkę',
-    description: 'Gra zespołowa i wyścigi drużynowe',
-    aliases: ['spacer na sciezke', 'spacer na ścieżkę', 'beer pong']
-  },
-  {
-    name: 'Inwestor',
-    description: 'Zbieranie puszek',
-    aliases: ['inwestor', 'lucky shot']
-  }
+  { name: 'Flanki',           aliases: ['flanki'] },
+  { name: 'Sprint na 500 ml', aliases: ['sprint na 500', 'sprint na 500 ml'] },
+  { name: 'Na pół',           aliases: ['na pol', 'na pół'] },
+  { name: 'Smakosz',          aliases: ['smakosz', 'beer hunt'] },
+  { name: 'Spacer na ścieżkę', aliases: ['spacer na sciezke', 'spacer na ścieżkę', 'beer pong'] },
+  { name: 'Inwestor',         aliases: ['inwestor', 'lucky shot'] }
 ];
 
 function findCompetitionColumn(header, competition) {
@@ -561,7 +537,6 @@ function renderCompetitionTimeline(rows) {
       <div class="timeline-card">
         <span class="timeline-status">${total ? 'complete' : 'oczekuje'}</span>
         <h4>${escapeHTML(competition.name)}</h4>
-        <p class="timeline-rule">${escapeHTML(competition.description)}</p>
         <div class="timeline-medals" aria-label="Medaliści konkurencji">
           ${renderTimelineMedal('gold', 'Złoto', medalists.gold)}
           ${renderTimelineMedal('silver', 'Srebro', medalists.silver)}
