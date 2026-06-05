@@ -151,3 +151,33 @@ alter table public.bets
 
 Po migracji `predicted_winner` zostaje w bazie (dla historii), ale aplikacja zapisuje
 i czyta wyłącznie `predicted_1st`, `predicted_2nd`, `predicted_3rd`.
+
+### 2026-06-06: tabela results (klasyfikacja typujących)
+
+Żeby liczyć punkty, potrzebujemy znać prawdziwe wyniki każdej konkurencji.
+Wejdź w **SQL Editor → New query** i uruchom:
+
+```sql
+create table public.results (
+  competition text primary key,
+  actual_1st text not null,
+  actual_2nd text not null,
+  actual_3rd text not null,
+  created_at timestamptz default now(),
+  updated_at timestamptz default now()
+);
+
+alter table public.results enable row level security;
+
+create policy "wyniki czytalne dla zalogowanych"
+  on public.results for select
+  to authenticated
+  using (true);
+```
+
+**Jak wpisywać wyniki:** w dashboardzie Supabase wejdź w **Table Editor → results**
+→ **Insert row** i wpisz:
+- `competition` — id konkurencji (`flanki`, `sprint500`, `napol`, `smakosz`, `beerpong`, `inwestor`)
+- `actual_1st`, `actual_2nd`, `actual_3rd` — nazwy drużyn/uczestników identyczne jak w TEAMS/PARTICIPANTS w `typuj.js`
+
+Klasyfikacja typujących odświeży się automatycznie na typuj.html.

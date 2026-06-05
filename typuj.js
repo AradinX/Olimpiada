@@ -104,6 +104,7 @@ function formatLockCountdown() {
   let myBets = {};           // competition_id -> bet row
   let allBets = [];          // wszystkie cudze zaklady do pokazania
   let profilesById = {};     // user_id -> display_name
+  let resultsByComp = {};    // competition_id -> { actual_1st, actual_2nd, actual_3rd }
   let dataLoaded = false;
 
   function escapeHTML(value) {
@@ -157,6 +158,59 @@ function formatLockCountdown() {
       return;
     }
     allBets = data || [];
+  }
+
+  async function loadResults() {
+    const { data, error } = await pgGet('results?select=competition,actual_1st,actual_2nd,actual_3rd');
+    if (error) {
+      console.warn('[typuj] results load:', error.message);
+      return;
+    }
+    resultsByComp = {};
+    (data || []).forEach(r => { resultsByComp[r.competition] = r; });
+    console.log('[typuj] wynikow:', (data || []).length);
+  }
+
+  // === Punktacja ===
+  function scoreBet(bet, result) {
+    if (!result) return { total: 0, hits: [] };
+    let total = 0;
+    const hits = [];
+    if (bet.predicted_1st === result.actual_1st) { total += POINTS.first;  hits.push('1'); }
+    if (bet.predicted_2nd === result.actual_2nd) { total += POINTS.second; hits.push('2'); }
+    if (bet.predicted_3rd === result.actual_3rd) { total += POINTS.third;  hits.push('3'); }
+
+    const exact = bet.predicted_1st === result.actual_1st
+               && bet.predicted_2nd === result.actual_2nd
+               && bet.predicted_3rd === result.actual_3rd;
+    const predicted = new Set([bet.predicted_1st, bet.predicted_2nd, bet.predicted_3rd]);
+    const actual    = [result.actual_1st, result.actual_2nd, result.actual_3rd];
+    const samePeople = actual.every(a => predicted.has(a));
+
+    if (exact)        { total += POINTS.podiumExact; hits.push('PODIUM'); }
+    else if (samePeople) { total += POINTS.podiumAny;  hits.push('3OF3'); }
+
+    return { total, hits };
+  }
+
+  function computeLeaderboard() {
+    const byUser = {};
+    allBets.forEach(bet => {
+      const result = resultsByComp[bet.competition];
+      if (!result) return; // bez wynikow nic nie liczymy
+      const { total, hits } = scoreBet(bet, result);
+      if (!byUser[bet.user_id]) {
+        byUser[bet.user_id] = {
+          user_id: bet.user_id,
+          display_name: profilesById[bet.user_id] || 'anon',
+          points: 0,
+          breakdown: {}
+        };
+      }
+      byUser[bet.user_id].points += total;
+      byUser[bet.user_id].breakdown[bet.competition] = { points: total, hits };
+    });
+    return Object.values(byUser).sort((a, b) => b.points - a.points || a.display_name.localeCompare(b.display_name));
   }
 
   function rebuildMyBets(userId) {
@@ -228,6 +282,72 @@ function formatLockCountdown() {
       wrap.className = 'typuj-lock-banner open';
       wrap.innerHTML = `⏳ ${escapeHTML(text)}`;
     }
+  }
+
+  function renderLeaderboard() {
+    const wrap = document.getElementById('typuj-leaderboard');
+    if (!wrap) return;
+    const ranking = computeLeaderboard();
+    const resultsCount = Object.keys(resultsByComp).length;
+
+    if (resultsCount === 0) {
+      wrap.hidden = false;
+      wrap.innerHTML = `
+        <div class="typuj-leaderboard-header">
+          <h2>🏆 Klasyfikacja typujących</h2>
+          <span class="typuj-leaderboard-meta">Wyniki konkurencji jeszcze nie wprowadzone</span>
+        </div>
+        <p class="typuj-leaderboard-empty">
+          Tabela pojawi się gdy organizator wprowadzi pierwsze wyniki.
+        </p>
+      `;
+      return;
+    }
+
+    if (ranking.length === 0) {
+      wrap.hidden = false;
+      wrap.innerHTML = `
+        <div class="typuj-leaderboard-header">
+          <h2>🏆 Klasyfikacja typujących</h2>
+          <span class="typuj-leaderboard-meta">Wyniki: ${resultsCount} / ${COMPETITIONS.length}</span>
+        </div>
+        <p class="typuj-leaderboard-empty">Nikt jeszcze nie zatypował.</p>
+      `;
+      return;
+    }
+
+    const currentUserId = window.alkoAuth.getUser()?.id;
+    const compMap = Object.fromEntries(COMPETITIONS.map(c => [c.id, c.name]));
+
+    const rows = ranking.map((entry, idx) => {
+      const isMe = entry.user_id === currentUserId;
+      const medal = idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : '';
+      const breakdownItems = Object.entries(entry.breakdown)
+        .filter(([, v]) => v.points > 0)
+        .map(([comp, v]) => `<li>${escapeHTML(compMap[comp] || comp)}: <strong>${v.points} pkt</strong></li>`)
+        .join('');
+      return `
+        <li class="typuj-rank-row${isMe ? ' me' : ''}">
+          <span class="typuj-rank-place">${medal || '#' + (idx + 1)}</span>
+          <details class="typuj-rank-details">
+            <summary>
+              <span class="typuj-rank-name">${escapeHTML(entry.display_name)}${isMe ? ' <em>(Ty)</em>' : ''}</span>
+              <span class="typuj-rank-points">${entry.points} pkt</span>
+            </summary>
+            ${breakdownItems ? `<ul class="typuj-rank-breakdown">${breakdownItems}</ul>` : '<p class="typuj-rank-breakdown-empty">Same pudła jak na razie.</p>'}
+          </details>
+        </li>
+      `;
+    }).join('');
+
+    wrap.hidden = false;
+    wrap.innerHTML = `
+      <div class="typuj-leaderboard-header">
+        <h2>🏆 Klasyfikacja typujących</h2>
+        <span class="typuj-leaderboard-meta">Wyniki: ${resultsCount} / ${COMPETITIONS.length}</span>
+      </div>
+      <ol class="typuj-rank-list">${rows}</ol>
+    `;
   }
 
   function renderList() {
@@ -402,6 +522,7 @@ function formatLockCountdown() {
     await loadBets();
     rebuildMyBets(user.id);
     renderList();
+    renderLeaderboard();
   }
 
   async function ensureDataLoaded() {
@@ -416,6 +537,8 @@ function formatLockCountdown() {
       lockedEl.hidden = false;
       listEl.hidden = true;
       listEl.innerHTML = '';
+      const lb = document.getElementById('typuj-leaderboard');
+      if (lb) lb.hidden = true;
       renderLockBanner();
       return;
     }
@@ -425,10 +548,11 @@ function formatLockCountdown() {
     renderList();
     try {
       await ensureDataLoaded();
-      await loadBets();
+      await Promise.all([loadBets(), loadResults()]);
       console.log('[typuj] zaklady:', allBets.length);
       rebuildMyBets(user.id);
       renderList();
+      renderLeaderboard();
     } catch (e) {
       console.error('[typuj] refresh error:', e);
     }
