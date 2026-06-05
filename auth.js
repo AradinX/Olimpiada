@@ -280,7 +280,27 @@
   }
 
   async function signOut() {
-    await client.auth.signOut();
+    // SDK Supabase wisi na auth.signOut(), wiec czyscimy localStorage recznie
+    // i sami powiadamiamy listenery — UI natychmiast wraca do stanu wylogowanego.
+    try {
+      for (let i = localStorage.length - 1; i >= 0; i--) {
+        const k = localStorage.key(i);
+        if (k && k.startsWith('sb-') && k.endsWith('-auth-token')) {
+          localStorage.removeItem(k);
+        }
+      }
+    } catch (e) { console.warn('[alkoAuth] clear storage:', e); }
+
+    currentUser = null;
+    cachedAccessToken = null;
+    broadcast();
+
+    // Best-effort: powiadom serwer Supabase zeby uniewaznil token.
+    // Z timeoutem, zeby nie blokowac UI gdy SDK znowu zawisnie.
+    Promise.race([
+      client.auth.signOut(),
+      new Promise(resolve => setTimeout(resolve, 1500))
+    ]).catch(() => {});
   }
 
   // === Nav button ===
