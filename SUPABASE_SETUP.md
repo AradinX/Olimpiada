@@ -173,11 +173,20 @@ create policy "wyniki czytalne dla zalogowanych"
   on public.results for select
   to authenticated
   using (true);
+
+create policy "admin moze wpisywac wyniki"
+  on public.results for insert
+  to authenticated
+  with check ((auth.jwt() ->> 'email') = 'xaradinx@gmail.com');
+
+create policy "admin moze edytowac wyniki"
+  on public.results for update
+  to authenticated
+  using ((auth.jwt() ->> 'email') = 'xaradinx@gmail.com');
 ```
 
-**Jak wpisywać wyniki:** w dashboardzie Supabase wejdź w **Table Editor → results**
-→ **Insert row** i wpisz:
-- `competition` — id konkurencji (`flanki`, `sprint500`, `napol`, `smakosz`, `beerpong`, `inwestor`)
-- `actual_1st`, `actual_2nd`, `actual_3rd` — nazwy drużyn/uczestników identyczne jak w TEAMS/PARTICIPANTS w `typuj.js`
+**Jak wpisywać wyniki:** wejdź na `/wpisz-wyniki.html` (link nie jest w nawigacji,
+wpisz URL bezpośrednio i dodaj do zakładek na telefonie). Tylko Twój email
+(`xaradinx@gmail.com`) ma uprawnienia do zapisu — inni dostaną banner „brak uprawnień".
 
-Klasyfikacja typujących odświeży się automatycznie na typuj.html.
+Klasyfikacja typujących na typuj.html odświeży się automatycznie po zapisie.

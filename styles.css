@@ -5456,6 +5456,210 @@ body.auth-modal-open {
   color: #3a4a60;
 }
 
+/* ==========================================================
+   WPISZ WYNIKI — panel admina (mobilnie zoptymalizowany)
+   ========================================================== */
+
+.wynik-main {
+  max-width: 760px;
+  margin: 24px auto 80px;
+  padding: 0 16px;
+}
+
+.wynik-intro {
+  margin-bottom: 24px;
+  padding: 22px 24px;
+  border: 1px solid rgba(20, 38, 58, 0.18);
+  border-radius: 8px;
+  background:
+    repeating-linear-gradient(0deg, rgba(20, 38, 58, 0.025) 0 1px, transparent 1px 10px),
+    linear-gradient(135deg, rgba(245, 234, 214, 0.95), rgba(224, 200, 153, 0.85));
+  color: #14263a;
+  box-shadow: 0 18px 50px rgba(20, 38, 58, 0.18);
+}
+
+.wynik-intro h1 {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.5rem, 4vw, 2.2rem);
+  color: #14263a;
+  margin-bottom: 8px;
+  line-height: 1.1;
+}
+
+.wynik-intro p {
+  color: #1f2f44;
+}
+
+.wynik-gate {
+  padding: 22px 24px;
+  border: 1px dashed rgba(20, 38, 58, 0.35);
+  border-radius: 8px;
+  background: rgba(245, 234, 214, 0.5);
+  color: #14263a;
+  text-align: center;
+  font-weight: 700;
+  margin-bottom: 18px;
+}
+
+.wynik-gate button {
+  margin-top: 12px;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 6px;
+  background: #14263a;
+  color: #f5ead6;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+}
+
+.wynik-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.wynik-card {
+  padding: 18px 20px;
+  border: 1px solid rgba(20, 38, 58, 0.18);
+  border-radius: 8px;
+  background:
+    repeating-linear-gradient(0deg, rgba(20, 38, 58, 0.025) 0 1px, transparent 1px 10px),
+    linear-gradient(135deg, rgba(245, 234, 214, 0.95), rgba(224, 200, 153, 0.85));
+  color: #14263a;
+  box-shadow: 0 14px 40px rgba(20, 38, 58, 0.14);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.wynik-card.is-filled {
+  border-color: rgba(31, 111, 58, 0.55);
+  box-shadow: 0 14px 40px rgba(31, 111, 58, 0.18);
+}
+
+.wynik-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.wynik-card h3 {
+  font-family: 'Cinzel', serif;
+  font-size: 1.3rem;
+  color: #14263a;
+}
+
+.wynik-card-tag {
+  padding: 3px 10px;
+  border: 1px solid rgba(20, 38, 58, 0.22);
+  border-radius: 999px;
+  background: rgba(255, 252, 242, 0.6);
+  color: #3a4a60;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.wynik-card.is-filled .wynik-card-tag {
+  border-color: rgba(31, 111, 58, 0.45);
+  background: rgba(31, 111, 58, 0.12);
+  color: #1f6f3a;
+}
+
+.wynik-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.wynik-slot {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.wynik-slot-label {
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #3a4a60;
+}
+
+.wynik-card select {
+  width: 100%;
+  padding: 14px 14px;        /* duzy target dla palca */
+  border: 1px solid rgba(20, 38, 58, 0.28);
+  border-radius: 6px;
+  background: rgba(255, 252, 242, 0.85);
+  color: #14263a;
+  font: inherit;
+  font-size: 1rem;
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 38px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path fill='%2314263a' d='M6 8L0 0h12z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+}
+
+.wynik-card select:focus {
+  outline: none;
+  border-color: #14263a;
+  background-color: #fff;
+}
+
+.wynik-card select option {
+  background: #fff;
+  color: #14263a;
+}
+
+.wynik-actions {
+  display: flex;
+  justify-content: stretch;
+  margin-top: 6px;
+}
+
+.wynik-actions button {
+  flex: 1;                   /* full-width na mobilkach */
+  padding: 14px 20px;
+  border: none;
+  border-radius: 6px;
+  background: #14263a;
+  color: #f5ead6;
+  font-weight: 900;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: background 160ms ease;
+}
+
+.wynik-actions button:hover:not(:disabled) {
+  background: #1f3d5e;
+}
+
+.wynik-actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.wynik-feedback {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #1f6f3a;
+  min-height: 1em;
+}
+
+.wynik-feedback.error {
+  color: #b32f2f;
+}
+
 .typuj-list {
   display: grid;
   gap: 18px;
