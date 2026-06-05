@@ -280,6 +280,7 @@
   }
 
   async function signOut() {
+    console.log('[alkoAuth] signOut start');
     // SDK Supabase wisi na auth.signOut(), wiec czyscimy localStorage recznie
     // i sami powiadamiamy listenery — UI natychmiast wraca do stanu wylogowanego.
     try {
@@ -359,7 +360,13 @@
       el.addEventListener('click', e => { e.preventDefault(); openModal('login'); });
     });
     document.querySelectorAll('[data-auth-logout]').forEach(el => {
-      el.addEventListener('click', e => { e.preventDefault(); closeAllAuthMenus(); signOut(); });
+      el.addEventListener('click', e => {
+        console.log('[alkoAuth] logout clicked');
+        e.preventDefault();
+        e.stopPropagation();
+        closeAllAuthMenus();
+        signOut();
+      });
     });
     document.querySelectorAll('[data-auth-trigger]').forEach(el => {
       el.addEventListener('click', e => {
