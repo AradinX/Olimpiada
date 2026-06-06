@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Flanki – Alkoolimpiada</title>
+  <title>Wpisz wyniki Flanków – Admin</title>
   <link rel="stylesheet" href="styles.css?v=5">
 </head>
 <body class="greek-page">
@@ -28,25 +28,25 @@
     </ul>
   </nav>
 
-  <main class="flanki-main">
-    <h1>⚔️ Flanki</h1>
-    <p class="flanki-intro">
-      2 grupy po 3 drużyny. Każda gra z każdą w grupie. Mecz trwa do momentu, aż jedna drużyna w pełni
-      wypije piwa (3 osoby, lub 3 z 4 w drużynie 4-osobowej). Punkty = liczba osób, które wypiły.
-      Z każdej grupy zwycięzcy idą do finału, drugie miejsca grają o brąz.
-    </p>
-
-    <section id="flanki-groups" class="flanki-groups"></section>
-
-    <section id="flanki-schedule-wrap" class="flanki-section">
-      <h2>📋 Harmonogram</h2>
-      <div id="flanki-schedule" class="flanki-schedule"></div>
+  <main class="wynik-main">
+    <section class="wynik-intro">
+      <h1>⚔️ Wpisz wyniki Flanków</h1>
+      <p>Punkty = liczba osób z drużyny które wypiły piwo (0-3). Mecz kończy się gdy jedna ma 3.</p>
+      <p style="margin-top:8px;"><a href="admin.html" style="color:#14263a;font-weight:800;">← Panel admina</a></p>
     </section>
 
-    <section id="flanki-playoff-wrap" class="flanki-section">
-      <h2>🏆 Faza pucharowa</h2>
-      <div id="flanki-playoff" class="flanki-playoff"></div>
-    </section>
+    <div class="wynik-gate" id="flanki-gate-login" hidden>
+      <p>Musisz być zalogowany jako admin.</p>
+      <button type="button" data-auth-login>Zaloguj się</button>
+    </div>
+
+    <div class="wynik-gate" id="flanki-gate-forbidden" hidden>
+      <p>🚫 Twoje konto nie ma uprawnień admina.</p>
+    </div>
+
+    <div id="flanki-admin" hidden>
+      <div id="flanki-admin-list"></div>
+    </div>
   </main>
 
   <script src="scripts.js?v=2"></script>
@@ -54,6 +54,6 @@
   <script src="supabase-config.js?v=2"></script>
   <script src="auth.js?v=3"></script>
   <script src="data.js?v=2"></script>
-  <script src="flanki.js?v=1"></script>
+  <script src="wpisz-flanki.js?v=1"></script>
 </body>
 </html>

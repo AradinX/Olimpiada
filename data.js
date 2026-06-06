@@ -58,6 +58,75 @@ const EVENT_START = new Date('2026-07-25T16:00:00');
 const ADMIN_EMAIL = 'xaradinx@gmail.com';
 
 // =========================
+// FLANKI — grupy i harmonogram
+// Format: 2 grupy x 3 druzyny. Round-robin. Z grupy awansuje 1 do finalu, 2 do meczu o 3.
+// Mecze: punkty = liczba osob ktore wypily piwo (max 3). Brak remisow.
+// Druzyna 4-osobowa: wystarczy 3 z 4 wypije.
+// =========================
+const FLANKI_GROUPS = {
+  A: ['Druzyna 2', 'Druzyna 5', 'Druzyna 1'],
+  B: ['Druzyna 4', 'Druzyna 3', 'Druzyna 6']
+};
+
+// Kolejnosc: A1, B1, A2, B2, A3, B3, malyFinal, final.
+// W kazdej grupie: 1) team1 vs team2  2) team3 vs team1  3) team2 vs team3
+// dzieki czemu kazda druzyna ma przerwe miedzy swoimi meczami.
+const FLANKI_SCHEDULE = [
+  { id: 'A1', phase: 'group', group: 'A', order: 1, team_a: 'Druzyna 2', team_b: 'Druzyna 5', label: 'Grupa A • Mecz 1' },
+  { id: 'B1', phase: 'group', group: 'B', order: 2, team_a: 'Druzyna 4', team_b: 'Druzyna 3', label: 'Grupa B • Mecz 1' },
+  { id: 'A2', phase: 'group', group: 'A', order: 3, team_a: 'Druzyna 1', team_b: 'Druzyna 2', label: 'Grupa A • Mecz 2' },
+  { id: 'B2', phase: 'group', group: 'B', order: 4, team_a: 'Druzyna 6', team_b: 'Druzyna 4', label: 'Grupa B • Mecz 2' },
+  { id: 'A3', phase: 'group', group: 'A', order: 5, team_a: 'Druzyna 5', team_b: 'Druzyna 1', label: 'Grupa A • Mecz 3' },
+  { id: 'B3', phase: 'group', group: 'B', order: 6, team_a: 'Druzyna 3', team_b: 'Druzyna 6', label: 'Grupa B • Mecz 3' },
+  { id: 'small_final', phase: 'playoff', order: 7, team_a: null, team_b: null, label: 'Mecz o 3. miejsce', placeholder: '2 z grupy A vs 2 z grupy B' },
+  { id: 'final',       phase: 'playoff', order: 8, team_a: null, team_b: null, label: 'Finał',              placeholder: '1 z grupy A vs 1 z grupy B' }
+];
+
+// Oblicza standings dla grupy z listy meczow (rozegranych).
+// matchesById: { 'A1': {score_a, score_b}, ... }
+// Zwraca tablice: [{ team, played, wins, scored, conceded, points }] posortowane (1 miejsce pierwsze).
+function computeFlankiStandings(groupName, matchesById) {
+  const teams = FLANKI_GROUPS[groupName] || [];
+  const groupMatches = FLANKI_SCHEDULE.filter(m => m.phase === 'group' && m.group === groupName);
+  const stats = teams.map(t => ({ team: t, played: 0, wins: 0, scored: 0, conceded: 0 }));
+  const byTeam = Object.fromEntries(stats.map(s => [s.team, s]));
+
+  groupMatches.forEach(m => {
+    const r = matchesById[m.id];
+    if (!r || r.score_a == null || r.score_b == null) return;
+    const a = byTeam[m.team_a], b = byTeam[m.team_b];
+    if (!a || !b) return;
+    a.played++; b.played++;
+    a.scored += r.score_a; a.conceded += r.score_b;
+    b.scored += r.score_b; b.conceded += r.score_a;
+    if (r.score_a > r.score_b) a.wins++;
+    else if (r.score_b > r.score_a) b.wins++;
+  });
+
+  // Sort: wins desc, head-to-head, bilans (scored-conceded) desc, scored desc, alfabetycznie
+  stats.sort((x, y) => {
+    if (y.wins !== x.wins) return y.wins - x.wins;
+    // head-to-head: szukamy meczu miedzy nimi
+    const h2h = groupMatches.find(m =>
+      (m.team_a === x.team && m.team_b === y.team) ||
+      (m.team_a === y.team && m.team_b === x.team)
+    );
+    const r = h2h ? matchesById[h2h.id] : null;
+    if (r && r.score_a != null && r.score_b != null) {
+      const xScore = h2h.team_a === x.team ? r.score_a : r.score_b;
+      const yScore = h2h.team_a === y.team ? r.score_a : r.score_b;
+      if (xScore !== yScore) return yScore - xScore;
+    }
+    const xDiff = x.scored - x.conceded, yDiff = y.scored - y.conceded;
+    if (yDiff !== xDiff) return yDiff - xDiff;
+    if (y.scored !== x.scored) return y.scored - x.scored;
+    return x.team.localeCompare(y.team, 'pl');
+  });
+
+  return stats;
+}
+
+// =========================
 // HELPERY
 // =========================
 

@@ -225,3 +225,36 @@ create policy "admin moze kasowac rekordy"
 ```
 
 **Jak zarządzać rekordami:** strona `/wpisz-rekordy.html` (też dostępna z `/admin.html`).
+
+### 2026-06-06: tabela flanki_matches (mecze Flanków)
+
+```sql
+create table public.flanki_matches (
+  match_id text primary key,        -- 'A1', 'A2', 'A3', 'B1', 'B2', 'B3', 'small_final', 'final'
+  team_a text,                       -- nazwa druzyny (dla group automatycznie z schedule; dla playoff admin wybiera)
+  team_b text,
+  score_a int,                       -- 0-3, liczba osob z druzyny A ktora wypila piwo
+  score_b int,                       -- 0-3, liczba osob z druzyny B ktora wypila piwo
+  updated_at timestamptz default now()
+);
+
+alter table public.flanki_matches enable row level security;
+
+create policy "flanki czytalne dla zalogowanych"
+  on public.flanki_matches for select to authenticated using (true);
+
+create policy "admin moze wpisywac flanki"
+  on public.flanki_matches for insert to authenticated
+  with check ((auth.jwt() ->> 'email') = 'xaradinx@gmail.com');
+
+create policy "admin moze edytowac flanki"
+  on public.flanki_matches for update to authenticated
+  using ((auth.jwt() ->> 'email') = 'xaradinx@gmail.com');
+
+create policy "admin moze kasowac flanki"
+  on public.flanki_matches for delete to authenticated
+  using ((auth.jwt() ->> 'email') = 'xaradinx@gmail.com');
+```
+
+**Jak zarządzać meczami:** strona `/wpisz-flanki.html`. Grupy 2x3 są sztywne (Drużyny 2,5,1 vs Drużyny 4,3,6).
+Mecze pucharowe (mały finał + finał) admin wpisuje gdy znana jest kolejność z grup — system podpowiada zwycięzców.
