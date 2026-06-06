@@ -4769,6 +4769,50 @@ tr.advanced td {
   outline: none;
 }
 
+/* Link Admin w navbar — wyrozniony zlotym tlem */
+.auth-admin-item {
+  margin-left: 6px;
+}
+
+.auth-admin-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 8px 14px;
+  border: 1px solid var(--gold, #f8c33a);
+  border-radius: var(--radius);
+  background: rgba(248, 195, 58, 0.12);
+  color: var(--gold, #f8c33a) !important;
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-decoration: none !important;
+  transition: background 180ms ease, color 180ms ease, transform 180ms ease;
+}
+
+.auth-admin-link:hover,
+.auth-admin-link:focus-visible {
+  background: var(--gold, #f8c33a);
+  color: #1a1206 !important;
+  outline: none;
+  transform: translateY(-1px);
+}
+
+/* Admin link w temple-nav (index) */
+.greek-home .temple-nav .auth-admin-temple-link {
+  background: linear-gradient(180deg, rgba(248, 195, 58, 0.95), rgba(185, 135, 47, 0.85));
+  border-color: rgba(123, 50, 61, 0.4);
+  color: #4a3010 !important;
+}
+
+.greek-home .temple-nav .auth-admin-temple-link::before {
+  content: '⚙';
+  color: #7b323d;
+}
+
 /* === Przycisk w temple-corner (strona glowna) === */
 .auth-temple-wrap {
   display: inline-flex;
@@ -5658,6 +5702,136 @@ body.auth-modal-open {
 
 .wynik-feedback.error {
   color: #b32f2f;
+}
+
+/* ==========================================================
+   ADMIN DASHBOARD
+   ========================================================== */
+
+.admin-main {
+  max-width: 760px;
+  margin: 24px auto 80px;
+  padding: 0 16px;
+}
+
+.admin-intro {
+  margin-bottom: 24px;
+  padding: 22px 24px;
+  border: 1px solid rgba(20, 38, 58, 0.18);
+  border-radius: 8px;
+  background:
+    repeating-linear-gradient(0deg, rgba(20, 38, 58, 0.025) 0 1px, transparent 1px 10px),
+    linear-gradient(135deg, rgba(245, 234, 214, 0.95), rgba(224, 200, 153, 0.85));
+  color: #14263a;
+  box-shadow: 0 18px 50px rgba(20, 38, 58, 0.18);
+}
+
+.admin-intro h1 {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  color: #14263a;
+  margin-bottom: 8px;
+}
+
+.admin-intro p {
+  color: #1f2f44;
+}
+
+.admin-tools {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.admin-tool {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 22px;
+  border: 1px solid rgba(20, 38, 58, 0.18);
+  border-radius: 8px;
+  background:
+    repeating-linear-gradient(0deg, rgba(20, 38, 58, 0.025) 0 1px, transparent 1px 10px),
+    linear-gradient(135deg, rgba(245, 234, 214, 0.95), rgba(224, 200, 153, 0.85));
+  color: #14263a;
+  text-decoration: none;
+  box-shadow: 0 14px 40px rgba(20, 38, 58, 0.14);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.admin-tool:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 50px rgba(20, 38, 58, 0.22);
+}
+
+.admin-tool-icon {
+  font-size: 2.2rem;
+  flex-shrink: 0;
+}
+
+.admin-tool-text h3 {
+  font-family: 'Cinzel', serif;
+  font-size: 1.2rem;
+  color: #14263a;
+  margin-bottom: 4px;
+}
+
+.admin-tool-text p {
+  color: #3a4a60;
+  font-size: 0.9rem;
+}
+
+.admin-tool-disabled {
+  opacity: 0.6;
+  pointer-events: none;
+  filter: grayscale(0.3);
+}
+
+.admin-tool-soon {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(20, 38, 58, 0.18);
+  color: #14263a;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* Karta rekordu na stronie rekordy.html (Top 3 Sprint) */
+.record-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 18px 14px;
+  border: 1px solid rgba(20, 38, 58, 0.18);
+  border-radius: 8px;
+  background:
+    repeating-linear-gradient(0deg, rgba(20, 38, 58, 0.025) 0 1px, transparent 1px 10px),
+    linear-gradient(135deg, rgba(245, 234, 214, 0.95), rgba(224, 200, 153, 0.85));
+  color: #14263a;
+  box-shadow: 0 10px 28px rgba(20, 38, 58, 0.16);
+  text-align: center;
+}
+
+.record-medal {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.record-holder {
+  font-weight: 800;
+  font-size: 1.05rem;
+}
+
+.record-value {
+  font-family: 'Cinzel', serif;
+  font-weight: 900;
+  color: #b9872f;
+  font-size: 1.15rem;
 }
 
 .typuj-list {

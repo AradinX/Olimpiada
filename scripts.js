@@ -116,6 +116,7 @@ function renderColumnTables(rows, containerId) {
 }
 
 // === 5) Ładowanie i odświeżanie Wyniki ===
+// UWAGA: od 2026-06-06 wyniki kalkuluje wyniki.js z Supabase results.
 async function loadWyniki() {
   try {
     const rows = await fetchCSV(SHEET_URL_WYNIKI);
@@ -124,12 +125,15 @@ async function loadWyniki() {
     console.error('Błąd pobierania Wyniki:', e);
   }
 }
-if (document.getElementById('wyniki')) {
-  loadWyniki();
-  setInterval(loadWyniki, 60000);
-}
+// Wylaczone — wyniki.js teraz kalkuluje z Supabase results.
+// if (document.getElementById('wyniki')) {
+//   loadWyniki();
+//   setInterval(loadWyniki, 60000);
+// }
 
 // === 6) Ładowanie i odświeżanie Zespoły (kolumny → tabele) ===
+// UWAGA: od 2026-06-06 zespoły są renderowane przez zespoly.js z TEAMS (data.js).
+// Stary fetch z Google Sheets zostawiony pod stopką dla legacy/diagnostyki.
 async function loadZespoly() {
   try {
     const rows = await fetchCSV(SHEET_URL_ZESPOLY);
@@ -139,10 +143,11 @@ async function loadZespoly() {
     console.error('Błąd pobierania Zespoły:', e);
   }
 }
-if (document.getElementById('zespoly-groups')) {
-  loadZespoly();
-  setInterval(loadZespoly, 60000);
-}
+// Wylaczone — zespoly.js teraz renderuje z TEAMS w data.js.
+// if (document.getElementById('zespoly-groups')) {
+//   loadZespoly();
+//   setInterval(loadZespoly, 60000);
+// }
 // === renderSplitTables – dzieli pierwszy arkusz na dwie tabele 2×4 i oznacza top2 jako advanced
 function renderSplitTables(rows, containerId) {
   const header   = rows[0].map(h => h.trim());
@@ -304,6 +309,7 @@ if (document.getElementById('beerpong-champ')) {
   setInterval(loadMistrzBeerPong, 60000);
 }
 // === load Rekord ===
+// UWAGA: od 2026-06-06 rekordy renderuje rekordy.js z Supabase records.
 async function loadRekordy() {
   try {
     const rows = await fetchCSV(SHEET_URL_REKORDY);
@@ -312,10 +318,11 @@ async function loadRekordy() {
     console.error('Błąd pobierania Rekordy:', e);
   }
 }
-if (document.getElementById('rekordy')) {
-  loadRekordy();
-  setInterval(loadRekordy, 60000);
-}
+// Wylaczone — rekordy.js teraz czyta z Supabase records.
+// if (document.getElementById('rekordy')) {
+//   loadRekordy();
+//   setInterval(loadRekordy, 60000);
+// }
 // Home podium
 function findColumnIndex(header, candidates, fallback) {
   const normalized = header.map(normalizeText);

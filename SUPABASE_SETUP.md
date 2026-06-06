@@ -190,3 +190,38 @@ wpisz URL bezpośrednio i dodaj do zakładek na telefonie). Tylko Twój email
 (`xaradinx@gmail.com`) ma uprawnienia do zapisu — inni dostaną banner „brak uprawnień".
 
 Klasyfikacja typujących na typuj.html odświeży się automatycznie po zapisie.
+
+### 2026-06-06: tabela records (rekordy sportowe)
+
+```sql
+create table public.records (
+  id uuid primary key default gen_random_uuid(),
+  competition text not null,    -- np. 'sprint500', 'napol', 'smakosz', 'inwestor'
+  holder text not null,         -- kto ustanowil rekord
+  value numeric not null,       -- wartosc rekordu
+  unit text default '',         -- 'sek', 'sztuk', 'ml' itd.
+  set_at date,                  -- kiedy ustanowiony (opcjonalne)
+  notes text default '',        -- ewentualne dopiski
+  created_at timestamptz default now(),
+  updated_at timestamptz default now()
+);
+
+alter table public.records enable row level security;
+
+create policy "rekordy czytalne dla zalogowanych"
+  on public.records for select to authenticated using (true);
+
+create policy "admin moze wpisywac rekordy"
+  on public.records for insert to authenticated
+  with check ((auth.jwt() ->> 'email') = 'xaradinx@gmail.com');
+
+create policy "admin moze edytowac rekordy"
+  on public.records for update to authenticated
+  using ((auth.jwt() ->> 'email') = 'xaradinx@gmail.com');
+
+create policy "admin moze kasowac rekordy"
+  on public.records for delete to authenticated
+  using ((auth.jwt() ->> 'email') = 'xaradinx@gmail.com');
+```
+
+**Jak zarządzać rekordami:** strona `/wpisz-rekordy.html` (też dostępna z `/admin.html`).

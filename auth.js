@@ -404,7 +404,42 @@
     document.querySelectorAll('.auth-nav-user, .auth-temple-user').forEach(c => c.classList.remove('open'));
   }
 
+  const ADMIN_EMAIL_NAV = 'xaradinx@gmail.com';
+
+  function toggleAdminLink(user) {
+    const isAdmin = !!(user && user.email === ADMIN_EMAIL_NAV);
+    // Klasyczny navbar (greek-page)
+    document.querySelectorAll('.navbar .nav-links').forEach(navList => {
+      let adminLi = navList.querySelector('.auth-admin-item');
+      if (isAdmin && !adminLi) {
+        adminLi = document.createElement('li');
+        adminLi.className = 'auth-admin-item';
+        adminLi.innerHTML = '<a href="admin.html" class="auth-admin-link">⚙ Admin</a>';
+        // Wstaw przed itemem z loginiem zeby byl po prawej kolejny
+        const authItem = navList.querySelector('.auth-nav-item');
+        if (authItem) navList.insertBefore(adminLi, authItem);
+        else navList.appendChild(adminLi);
+      } else if (!isAdmin && adminLi) {
+        adminLi.remove();
+      }
+    });
+    // Temple nav (index.html)
+    document.querySelectorAll('.temple-nav').forEach(tn => {
+      let link = tn.querySelector('.auth-admin-temple-link');
+      if (isAdmin && !link) {
+        link = document.createElement('a');
+        link.href = 'admin.html';
+        link.className = 'auth-admin-temple-link';
+        link.textContent = 'Admin';
+        tn.appendChild(link);
+      } else if (!isAdmin && link) {
+        link.remove();
+      }
+    });
+  }
+
   function renderAuthState(user) {
+    toggleAdminLink(user);
     document.querySelectorAll('.auth-nav-item').forEach(item => {
       const btn = item.querySelector('.auth-nav-btn');
       const userBox = item.querySelector('.auth-nav-user');
