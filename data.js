@@ -12,7 +12,7 @@
 // =========================
 const TEAMS = [
   { name: 'Druzyna 1', members: ['Bartosz', 'Patrycja D', 'Patera'] },
-  { name: 'Druzyna 2', members: ['Piotr', 'Andzia', 'Mati', 'Jepka'] },
+  { name: 'Druzyna 2', members: ['Piotr', 'Andzia', 'Mati', 'Natalia'] },
   { name: 'Druzyna 3', members: ['Michu', 'Asia', 'Maro'] },
   { name: 'Druzyna 4', members: ['Sopel', 'Martyna', 'Rosa', 'Patrycja'] },
   { name: 'Druzyna 5', members: ['Heksyn', 'Kamila', 'Kotka'] },
@@ -24,8 +24,8 @@ const TEAMS = [
 // =========================
 const PARTICIPANTS = [
   'Patera', 'Martyna', 'Patrycja D.', 'Jadzia', 'Heksyn', 'Natalia',
-  'Rosa', 'Kamila', 'Kotka', 'Maro', 'Bartosz', 'Zelek', 'Mati', 'Piter',
-  'Barwa', 'Ganja', 'Michu', 'Sopel', 'Patrycja', 'Asia'
+  'Rosa', 'Kamila', 'Kotka', 'Maro', 'Bartosz', 'Zelek', 'Mati', 'Piotr',
+  'Barwa', 'Andzia', 'Michu', 'Sopel', 'Patrycja', 'Asia'
 ];
 
 // =========================
