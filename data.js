@@ -67,7 +67,7 @@ function normalizePersonName(name) {
   return String(name || '')
     .toLowerCase()
     .normalize('NFD').replace(/[̀-ͯ]/g, '') // strip diakrytyki
-    .replace(/[.\s]+$/, '')                            // strip trailing dots/spaces
+    .replace(/[.\s]+$/, '')                            // strip trailing kropek/spacji
     .trim();
 }
 

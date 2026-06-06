@@ -5834,6 +5834,65 @@ body.auth-modal-open {
   font-size: 1.15rem;
 }
 
+/* ==========================================================
+   WYNIKI — mobilne skalowanie tabeli
+   ========================================================== */
+
+.wyniki-hint {
+  display: none;
+  margin: 8px 0 12px;
+  color: var(--ink-muted, #a7adbb);
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+.wyniki-scroll {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 8px;
+  position: relative;
+}
+
+.wyniki-scroll #wyniki {
+  min-width: 720px;
+  width: 100%;
+  table-layout: auto;
+}
+
+.wyniki-scroll #wyniki th,
+.wyniki-scroll #wyniki td {
+  padding: 8px 10px;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.wyniki-scroll #wyniki th:nth-child(2),
+.wyniki-scroll #wyniki td:nth-child(2) {
+  text-align: left;
+}
+
+@media (max-width: 900px) {
+  .wyniki-hint { display: block; }
+  .wyniki-scroll {
+    box-shadow: inset -12px 0 12px -10px rgba(20, 38, 58, 0.4);
+  }
+  .wyniki-scroll #wyniki th,
+  .wyniki-scroll #wyniki td {
+    padding: 6px 8px;
+    font-size: 0.82rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .wyniki-scroll #wyniki th,
+  .wyniki-scroll #wyniki td {
+    padding: 5px 6px;
+    font-size: 0.78rem;
+  }
+}
+
 .typuj-list {
   display: grid;
   gap: 18px;

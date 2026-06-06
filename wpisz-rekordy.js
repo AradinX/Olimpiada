@@ -37,11 +37,10 @@
       COMPETITIONS.map(c => `<option value="${escapeHTML(c.id)}">${escapeHTML(c.name)}</option>`).join('');
   }
 
-  function fillHolderDropdown(select) {
-    // Wszyscy uczestnicy + nazwy druzyn (na wypadek gdyby rekord dotyczyl druzyny)
+  function fillHolderDatalist(datalist) {
+    // Podpowiedzi: uczestnicy + druzyny + historyczni rekordziści (dodajemy po imporcie).
     const all = [...PARTICIPANTS, ...TEAMS.map(t => t.name)];
-    select.innerHTML = '<option value="" disabled selected>— wybierz —</option>' +
-      all.map(n => `<option value="${escapeHTML(n)}">${escapeHTML(n)}</option>`).join('');
+    datalist.innerHTML = all.map(n => `<option value="${escapeHTML(n)}">`).join('');
   }
 
   function compName(id) {
@@ -73,7 +72,7 @@
         </div>
         <p style="color:#1f2f44;font-size:0.95rem;">
           <strong>${escapeHTML(String(r.value))}${r.unit ? ' ' + escapeHTML(r.unit) : ''}</strong>
-          ${r.set_at ? ` • ${escapeHTML(new Date(r.set_at).toLocaleDateString('pl-PL'))}` : ''}
+          ${r.set_at ? ` • ${new Date(r.set_at).getFullYear()}` : ''}
           ${r.notes ? `<br><em>${escapeHTML(r.notes)}</em>` : ''}
         </p>
         <div class="wynik-actions" style="gap:8px;">
@@ -96,8 +95,14 @@
       notes: (fd.get('notes') || '').trim(),
       updated_at: new Date().toISOString()
     };
-    const setAt = fd.get('set_at');
-    if (setAt) payload.set_at = setAt;
+    // Rok -> data 1 stycznia danego roku (kolumna w bazie to nadal DATE).
+    const yearStr = fd.get('year');
+    if (yearStr) {
+      const y = parseInt(yearStr, 10);
+      if (!isNaN(y) && y >= 1900 && y <= 2100) {
+        payload.set_at = `${y}-01-01`;
+      }
+    }
     return payload;
   }
 
@@ -218,7 +223,94 @@
 
   function init() {
     fillCompetitionDropdown(newForm.querySelector('[name="competition"]'));
-    fillHolderDropdown(newForm.querySelector('[name="holder"]'));
+    fillHolderDatalist(document.getElementById('holder-suggestions'));
+    const importBtn = document.getElementById('btn-import-history');
+    if (importBtn && !importBtn._wired) {
+      importBtn._wired = true;
+      importBtn.addEventListener('click', handleImportHistory);
+    }
+  }
+
+  async function handleImportHistory() {
+    const btn = document.getElementById('btn-import-history');
+    if (!confirm('Importować historyczne wyniki Sprint na 500 z arkusza? Duplikaty zostaną pominięte.')) return;
+    btn.disabled = true;
+    const oldLabel = btn.textContent;
+    btn.textContent = 'Importuję...';
+
+    try {
+      if (typeof fetchCSV !== 'function' || typeof SHEET_URL_REKORDY === 'undefined') {
+        throw new Error('Brakuje fetchCSV / SHEET_URL_REKORDY (scripts.js)');
+      }
+      const rows = await fetchCSV(SHEET_URL_REKORDY);
+      if (rows.length < 3) throw new Error('Arkusz ma za mało wierszy.');
+      const eventHeader = rows[0] || [];
+      const yearHeader  = rows[1] || [];
+      const dataRows    = rows.slice(2).filter(r => r.some(Boolean));
+
+      // Znajdź kolumny Sprint na 500
+      const sprintCols = eventHeader
+        .map((eventName, idx) => ({ eventName, idx, year: parseInt(String(yearHeader[idx] || '').trim(), 10) }))
+        .filter(c => String(c.eventName).toLowerCase().includes('sprint na 500') && Number.isFinite(c.year));
+
+      if (!sprintCols.length) throw new Error('Brak kolumn z "Sprint na 500" + roku.');
+
+      // Zbuduj liste rekordow do wstawienia
+      const toInsert = [];
+      sprintCols.forEach(col => {
+        dataRows.forEach(row => {
+          const holder = String(row[0] || '').trim();
+          const rawVal = String(row[col.idx] || '').replace(',', '.').trim();
+          const v = parseFloat(rawVal);
+          if (!holder || isNaN(v) || v <= 0) return;
+          toInsert.push({
+            competition: 'sprint500',
+            holder,
+            value: v,
+            unit: 'sek',
+            set_at: `${col.year}-01-01`,
+            notes: 'Import historyczny',
+            updated_at: new Date().toISOString()
+          });
+        });
+      });
+
+      if (!toInsert.length) throw new Error('Nic do zaimportowania.');
+
+      // Eliminuj duplikaty (holder + year + value identyczne jak juz w bazie)
+      const existingKey = r => `${(r.holder||'').toLowerCase()}|${r.set_at}|${parseFloat(r.value)}`;
+      const existingKeys = new Set(records.map(existingKey));
+      const fresh = toInsert.filter(r => !existingKeys.has(existingKey(r)));
+
+      if (!fresh.length) {
+        showToast(`Wszystkie ${toInsert.length} rekordy już są w bazie.`, 'info');
+        btn.disabled = false; btn.textContent = oldLabel;
+        return;
+      }
+
+      // Wsadz hurtem
+      const token = window.alkoAuth.getAccessToken();
+      const url = window.SUPABASE_CONFIG.url + '/rest/v1/records';
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': window.SUPABASE_CONFIG.anonKey,
+          'Authorization': `Bearer ${token}`,
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify(fresh)
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}: ${await res.text()}`);
+      showToast(`✓ Zaimportowano ${fresh.length} rekordów (pominięto ${toInsert.length - fresh.length} duplikatów).`, 'success');
+      await loadRecords();
+    } catch (err) {
+      console.error('[wpisz-rekordy] import:', err);
+      showToast('Błąd importu: ' + (err.message || err), 'error');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = oldLabel;
+    }
   }
 
   function refreshFor(user) {

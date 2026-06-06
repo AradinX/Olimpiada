@@ -38,7 +38,7 @@
     try {
       const dt = new Date(d);
       if (isNaN(dt.getTime())) return escapeHTML(d);
-      return dt.toLocaleDateString('pl-PL', { year: 'numeric', month: '2-digit', day: '2-digit' });
+      return String(dt.getFullYear());
     } catch { return escapeHTML(d); }
   }
 
@@ -74,7 +74,7 @@
         <th>Konkurencja</th>
         <th>Rekordzista</th>
         <th>Wynik</th>
-        <th>Data</th>
+        <th>Rok</th>
         <th>Notatki</th>
       </tr>
     `;

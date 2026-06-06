@@ -45,6 +45,19 @@
     </div>
 
     <div id="rekord-admin" hidden>
+      <article class="wynik-card" style="margin-bottom:14px;background:rgba(255,252,242,0.6);">
+        <div class="wynik-card-head">
+          <h3>📥 Import historycznych rekordów</h3>
+        </div>
+        <p style="color:#1f2f44;font-size:0.92rem;">
+          Pobieram historyczne wyniki Sprint na 500 z arkusza Google i zapisuję do bazy.
+          Bezpieczne — duplikaty pomija (po: rekordzista + rok + wynik).
+        </p>
+        <div class="wynik-actions">
+          <button type="button" id="btn-import-history" style="background:#1f6f3a;">Importuj z arkusza</button>
+        </div>
+      </article>
+
       <article class="wynik-card">
         <div class="wynik-card-head">
           <h3>➕ Dodaj nowy rekord</h3>
@@ -58,9 +71,8 @@
           </label>
           <label class="wynik-slot">
             <span class="wynik-slot-label">Rekordzista</span>
-            <select name="holder" required>
-              <option value="" disabled selected>— wybierz —</option>
-            </select>
+            <input type="text" name="holder" list="holder-suggestions" required placeholder="Wybierz lub wpisz...">
+            <datalist id="holder-suggestions"></datalist>
           </label>
           <label class="wynik-slot">
             <span class="wynik-slot-label">Wynik (liczba)</span>
@@ -71,8 +83,8 @@
             <input type="text" name="unit" maxlength="20">
           </label>
           <label class="wynik-slot">
-            <span class="wynik-slot-label">Data ustanowienia</span>
-            <input type="date" name="set_at">
+            <span class="wynik-slot-label">Rok ustanowienia</span>
+            <input type="number" name="year" min="2010" max="2030" step="1" placeholder="np. 2025">
           </label>
           <label class="wynik-slot">
             <span class="wynik-slot-label">Notatki (opcjonalne)</span>
@@ -95,6 +107,6 @@
   <script src="supabase-config.js?v=2"></script>
   <script src="auth.js?v=3"></script>
   <script src="data.js?v=1"></script>
-  <script src="wpisz-rekordy.js?v=1"></script>
+  <script src="wpisz-rekordy.js?v=3"></script>
 </body>
 </html>

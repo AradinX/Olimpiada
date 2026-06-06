@@ -1,8 +1,5 @@
 // === Panel Admina — wpisywanie wynikow konkurencji ===
-// Uzywa globalnych TEAMS, PARTICIPANTS, COMPETITIONS z typuj.js (musi byc dolaczony wczesniej).
-// Tylko ADMIN_EMAIL moze zapisywac (sprawdzane lokalnie + RLS po stronie Supabase).
-
-const ADMIN_EMAIL = 'xaradinx@gmail.com';
+// Uzywa globalnych TEAMS, PARTICIPANTS, COMPETITIONS, ADMIN_EMAIL z data.js.
 
 (function () {
   const gateLoginEl = document.getElementById('wynik-gate-login');
