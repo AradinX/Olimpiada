@@ -131,13 +131,20 @@
   }
 
   async function load() {
+    matchesById = {};
     const { data, error } = await pgGet('flanki_matches?select=match_id,team_a,team_b,score_a,score_b');
     if (error) {
-      console.error('[flanki] load:', error.message);
-      groupsEl.innerHTML = `<p class="status-copy">${escapeHTML('Nie udało się pobrać meczów: ' + error.message)}</p>`;
+      // Nie wisimy na bledzie — renderujemy grupy/harmonogram z pustymi wynikami
+      // i pokazujemy delikatny banner.
+      console.warn('[flanki] load:', error.message);
+      renderAll();
+      const banner = document.createElement('p');
+      banner.className = 'status-copy';
+      banner.style.cssText = 'margin-bottom:14px;color:#ffb4b4;';
+      banner.textContent = `Brak meczów w bazie (${error.message}). Wpisz pierwszy w panelu admina.`;
+      groupsEl.parentNode.insertBefore(banner, groupsEl);
       return;
     }
-    matchesById = {};
     (data || []).forEach(m => { matchesById[m.match_id] = m; });
     renderAll();
   }
@@ -149,6 +156,9 @@
       playoffEl.innerHTML = '';
       return;
     }
+    // Render od razu (puste wyniki) zeby cos bylo widac zanim sieciowka odpowie
+    matchesById = {};
+    renderAll();
     load();
   }
 

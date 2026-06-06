@@ -33,13 +33,14 @@
   }
 
   async function loadMatches() {
+    matchesById = {};
     const { data, error } = await pgGet('flanki_matches?select=match_id,team_a,team_b,score_a,score_b');
     if (error) {
-      console.error('[wpisz-flanki] load:', error.message);
-      showToast('Błąd ładowania: ' + error.message, 'error');
+      console.warn('[wpisz-flanki] load:', error.message);
+      // Pierwszy raz — tabela moze nie istniec albo byc pusta. Pozwol wpisywac.
+      showToast('Brak meczów w bazie. Możesz wpisać pierwszy.', 'info');
       return;
     }
-    matchesById = {};
     (data || []).forEach(m => { matchesById[m.match_id] = m; });
   }
 
@@ -255,6 +256,8 @@
     gateLogin.hidden = true;
     gateForbidden.hidden = true;
     wrap.hidden = false;
+    // Render od razu zeby admin widzial 8 kart, potem dociagam wyniki
+    render();
     await loadMatches();
     render();
   }
