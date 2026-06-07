@@ -1931,13 +1931,14 @@ tr.advanced td {
 
 .countdown-temple {
   display: grid;
-  gap: 10px;
-  padding: 14px;
-  max-width: 360px;
+  gap: 8px;
+  padding: 12px;
+  max-width: 320px;
+  width: 100%;
   border: 1px solid rgba(20, 38, 58, 0.18);
-  border-radius: 16px;
+  border-radius: 14px;
   background: rgba(255, 248, 233, 0.72);
-  box-shadow: 0 26px 80px rgba(20, 38, 58, 0.16);
+  box-shadow: 0 24px 70px rgba(20, 38, 58, 0.16);
   backdrop-filter: blur(18px);
 }
 
@@ -1958,8 +1959,8 @@ tr.advanced td {
 }
 
 .greek-home .time-unit {
-  min-height: 60px;
-  padding: 8px 14px;
+  min-height: 52px;
+  padding: 6px 12px;
   grid-template-columns: 1fr auto;
   border-color: rgba(20, 38, 58, 0.16);
   background:
@@ -1970,7 +1971,8 @@ tr.advanced td {
 .greek-home .time-unit span {
   justify-self: start;
   color: var(--ink-blue);
-  font-size: clamp(1.6rem, 3.6vw, 2.6rem);
+  font-size: clamp(1.4rem, 2.6vw, 2rem);
+  font-weight: 800;
 }
 
 .greek-home .time-unit small {
@@ -2466,7 +2468,8 @@ tr.advanced td {
 }
 
 .olympus-copy {
-  padding-top: clamp(180px, 22vw, 280px);
+  /* Wystarczy przesunąć pod nawigację (top: 56-92px + wysokość ok 70-80px = max 172px). */
+  padding-top: clamp(140px, 14vw, 200px);
 }
 
 .olympus-copy h2 {
@@ -3197,20 +3200,23 @@ tr.advanced td {
 
 /* Final layout polish: keep the monumental type inside the temple grid. */
 .greek-home .olympus-hero {
-  grid-template-columns: minmax(0, 1fr) minmax(300px, 390px);
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 320px);
   align-items: center;
   overflow: hidden;
+  padding: clamp(22px, 4vw, 64px) clamp(20px, 5vw, 110px);
+  gap: clamp(16px, 2.5vw, 48px);
 }
 
 .greek-home .olympus-copy {
   min-width: 0;
   max-width: 980px;
-  padding-right: clamp(0px, 3vw, 46px);
+  padding-right: clamp(0px, 2vw, 32px);
 }
 
 .greek-home .olympus-copy h2 {
   max-width: 100%;
-  font-size: clamp(1.9rem, 5.2vw, 5.2rem);
+  /* Skala zoptymalizowana dla 1024-2560px. nowrap zachowane. */
+  font-size: clamp(1.8rem, 4.2vw, 4.6rem);
   line-height: 0.95;
   letter-spacing: -0.02em;
   white-space: nowrap;
@@ -3818,9 +3824,10 @@ tr.advanced td {
 }
 
 .greek-home .temple-nav {
-  left: clamp(150px, 13vw, 230px);
-  right: clamp(16px, 4vw, 90px);
-  top: clamp(64px, 7vw, 110px);
+  /* Lewa krawedz ZAWSZE za logiem (logo max right = 256px na szerokich ekranach). */
+  left: clamp(220px, 14vw, 280px);
+  right: clamp(20px, 4vw, 100px);
+  top: clamp(56px, 5.5vw, 92px);
   max-width: none;
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
