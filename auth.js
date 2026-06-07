@@ -203,6 +203,61 @@
   }
   client.auth.onAuthStateChange((_event, session) => setSession(session));
 
+  // === Raw fetch do /auth/v1/* (SDK signIn/signUp wisi) ===
+  async function rawAuthRequest(path, body) {
+    const url = cfg.url + path;
+    const ctrl = new AbortController();
+    const tid = setTimeout(() => ctrl.abort(), 10000);
+    try {
+      const r = await fetch(url, {
+        method: 'POST',
+        signal: ctrl.signal,
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': cfg.anonKey
+        },
+        body: JSON.stringify(body)
+      });
+      clearTimeout(tid);
+      const txt = await r.text();
+      let json = null;
+      try { json = txt ? JSON.parse(txt) : null; } catch {}
+      if (!r.ok) {
+        const msg = json?.error_description || json?.msg || json?.error || txt || `HTTP ${r.status}`;
+        return { error: msg, status: r.status };
+      }
+      return { json };
+    } catch (err) {
+      clearTimeout(tid);
+      return { error: err.name === 'AbortError' ? 'Timeout — Supabase nie odpowiedzial w 10s.' : err.message };
+    }
+  }
+
+  // Zapisuje sesje do localStorage w formacie Supabase v2 + ustawia stan auth.js
+  function saveSessionFromResponse(json) {
+    const session = {
+      access_token: json.access_token,
+      refresh_token: json.refresh_token || '',
+      token_type: json.token_type || 'bearer',
+      expires_in: json.expires_in || 3600,
+      expires_at: Math.floor(Date.now() / 1000) + (json.expires_in || 3600),
+      user: json.user || null
+    };
+    try {
+      const ref = new URL(cfg.url).hostname.split('.')[0];
+      localStorage.setItem(`sb-${ref}-auth-token`, JSON.stringify(session));
+    } catch (e) { console.warn('[alkoAuth] storage write:', e); }
+
+    cachedAccessToken = session.access_token;
+    if (session.user) {
+      currentUser = {
+        id: session.user.id,
+        email: session.user.email,
+        displayName: session.user.user_metadata?.display_name || session.user.email?.split('@')[0] || 'user'
+      };
+    }
+  }
+
   // === Modal ===
   const MODAL_HTML = `
     <div class="auth-modal-backdrop" id="auth-modal" hidden>
@@ -280,13 +335,19 @@
       const data = new FormData(loginForm);
       const submit = loginForm.querySelector('.auth-submit');
       submit.disabled = true; submit.textContent = 'Loguje...'; showError('');
-      const { error } = await client.auth.signInWithPassword({
+      const res = await rawAuthRequest('/auth/v1/token?grant_type=password', {
         email: data.get('email'),
         password: data.get('password')
       });
       submit.disabled = false; submit.textContent = 'Zaloguj sie';
-      if (error) return showError(translateError(error.message));
-      closeModal();
+      if (res.error) return showError(translateError(res.error));
+      if (res.json && res.json.access_token) {
+        saveSessionFromResponse(res.json);
+        broadcast();
+        closeModal();
+      } else {
+        showError('Logowanie zwrocilo dziwna odpowiedz. Sprobuj jeszcze raz.');
+      }
     });
 
     registerForm.addEventListener('submit', async e => {
@@ -294,16 +355,17 @@
       const data = new FormData(registerForm);
       const submit = registerForm.querySelector('.auth-submit');
       submit.disabled = true; submit.textContent = 'Tworze...'; showError('');
-      const { error } = await client.auth.signUp({
+      const res = await rawAuthRequest('/auth/v1/signup', {
         email: data.get('email'),
         password: data.get('password'),
-        options: { data: { display_name: data.get('display_name').trim() } }
+        data: { display_name: data.get('display_name').trim() }
       });
       submit.disabled = false; submit.textContent = 'Zaloz konto';
-      if (error) return showError(translateError(error.message));
-      // Jesli Confirm email wylaczone -> sesja od razu. Jesli wlaczone -> info.
-      const { data: sessionData } = await client.auth.getSession();
-      if (sessionData.session) {
+      if (res.error) return showError(translateError(res.error));
+      // Jesli Confirm email wylaczone -> sesja od razu. Jesli wlaczone -> wiadomosc.
+      if (res.json && res.json.access_token) {
+        saveSessionFromResponse(res.json);
+        broadcast();
         closeModal();
       } else {
         showError('Konto utworzone. Sprawdz email i kliknij link aktywacyjny.');
