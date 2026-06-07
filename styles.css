@@ -1747,17 +1747,46 @@ tr.advanced td {
   animation-delay: -4s;
 }
 
+/* === Nagłówek i nawigacja na greek-home — w stylu arena-temple === */
 .greek-home .site-header,
 .greek-home .navbar {
-  border-color: rgba(20, 38, 58, 0.18);
+  width: min(1680px, calc(100% - clamp(24px, 7vw, 180px)));
+  border: 1px solid var(--engrave, rgba(20, 38, 58, 0.18));
+  border-radius: 4px;
   color: var(--ink-blue);
-  background: rgba(255, 248, 233, 0.72);
-  box-shadow: 0 18px 60px rgba(20, 38, 58, 0.12);
+  background:
+    linear-gradient(180deg, rgba(235, 216, 176, 0.95), rgba(201, 166, 103, 0.48));
+  box-shadow: var(--shadow-stone, 0 18px 60px rgba(20, 38, 58, 0.18));
+  backdrop-filter: none;
 }
 
-.greek-home .site-header h1,
+.greek-home .site-header {
+  margin-top: clamp(16px, 2vw, 28px);
+  padding: clamp(10px, 1.6vw, 18px) clamp(16px, 2.4vw, 28px);
+}
+
+.greek-home .navbar {
+  margin-top: 10px;
+}
+
+.greek-home .site-logo {
+  width: clamp(46px, 5vw, 64px);
+  height: clamp(46px, 5vw, 64px);
+  border: 2px solid var(--antique-gold, #b9872f);
+  box-shadow: 0 4px 14px rgba(20, 38, 58, 0.18);
+}
+
+.greek-home .site-header h1 {
+  color: var(--ink-blue);
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.2rem, 2vw, 1.75rem);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
 .greek-home .nav-links a {
   color: var(--ink-blue);
+  font-weight: 800;
 }
 
 .greek-home .nav-links a.active,
