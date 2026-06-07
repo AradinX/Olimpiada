@@ -1747,10 +1747,11 @@ tr.advanced td {
   animation-delay: -4s;
 }
 
-/* === Nagłówek i nawigacja na greek-home — w stylu arena-temple === */
-.greek-home .site-header,
-.greek-home .navbar {
+/* === Nawigacja na greek-home — logo + tytul + linki w jednym pasku === */
+.greek-home .navbar.navbar-with-brand {
   width: min(1680px, calc(100% - clamp(24px, 7vw, 180px)));
+  margin-top: clamp(16px, 2vw, 28px);
+  padding: clamp(10px, 1.4vw, 16px) clamp(14px, 2vw, 24px);
   border: 1px solid var(--engrave, rgba(20, 38, 58, 0.18));
   border-radius: 4px;
   color: var(--ink-blue);
@@ -1758,35 +1759,66 @@ tr.advanced td {
     linear-gradient(180deg, rgba(235, 216, 176, 0.95), rgba(201, 166, 103, 0.48));
   box-shadow: var(--shadow-stone, 0 18px 60px rgba(20, 38, 58, 0.18));
   backdrop-filter: none;
+  display: flex;
+  align-items: center;
+  gap: clamp(14px, 2vw, 28px);
 }
 
-.greek-home .site-header {
-  margin-top: clamp(16px, 2vw, 28px);
-  padding: clamp(10px, 1.6vw, 18px) clamp(16px, 2.4vw, 28px);
-}
-
-.greek-home .navbar {
-  margin-top: 10px;
+.greek-home .navbar-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: var(--ink-blue);
+  flex-shrink: 0;
 }
 
 .greek-home .site-logo {
-  width: clamp(46px, 5vw, 64px);
-  height: clamp(46px, 5vw, 64px);
+  width: clamp(42px, 4.4vw, 56px);
+  height: clamp(42px, 4.4vw, 56px);
+  border-radius: 50%;
+  object-fit: cover;
   border: 2px solid var(--antique-gold, #b9872f);
   box-shadow: 0 4px 14px rgba(20, 38, 58, 0.18);
 }
 
-.greek-home .site-header h1 {
-  color: var(--ink-blue);
+.greek-home .navbar-title {
   font-family: 'Cinzel', serif;
-  font-size: clamp(1.2rem, 2vw, 1.75rem);
+  font-size: clamp(1.05rem, 1.6vw, 1.45rem);
   font-weight: 800;
   letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-blue);
+  white-space: nowrap;
+}
+
+/* Linki przesuniete do prawej */
+.greek-home .navbar.navbar-with-brand .nav-links {
+  margin-left: auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
 }
 
 .greek-home .nav-links a {
   color: var(--ink-blue);
   font-weight: 800;
+}
+
+/* Na mobilkach: brand na gorze, linki ponizej (wraz) */
+@media (max-width: 760px) {
+  .greek-home .navbar.navbar-with-brand {
+    flex-wrap: wrap;
+  }
+  .greek-home .navbar.navbar-with-brand .nav-links {
+    width: 100%;
+    margin-left: 0;
+    justify-content: center;
+  }
+  .greek-home .navbar-title {
+    font-size: clamp(0.95rem, 4vw, 1.2rem);
+  }
 }
 
 .greek-home .nav-links a.active,
