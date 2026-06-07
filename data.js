@@ -30,14 +30,45 @@ const PARTICIPANTS = [
 
 // =========================
 // LISTA KONKURENCJI
+// description widoczny na typuj.html zeby ludzie wiedzieli na czym polega konkurencja.
 // =========================
 const COMPETITIONS = [
-  { id: 'sprint500', name: 'Sprint na 500',     type: 'participant' },
-  { id: 'flanki',    name: 'Flanki',            type: 'team' },
-  { id: 'napol',     name: 'Na pol',            type: 'participant' },
-  { id: 'smakosz',   name: 'Smakosz',           type: 'participant' },
-  { id: 'beerpong',  name: 'Spacer na sciezke', type: 'team' },
-  { id: 'inwestor',  name: 'Inwestor',          type: 'participant' }
+  {
+    id: 'sprint500',
+    name: 'Sprint na 500',
+    type: 'participant',
+    description: 'Kubek piwa (500 ml) i walka z czasem — kto wypije najszybciej, ten wygrywa. Mierzony stoperem co do setnej.'
+  },
+  {
+    id: 'flanki',
+    name: 'Flanki',
+    type: 'team',
+    description: 'Drużynowa gra w rzucanie piłką w puszkę przeciwnika. Format grupowy + faza pucharowa (mecz o 3. miejsce i finał). Wynik = liczba osób, które wypiły piwo.'
+  },
+  {
+    id: 'napol',
+    name: 'Na pol',
+    type: 'participant',
+    description: 'Dwa kubki na wadze. Zadanie: nalać i wypić piwo tak, żeby waga utrzymała równowagę. Punktuje balans i precyzja.'
+  },
+  {
+    id: 'smakosz',
+    name: 'Smakosz',
+    type: 'participant',
+    description: 'Cztery piwa różnych marek obok siebie. Trzeba rozpoznać każde z nich na ślepo — kto trafi najwięcej, ten wygrywa.'
+  },
+  {
+    id: 'beerpong',
+    name: 'Spacer na sciezke',
+    type: 'team',
+    description: 'Klasyczny beer pong — celuj kulką w kubki z piwem przeciwnika. Drużynowo, eliminacje + finał.'
+  },
+  {
+    id: 'inwestor',
+    name: 'Inwestor',
+    type: 'participant',
+    description: 'Zbieranie puszek na czas. Im więcej puszek, tym wyższy „kapitał" — kto najlepiej zainwestuje pierwsze minuty, ten wygrywa.'
+  }
 ];
 
 // =========================

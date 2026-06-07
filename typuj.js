@@ -281,12 +281,27 @@
         ? `<button type="submit" disabled title="Typowanie zamkniete">Zamkniete</button>`
         : `<button type="submit">${submitted ? 'Zaktualizuj typ' : 'Obstaw'}</button>`;
 
+      // Aktualny wynik konkurencji (jesli admin juz wpisal)
+      const result = resultsByComp[comp.id];
+      const resultBlock = result ? `
+        <div class="typuj-result-podium">
+          <span class="typuj-result-label">✅ Wyniki konkurencji:</span>
+          <div class="typuj-result-places">
+            <span class="typuj-result-place">🥇 <strong>${escapeHTML(result.actual_1st || '—')}</strong></span>
+            <span class="typuj-result-place">🥈 <strong>${escapeHTML(result.actual_2nd || '—')}</strong></span>
+            <span class="typuj-result-place">🥉 <strong>${escapeHTML(result.actual_3rd || '—')}</strong></span>
+          </div>
+        </div>
+      ` : '';
+
       return `
-        <article class="typuj-card${locked ? ' locked' : ''}" data-comp="${escapeHTML(comp.id)}">
+        <article class="typuj-card${locked ? ' locked' : ''}${result ? ' has-result' : ''}" data-comp="${escapeHTML(comp.id)}">
           <div class="typuj-card-head">
             <h3>${escapeHTML(comp.name)}</h3>
             <span class="typuj-card-tag">${comp.type === 'team' ? 'druzyna' : 'uczestnik'}</span>
           </div>
+          ${comp.description ? `<p class="typuj-card-desc">${escapeHTML(comp.description)}</p>` : ''}
+          ${resultBlock}
           <form data-comp-form="${escapeHTML(comp.id)}" class="typuj-podium-form">
             ${podiumSelect('first',  '🥇 1. miejsce', v1, comp, locked)}
             ${podiumSelect('second', '🥈 2. miejsce', v2, comp, locked)}

@@ -6637,6 +6637,56 @@ body.auth-modal-open {
   text-transform: uppercase;
 }
 
+/* Opis konkurencji */
+.typuj-card-desc {
+  margin: 0;
+  padding: 10px 14px;
+  border-left: 3px solid #b9872f;
+  background: rgba(255, 252, 242, 0.55);
+  color: #1f2f44;
+  font-size: 0.92rem;
+  line-height: 1.45;
+  font-style: italic;
+}
+
+/* Podium wynikow (gdy admin juz wpisal) */
+.typuj-result-podium {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 14px;
+  border: 1px solid rgba(31, 111, 58, 0.45);
+  border-radius: 6px;
+  background: rgba(31, 111, 58, 0.1);
+}
+
+.typuj-result-label {
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #1f6f3a;
+}
+
+.typuj-result-places {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+}
+
+.typuj-result-place {
+  color: #14263a;
+  font-size: 0.95rem;
+}
+
+.typuj-result-place strong {
+  color: #1f6f3a;
+}
+
+.typuj-card.has-result {
+  border-color: rgba(31, 111, 58, 0.45);
+}
+
 .typuj-card .typuj-current {
   color: #3a4a60;
   font-size: 0.9rem;
