@@ -37,37 +37,37 @@ const COMPETITIONS = [
     id: 'sprint500',
     name: 'Sprint na 500',
     type: 'participant',
-    description: 'Kubek piwa (500 ml) i walka z czasem — kto wypije najszybciej, ten wygrywa. Mierzony stoperem co do setnej.'
+    description: 'Klasyk wszech czasów: pół litra złocistego płynu kontra stoper. Kto skróci dystans między pierwszym łykiem a ostatnią kroplą — ten wpisuje się do annałów Alkoolimpiady.'
   },
   {
     id: 'flanki',
     name: 'Flanki',
     type: 'team',
-    description: 'Drużynowa gra w rzucanie piłką w puszkę przeciwnika. Format grupowy + faza pucharowa (mecz o 3. miejsce i finał). Wynik = liczba osób, które wypiły piwo.'
+    description: 'Szlagier całego turnieju. Jeżeli potrzebujesz zasad — odpuść sobie w tym roku.'
   },
   {
     id: 'napol',
     name: 'Na pol',
     type: 'participant',
-    description: 'Dwa kubki na wadze. Zadanie: nalać i wypić piwo tak, żeby waga utrzymała równowagę. Punktuje balans i precyzja.'
+    description: 'Sztuka precyzji w czystej postaci. Nalewamy 500 ml pysznego, schłodzonego nektaru na wagę i wypij dokładnie połowę tego, co masz. Margines błędu? Zerowy, jeśli chcesz medal.'
   },
   {
     id: 'smakosz',
     name: 'Smakosz',
     type: 'participant',
-    description: 'Cztery piwa różnych marek obok siebie. Trzeba rozpoznać każde z nich na ślepo — kto trafi najwięcej, ten wygrywa.'
+    description: 'Pięć kufli, jedno czujne podniebienie. Na ślepo dopasuj piwa do ich marek — czy odgadniesz, że to kraftowy Okocim Judy Hopps o nucie marchewkowej? Wygrywa ten, kto pamięta smak po pierwszym łyku.'
   },
   {
     id: 'beerpong',
     name: 'Spacer na sciezke',
     type: 'team',
-    description: 'Klasyczny beer pong — celuj kulką w kubki z piwem przeciwnika. Drużynowo, eliminacje + finał.'
+    description: 'Spacer bywa zdradliwy — szczególnie po ciemku. Na szczęście jest nawigator. Dwóch zawodników ze złączonymi nogami i opaską na oczach, jeden przewodnik z otwartymi oczami i misjami specjalnymi po drodze.'
   },
   {
     id: 'inwestor',
     name: 'Inwestor',
     type: 'participant',
-    description: 'Zbieranie puszek na czas. Im więcej puszek, tym wyższy „kapitał" — kto najlepiej zainwestuje pierwsze minuty, ten wygrywa.'
+    description: 'Puszki i butelki — żyła złota XXI wieku. Trafiaj nimi w odpowiedni pojemnik z odległości; każde celne uderzenie to kapitał na koncie. Im więcej trafień, tym wyższa wycena fortuny.'
   }
 ];
 
