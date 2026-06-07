@@ -1749,7 +1749,9 @@ tr.advanced td {
 
 /* === Nawigacja na greek-home — logo + tytul + linki w jednym pasku === */
 .greek-home .navbar.navbar-with-brand {
-  width: min(1680px, calc(100% - clamp(24px, 7vw, 180px)));
+  /* Max 1420px = experience(1600px max) - clamp(180px paddingu sekcji wewnetrznych).
+     Dzieki temu navbar ma identyczna szerokosc co hero i konkurencje. */
+  width: min(1420px, calc(100% - clamp(24px, 7vw, 180px)));
   margin-top: clamp(16px, 2vw, 28px);
   padding: clamp(10px, 1.4vw, 16px) clamp(14px, 2vw, 24px);
   border: 1px solid var(--engrave, rgba(20, 38, 58, 0.18));
