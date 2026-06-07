@@ -137,10 +137,70 @@
   let resolveReady;
   const ready = new Promise(r => { resolveReady = r; });
 
-  client.auth.getSession().then(({ data }) => {
-    setSession(data.session);
+  // === Email-confirmation callback handler ===
+  // Po kliknieciu linku z maila Supabase przekierowuje na nasza strone z hashem
+  // typu #access_token=...&refresh_token=...&type=signup
+  // Ten kod parsuje hash, zapisuje sesje do localStorage w formacie Supabase v2
+  // i czysci URL. Robimy to recznie bo SDK auth.* sie wiesza.
+  function handleEmailCallback() {
+    if (!window.location.hash || window.location.hash.length < 10) return null;
+    const hashParams = new URLSearchParams(window.location.hash.substring(1));
+    const accessToken = hashParams.get('access_token');
+    const refreshToken = hashParams.get('refresh_token');
+    if (!accessToken) return null;
+
+    let payload;
+    try {
+      const base = accessToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+      const padded = base + '==='.slice((base.length + 3) % 4);
+      payload = JSON.parse(atob(padded));
+    } catch (e) {
+      console.warn('[alkoAuth] cannot decode JWT:', e);
+      return null;
+    }
+
+    const expiresIn = parseInt(hashParams.get('expires_in'), 10) || 3600;
+    const session = {
+      access_token: accessToken,
+      refresh_token: refreshToken || '',
+      token_type: hashParams.get('token_type') || 'bearer',
+      expires_in: expiresIn,
+      expires_at: Math.floor(Date.now() / 1000) + expiresIn,
+      user: {
+        id: payload.sub,
+        email: payload.email,
+        aud: payload.aud,
+        role: payload.role,
+        app_metadata: payload.app_metadata || {},
+        user_metadata: payload.user_metadata || {}
+      }
+    };
+
+    // Supabase v2 trzyma sesje pod kluczem sb-{ref}-auth-token
+    try {
+      const ref = new URL(cfg.url).hostname.split('.')[0];
+      localStorage.setItem(`sb-${ref}-auth-token`, JSON.stringify(session));
+    } catch (e) { console.warn('[alkoAuth] storage write:', e); }
+
+    // Wyczysc hash zeby refresh nie odpalal tego ponownie
+    history.replaceState(null, '', window.location.pathname + window.location.search);
+
+    console.log('[alkoAuth] email confirmation processed, session restored');
+    return session;
+  }
+
+  const callbackSession = handleEmailCallback();
+
+  if (callbackSession) {
+    // Mamy swiezuteńka sesje z URL — odpal natychmiast
+    setSession(callbackSession);
     resolveReady();
-  });
+  } else {
+    client.auth.getSession().then(({ data }) => {
+      setSession(data.session);
+      resolveReady();
+    });
+  }
   client.auth.onAuthStateChange((_event, session) => setSession(session));
 
   // === Modal ===
