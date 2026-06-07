@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Alkoolimpiada – Strona Główna</title>
-  <link rel="stylesheet" href="styles.css?v=9"/>
+  <link rel="stylesheet" href="styles.css?v=10"/>
 </head>
 <body class="home-page greek-home">
   <div class="temple-loader" id="temple-loader" aria-label="Ładowanie strony" role="status">
@@ -40,26 +40,27 @@
   </nav>
 
   <main class="experience">
-    <section class="olympus-hero" data-spotlight>
-      <div class="hero-scroll" aria-hidden="true">MMXXVI</div>
-
-      <div class="olympus-copy" data-animate>
-        <span class="eyebrow">Nowa edycja • 25.07.2026 • Sobin</span>
+    <section class="olympus-hero arena-temple">
+      <article class="hero-module olympus-copy">
+        <div class="module-label">
+          <span>Edycja MMXXVI</span>
+          <small>25.07.2026 • Sobin</small>
+        </div>
         <h2>ALKOOLIMPIADA</h2>
         <p class="hero-lead">
           Citius, Altius, Fortius. Pochodnia, arena i chwała
           zapisane w tabelach igrzysk.
         </p>
         <div class="hero-actions">
-          <a class="button button-primary magnetic" href="wyniki.html">Tablica wyników</a>
-          <a class="button button-secondary magnetic" href="#arena">Wejdź na arenę</a>
+          <a class="button button-primary" href="wyniki.html">Tablica wyników</a>
+          <a class="button button-secondary" href="#arena">Wejdź na arenę</a>
         </div>
-      </div>
+      </article>
 
-      <aside class="countdown-temple" data-animate>
-        <div class="console-status">
+      <aside class="hero-module countdown-temple">
+        <div class="module-label">
           <span id="event-status-label">Odliczanie do startu</span>
-          <strong id="event-status-copy">Start: 25 lipca 2026, godz. 16:00.</strong>
+          <small id="event-status-copy">25 lipca 2026, 16:00</small>
         </div>
         <div id="timer" aria-live="polite">
           <div class="time-unit">
