@@ -2468,8 +2468,8 @@ tr.advanced td {
 }
 
 .olympus-copy {
-  /* Wystarczy przesunąć pod nawigację (top: 56-92px + wysokość ok 70-80px = max 172px). */
-  padding-top: clamp(140px, 14vw, 200px);
+  /* Nawigacja jest teraz nad hero (standardowy navbar), nie trzeba dodgowac. */
+  padding-top: clamp(20px, 3vw, 60px);
 }
 
 .olympus-copy h2 {
@@ -2576,10 +2576,9 @@ tr.advanced td {
   filter: sepia(0.18) saturate(0.78) contrast(1.12);
 }
 
-.greek-home .site-header,
-.greek-home .navbar {
-  display: none;
-}
+/* 2026-06-07: index uzywa teraz standardowego site-header + navbar.
+   Stary temple-nav porzucony, bo nie skalowal sie poprawnie do roznych monitorow.
+   .greek-home .navbar styling (linie ~1751) nadaje nawigacji grecki klimat. */
 
 @keyframes loaderImageIn {
   0% {

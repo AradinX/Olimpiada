@@ -307,18 +307,10 @@
   // === Nav button ===
   function mountNavButton() {
     const navList = document.querySelector('.navbar .nav-links');
-    // Na greek-home auth ladujemy do osobnego kontenera (autoutworzonego),
-    // zeby nie psul temple-nav z rzymskimi numeracjami.
-    const isGreekHome = document.body.classList.contains('greek-home');
-    let templeCorner = document.querySelector('.auth-temple-corner');
-    if (isGreekHome && !templeCorner) {
-      const hero = document.querySelector('.olympus-hero');
-      if (hero) {
-        templeCorner = document.createElement('div');
-        templeCorner.className = 'auth-temple-corner';
-        hero.appendChild(templeCorner);
-      }
-    }
+    // 2026-06-07: index uzywa teraz standardowego navbara — auth-temple-corner
+    // zostaje wylaczony (templeCorner = null). Stara sciezka temple-corner zachowana
+    // jako no-op jakby ktos chcial wrocic.
+    const templeCorner = null;
 
     if (navList && !navList.querySelector('.auth-nav-item')) {
       const li = document.createElement('li');
