@@ -1931,14 +1931,14 @@ tr.advanced td {
 
 .countdown-temple {
   display: grid;
-  gap: 8px;
-  padding: 12px;
-  max-width: 320px;
+  gap: 12px;
+  padding: 18px;
+  max-width: 380px;
   width: 100%;
   border: 1px solid rgba(20, 38, 58, 0.18);
   border-radius: 14px;
-  background: rgba(255, 248, 233, 0.72);
-  box-shadow: 0 24px 70px rgba(20, 38, 58, 0.16);
+  background: rgba(255, 248, 233, 0.78);
+  box-shadow: 0 28px 80px rgba(20, 38, 58, 0.2);
   backdrop-filter: blur(18px);
 }
 
@@ -1959,8 +1959,8 @@ tr.advanced td {
 }
 
 .greek-home .time-unit {
-  min-height: 52px;
-  padding: 6px 12px;
+  min-height: 70px;
+  padding: 10px 18px;
   grid-template-columns: 1fr auto;
   border-color: rgba(20, 38, 58, 0.16);
   background:
@@ -1971,8 +1971,10 @@ tr.advanced td {
 .greek-home .time-unit span {
   justify-self: start;
   color: var(--ink-blue);
-  font-size: clamp(1.4rem, 2.6vw, 2rem);
-  font-weight: 800;
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 900;
+  font-family: 'Cinzel', serif;
+  line-height: 1;
 }
 
 .greek-home .time-unit small {
@@ -3199,27 +3201,30 @@ tr.advanced td {
 
 /* Final layout polish: keep the monumental type inside the temple grid. */
 .greek-home .olympus-hero {
-  grid-template-columns: minmax(0, 1fr) minmax(220px, 320px);
+  /* Bez wymuszania pelnej wysokosci — niech tresc dyktuje. */
+  min-height: clamp(420px, 70vh, 720px);
+  grid-template-columns: minmax(0, 1.4fr) minmax(280px, 380px);
   align-items: center;
   overflow: hidden;
-  padding: clamp(22px, 4vw, 64px) clamp(20px, 5vw, 110px);
-  gap: clamp(16px, 2.5vw, 48px);
+  padding: clamp(32px, 5vw, 80px) clamp(24px, 5vw, 110px);
+  gap: clamp(24px, 4vw, 64px);
 }
 
 .greek-home .olympus-copy {
   min-width: 0;
-  max-width: 980px;
+  max-width: 100%;
   padding-right: clamp(0px, 2vw, 32px);
 }
 
 .greek-home .olympus-copy h2 {
   max-width: 100%;
-  /* Skala zoptymalizowana dla 1024-2560px. nowrap zachowane. */
-  font-size: clamp(1.8rem, 4.2vw, 4.6rem);
-  line-height: 0.95;
+  /* Wyrazny tytul. Skala 2.6rem (mobile) -> 7rem (desktop). nowrap by sie zmiescil w jednej linii. */
+  font-size: clamp(2.6rem, 7vw, 7rem);
+  line-height: 0.92;
   letter-spacing: -0.02em;
   white-space: nowrap;
   overflow: visible;
+  margin: 8px 0 18px;
 }
 
 .greek-home .hero-lead {
