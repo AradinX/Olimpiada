@@ -8,7 +8,7 @@
   <link rel="icon" type="image/png" href="assets/icons/favicon.png">
   <link rel="stylesheet" href="styles.css?v=15">
   <link rel="stylesheet" href="styles-index.css?v=10">
-  <link rel="stylesheet" href="styles-wyniki.css?v=2">
+  <link rel="stylesheet" href="styles-wyniki.css?v=12">
 </head>
 <body class="greek-page greek-home-redesign wyniki-page">
   <!-- Navbar (struktura zachowana dla auth.js) -->
@@ -36,25 +36,10 @@
     </ul>
   </nav>
 
-  <!-- Greek border ozdobny pod navbar -->
-  <div class="wyniki-border-top" aria-hidden="true">
-    <img src="assets/decorations/greek-border-horizontal.png" alt="">
-  </div>
-
-  <main class="wyniki-stage">
-    <!-- Pergaminowa karta z tabelą + dekoracjami wkomponowanymi w tlo -->
-    <div class="wyniki-parchment">
-      <!-- DEKORACJE: za zawartoscia, subtelne, jak fresk grawerowany -->
-      <div class="wyniki-decor wyniki-decor-statue" aria-hidden="true">
-        <img src="assets/decorations/results-statue-faded.png" alt="">
-      </div>
-      <div class="wyniki-decor wyniki-decor-amphora" aria-hidden="true">
-        <img src="assets/decorations/amphora-black-gold.png" alt="">
-      </div>
-      <div class="wyniki-decor wyniki-decor-philosopher" aria-hidden="true">
-        <img src="assets/decorations/figure-philosopher.png" alt="">
-      </div>
-
+  <main class="wyniki-stage results-stage">
+    <div class="results-content">
+      <!-- Pergaminowa plansza centralna -->
+      <div class="wyniki-parchment results-board">
       <header class="wyniki-header">
         <span class="laurel-pair laurel-pair--section" aria-hidden="true">
           <img src="assets/decorations/laurel-divider.png" alt="" class="laurel-mirror">
@@ -68,7 +53,7 @@
         </p>
       </header>
 
-      <div class="wyniki-table-wrap">
+      <div class="wyniki-table-wrap results-table-wrap">
         <p class="wyniki-hint">Przesuń tabelę w bok jeśli kolumny nie mieszczą się na ekranie.</p>
         <div class="wyniki-scroll">
           <table id="wyniki">
@@ -87,9 +72,8 @@
         <span><img src="assets/icons/medal-bronze.png" alt=""> Brąz</span>
       </div>
 
-      <!-- Sekcja informacje z heraldami -->
+      <!-- Sekcja informacje (uproszczona, bez heraldów po bokach) -->
       <section class="wyniki-info">
-        <img src="assets/decorations/herald-trumpet.png" alt="" class="wyniki-herald wyniki-herald-left">
         <div class="wyniki-info-text">
           <h2>Informacje</h2>
           <p>
@@ -97,15 +81,10 @@
             przyznawane każdemu członkowi zwycięskiej drużyny.
           </p>
         </div>
-        <img src="assets/decorations/herald-trumpet.png" alt="" class="wyniki-herald wyniki-herald-right">
       </section>
+      </div>
     </div>
   </main>
-
-  <!-- Greek border ozdobny u dołu -->
-  <div class="wyniki-border-bottom" aria-hidden="true">
-    <img src="assets/decorations/greek-border-horizontal.png" alt="">
-  </div>
 
   <script src="scripts.js?v=2"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
