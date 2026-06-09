@@ -2,9 +2,9 @@
 // Pokazuje tabele grup, harmonogram (kolejki), faze pucharowa.
 
 (function () {
-  const groupsEl   = document.getElementById('flanki-groups');
+  const groupsEl = document.getElementById('flanki-groups');
   const scheduleEl = document.getElementById('flanki-schedule');
-  const playoffEl  = document.getElementById('flanki-playoff');
+  const playoffEl = document.getElementById('flanki-playoff');
   if (!groupsEl || !scheduleEl || !playoffEl) return;
 
   if (!window.alkoAuth || !window.alkoAuth.configured) {
@@ -20,69 +20,76 @@
   }
 
   function membersOf(teamName) {
-    const t = TEAMS.find(x => x.name === teamName);
-    return t ? t.members.join(', ') : '';
+    const team = TEAMS.find(item => item.name === teamName);
+    return team ? team.members.join(', ') : '';
   }
 
-  // ============================================================
-  // GRUPY — uproszczona tabela: Druzyna | Mecze | Punkty
-  // ============================================================
   function renderGroups() {
-    groupsEl.innerHTML = ['A', 'B'].map(g => {
-      const standings = computeFlankiStandings(g, matchesById);
-      const rows = standings.map((s, idx) => {
-        const place = idx + 1;
-        const medal = place === 1 ? '🥇' : place === 2 ? '🥈' : '🥉';
+    groupsEl.innerHTML = ['A', 'B'].map(groupName => {
+      const standings = computeFlankiStandings(groupName, matchesById);
+      const rows = standings.map((standing, index) => {
+        const place = index + 1;
+        const losses = Math.max(0, standing.played - standing.wins);
+        const diff = standing.scored - standing.conceded;
+
         return `
           <tr class="place-${place}">
-            <td class="rank-cell">${medal}</td>
+            <td class="rank-cell"><span>${place}</span></td>
             <td class="team-cell">
-              <strong>${escapeHTML(s.team)}</strong>
-              <small>${escapeHTML(membersOf(s.team))}</small>
+              <strong>${escapeHTML(standing.team)}</strong>
+              <small>${escapeHTML(membersOf(standing.team))}</small>
             </td>
-            <td>${s.played}</td>
-            <td><strong>${s.scored}</strong></td>
+            <td>${standing.played}</td>
+            <td>${standing.wins}</td>
+            <td>${losses}</td>
+            <td><strong>${standing.scored}</strong></td>
+            <td>${diff > 0 ? '+' : ''}${diff}</td>
           </tr>
         `;
       }).join('');
+
       return `
         <article class="flanki-group">
-          <h2>Grupa ${g}</h2>
-          <table class="flanki-group-table">
-            <thead>
-              <tr>
-                <th></th><th>Drużyna</th><th>M</th><th>Pkt</th>
-              </tr>
-            </thead>
-            <tbody>${rows}</tbody>
-          </table>
+          <h2>Grupa ${groupName}</h2>
+          <div class="flanki-table-scroll">
+            <table class="flanki-group-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Drużyna</th>
+                  <th>M</th>
+                  <th>Z</th>
+                  <th>P</th>
+                  <th>Pkt</th>
+                  <th>+/-</th>
+                </tr>
+              </thead>
+              <tbody>${rows}</tbody>
+            </table>
+          </div>
         </article>
       `;
     }).join('');
   }
 
-  // ============================================================
-  // HARMONOGRAM — widok kolejek z battle cards
-  // Kolejka 1: A1 + B1, Kolejka 2: A2 + B2, Kolejka 3: A3 + B3
-  // ============================================================
-  function renderMatchCard(m) {
-    const r = matchesById[m.id] || {};
-    const played = isPlayed(r);
-    const scoreA = r.score_a != null ? r.score_a : '–';
-    const scoreB = r.score_b != null ? r.score_b : '–';
-    const winnerA = played && r.score_a > r.score_b;
-    const winnerB = played && r.score_b > r.score_a;
-    const memA = membersOf(m.team_a);
-    const memB = membersOf(m.team_b);
+  function renderMatchCard(match) {
+    const result = matchesById[match.id] || {};
+    const played = isPlayed(result);
+    const scoreA = result.score_a != null ? result.score_a : '-';
+    const scoreB = result.score_b != null ? result.score_b : '-';
+    const winnerA = played && result.score_a > result.score_b;
+    const winnerB = played && result.score_b > result.score_a;
+    const membersA = membersOf(match.team_a);
+    const membersB = membersOf(match.team_b);
 
     return `
       <article class="match-card ${played ? 'played' : 'pending'}">
-        <div class="match-card-meta">${escapeHTML(m.label)}</div>
+        <div class="match-card-meta">${escapeHTML(match.label)}</div>
         <div class="match-card-body">
           <div class="match-side ${winnerA ? 'winner' : ''}">
-            <div class="match-side-name">${escapeHTML(m.team_a)}</div>
-            <div class="match-side-members">${escapeHTML(memA)}</div>
-            ${winnerA ? '<div class="match-side-badge">✓ Wygrana</div>' : ''}
+            <div class="match-side-name">${escapeHTML(match.team_a)}</div>
+            <div class="match-side-members">${escapeHTML(membersA)}</div>
+            ${winnerA ? '<div class="match-side-badge">Wygrana</div>' : ''}
           </div>
           <div class="match-score-block">
             <div class="match-score-num ${winnerA ? 'won' : ''}">${scoreA}</div>
@@ -90,19 +97,17 @@
             <div class="match-score-num ${winnerB ? 'won' : ''}">${scoreB}</div>
           </div>
           <div class="match-side ${winnerB ? 'winner' : ''}">
-            <div class="match-side-name">${escapeHTML(m.team_b)}</div>
-            <div class="match-side-members">${escapeHTML(memB)}</div>
-            ${winnerB ? '<div class="match-side-badge">✓ Wygrana</div>' : ''}
+            <div class="match-side-name">${escapeHTML(match.team_b)}</div>
+            <div class="match-side-members">${escapeHTML(membersB)}</div>
+            ${winnerB ? '<div class="match-side-badge">Wygrana</div>' : ''}
           </div>
         </div>
-        ${!played ? '<div class="match-card-status">⏳ oczekuje na rozegranie</div>' : ''}
+        ${!played ? '<div class="match-card-status">Oczekuje na rozegranie</div>' : ''}
       </article>
     `;
   }
 
   function renderSchedule() {
-    // Grupuj mecze po kolejkach.
-    // Kolejka 1: A1 + B1, Kolejka 2: A2 + B2, Kolejka 3: A3 + B3
     const rounds = [
       { label: 'Kolejka 1', matches: ['A1', 'B1'] },
       { label: 'Kolejka 2', matches: ['A2', 'B2'] },
@@ -110,11 +115,12 @@
     ];
 
     scheduleEl.innerHTML = rounds.map(round => {
-      const matches = round.matches.map(id => FLANKI_SCHEDULE.find(m => m.id === id)).filter(Boolean);
+      const matches = round.matches.map(id => FLANKI_SCHEDULE.find(match => match.id === id)).filter(Boolean);
       const cards = matches.map(renderMatchCard).join('');
-      const anyPlayed = matches.some(m => isPlayed(matchesById[m.id]));
-      const allPlayed = matches.every(m => isPlayed(matchesById[m.id]));
-      const status = allPlayed ? '✓ zakończona' : anyPlayed ? '◐ w trakcie' : '◯ przed nami';
+      const anyPlayed = matches.some(match => isPlayed(matchesById[match.id]));
+      const allPlayed = matches.every(match => isPlayed(matchesById[match.id]));
+      const status = allPlayed ? 'Zakończona' : anyPlayed ? 'W trakcie' : 'Przed nami';
+
       return `
         <section class="round">
           <header class="round-header">
@@ -127,44 +133,39 @@
     }).join('');
   }
 
-  // ============================================================
-  // FAZA PUCHAROWA — drabinka
-  // ============================================================
   function renderPlayoff() {
-    const standA = computeFlankiStandings('A', matchesById);
-    const standB = computeFlankiStandings('B', matchesById);
-    const groupsDone = (g) =>
-      FLANKI_SCHEDULE.filter(m => m.phase === 'group' && m.group === g)
-        .every(m => isPlayed(matchesById[m.id]));
-    const aDone = groupsDone('A');
-    const bDone = groupsDone('B');
+    const standingsA = computeFlankiStandings('A', matchesById);
+    const standingsB = computeFlankiStandings('B', matchesById);
+    const groupsDone = groupName =>
+      FLANKI_SCHEDULE.filter(match => match.phase === 'group' && match.group === groupName)
+        .every(match => isPlayed(matchesById[match.id]));
+
+    const groupADone = groupsDone('A');
+    const groupBDone = groupsDone('B');
 
     function bracketMatch(matchId, sideASource, sideBSource) {
-      const m = FLANKI_SCHEDULE.find(x => x.id === matchId);
-      const r = matchesById[matchId] || {};
-      const played = isPlayed(r);
-      const hasTeams = r.team_a && r.team_b;
-      const teamA = hasTeams ? r.team_a : sideASource.team;
-      const teamB = hasTeams ? r.team_b : sideBSource.team;
-      const placeholderA = sideASource.placeholder;
-      const placeholderB = sideBSource.placeholder;
-      const winnerA = played && r.score_a > r.score_b;
-      const winnerB = played && r.score_b > r.score_a;
-      const scoreA = r.score_a != null ? r.score_a : '–';
-      const scoreB = r.score_b != null ? r.score_b : '–';
-
-      const showA = teamA || placeholderA;
-      const showB = teamB || placeholderB;
-      const memA = teamA ? membersOf(teamA) : '';
-      const memB = teamB ? membersOf(teamB) : '';
+      const match = FLANKI_SCHEDULE.find(item => item.id === matchId);
+      const result = matchesById[matchId] || {};
+      const played = isPlayed(result);
+      const hasTeams = result.team_a && result.team_b;
+      const teamA = hasTeams ? result.team_a : sideASource.team;
+      const teamB = hasTeams ? result.team_b : sideBSource.team;
+      const showA = teamA || sideASource.placeholder;
+      const showB = teamB || sideBSource.placeholder;
+      const winnerA = played && result.score_a > result.score_b;
+      const winnerB = played && result.score_b > result.score_a;
+      const scoreA = result.score_a != null ? result.score_a : '-';
+      const scoreB = result.score_b != null ? result.score_b : '-';
+      const membersA = teamA ? membersOf(teamA) : '';
+      const membersB = teamB ? membersOf(teamB) : '';
 
       return `
         <article class="bracket-match ${matchId === 'final' ? 'final' : 'small-final'} ${played ? 'played' : 'pending'}">
-          <div class="bracket-label">${escapeHTML(m.label)}</div>
+          <div class="bracket-label">${escapeHTML(match.label)}</div>
           <div class="bracket-row ${winnerA ? 'winner-top' : ''}">
             <div class="bracket-team">
               <div class="bracket-team-name">${escapeHTML(showA)}</div>
-              ${memA ? `<div class="bracket-team-mem">${escapeHTML(memA)}</div>` : ''}
+              ${membersA ? `<div class="bracket-team-mem">${escapeHTML(membersA)}</div>` : ''}
             </div>
             <div class="bracket-score ${winnerA ? 'won' : ''}">${scoreA}</div>
           </div>
@@ -172,33 +173,47 @@
           <div class="bracket-row ${winnerB ? 'winner-top' : ''}">
             <div class="bracket-team">
               <div class="bracket-team-name">${escapeHTML(showB)}</div>
-              ${memB ? `<div class="bracket-team-mem">${escapeHTML(memB)}</div>` : ''}
+              ${membersB ? `<div class="bracket-team-mem">${escapeHTML(membersB)}</div>` : ''}
             </div>
             <div class="bracket-score ${winnerB ? 'won' : ''}">${scoreB}</div>
           </div>
           ${played
-            ? `<div class="bracket-result">🏆 ${escapeHTML(winnerA ? showA : showB)}</div>`
-            : `<div class="bracket-result pending">${!hasTeams && (!aDone || !bDone) ? 'oczekuje na zakończenie grup' : 'oczekuje na rozegranie'}</div>`}
+            ? `<div class="bracket-result">Zwycięzca: ${escapeHTML(winnerA ? showA : showB)}</div>`
+            : `<div class="bracket-result pending">${!hasTeams && (!groupADone || !groupBDone) ? 'oczekuje na zakończenie grup' : 'oczekuje na rozegranie'}</div>`}
         </article>
       `;
     }
 
-    const finalSrcA = { team: aDone ? standA[0]?.team : null, placeholder: '1 z grupy A' };
-    const finalSrcB = { team: bDone ? standB[0]?.team : null, placeholder: '1 z grupy B' };
-    const smallSrcA = { team: aDone ? standA[1]?.team : null, placeholder: '2 z grupy A' };
-    const smallSrcB = { team: bDone ? standB[1]?.team : null, placeholder: '2 z grupy B' };
+    const finalSourceA = { team: groupADone ? standingsA[0]?.team : null, placeholder: '1 z grupy A' };
+    const finalSourceB = { team: groupBDone ? standingsB[0]?.team : null, placeholder: '1 z grupy B' };
+    const smallSourceA = { team: groupADone ? standingsA[1]?.team : null, placeholder: '2 z grupy A' };
+    const smallSourceB = { team: groupBDone ? standingsB[1]?.team : null, placeholder: '2 z grupy B' };
+
+    const finalResult = matchesById.final || {};
+    const finalPlayed = isPlayed(finalResult);
+    const champion = finalPlayed
+      ? (finalResult.score_a > finalResult.score_b ? finalResult.team_a : finalResult.team_b)
+      : null;
 
     playoffEl.innerHTML = `
       <div class="bracket-container">
         <div class="bracket-col bracket-col-small">
-          <div class="bracket-col-title">🥉 Mecz o 3 miejsce</div>
-          ${bracketMatch('small_final', smallSrcA, smallSrcB)}
+          <div class="bracket-col-title">Mecz o 3. miejsce</div>
+          ${bracketMatch('small_final', smallSourceA, smallSourceB)}
+        </div>
+        <div class="flanki-belt-wrap" aria-hidden="true">
+          <img class="flanki-belt" src="assets/decorations/flanki-trophy.png" alt="">
         </div>
         <div class="bracket-col bracket-col-final">
-          <div class="bracket-col-title">🏆 Finał</div>
-          ${bracketMatch('final', finalSrcA, finalSrcB)}
+          <div class="bracket-col-title">Finał</div>
+          ${bracketMatch('final', finalSourceA, finalSourceB)}
         </div>
       </div>
+      <p class="flanki-champion-note">
+        ${champion
+          ? `Zwycięzcą Turnieju Flanki zostaje ${escapeHTML(champion)}!`
+          : 'Zwycięzca Turnieju Flanki zostanie ogłoszony po finale.'}
+      </p>
     `;
   }
 
@@ -214,7 +229,6 @@
     if (error) {
       console.warn('[flanki] load:', error.message);
       renderAll();
-      // Nie wstawiamy bannera multiple times — sprawdzamy czy juz jest
       if (!document.querySelector('.flanki-error-banner')) {
         const banner = document.createElement('p');
         banner.className = 'status-copy flanki-error-banner';
@@ -225,7 +239,7 @@
       return;
     }
     document.querySelectorAll('.flanki-error-banner').forEach(el => el.remove());
-    (data || []).forEach(m => { matchesById[m.match_id] = m; });
+    (data || []).forEach(match => { matchesById[match.match_id] = match; });
     renderAll();
   }
 

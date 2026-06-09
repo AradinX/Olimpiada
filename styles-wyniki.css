@@ -35,7 +35,7 @@
   width: 100%;
   min-height: calc(100vh - 90px);
   margin: 0;
-  padding: clamp(32px, 5vw, 72px) clamp(16px, 3vw, 48px);
+  padding: clamp(42px, 5vw, 78px) clamp(16px, 4vw, 64px);
   display: block;
   overflow: hidden;
   isolation: isolate;
@@ -83,31 +83,30 @@
 .wyniki-page .results-board {
   position: relative;
   z-index: 2;
-  width: min(100%, 1280px);
+  width: min(100%, 1420px);
   margin: 0 auto;
-  padding: clamp(24px, 4vw, 56px);
-  border: 1px solid rgba(132, 92, 34, 0.55);
-  border-radius: 6px;
-  background:
-    linear-gradient(90deg, rgba(97, 59, 22, 0.16), transparent 9%, transparent 91%, rgba(97, 59, 22, 0.16)),
-    rgba(238, 218, 174, 0.86);
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
   color: #281b0b;
-  box-shadow:
-    0 24px 80px rgba(0, 0, 0, 0.45),
-    inset 0 0 0 1px rgba(255, 245, 219, 0.32);
-  backdrop-filter: blur(1.5px);
-  overflow: hidden;
+  box-shadow: none;
+  backdrop-filter: none;
+  overflow: visible;
 }
 
 .wyniki-page .results-board::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background:
-    radial-gradient(ellipse at 50% 0%, rgba(255, 249, 232, 0.24), transparent 56%),
-    linear-gradient(180deg, rgba(255, 246, 224, 0.08), rgba(106, 67, 25, 0.08));
+  content: none;
+}
+
+.wyniki-page .results-board,
+.wyniki-page .results-panel,
+.wyniki-page .results-content-panel,
+.wyniki-page .leaderboard-board {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+  backdrop-filter: none !important;
 }
 
 .wyniki-page .wyniki-header,
@@ -121,6 +120,8 @@
 .wyniki-page .wyniki-header {
   text-align: center;
   margin-bottom: clamp(24px, 3vw, 40px);
+  color: #ead39b;
+  text-shadow: 0 3px 18px rgba(0, 0, 0, 0.55);
 }
 
 .wyniki-page .wyniki-header .laurel-pair {
@@ -141,8 +142,10 @@
   letter-spacing: 0.06em;
   line-height: 1.05;
   text-transform: uppercase;
-  color: #2a1c0a;
-  text-shadow: 0 1px 0 rgba(255, 248, 230, 0.4);
+  color: #f0d89d;
+  text-shadow:
+    0 2px 0 rgba(42, 25, 6, 0.58),
+    0 14px 34px rgba(0, 0, 0, 0.62);
 }
 
 .wyniki-page .wyniki-subtitle {
@@ -152,7 +155,7 @@
   font-weight: 600;
   letter-spacing: 0.32em;
   text-transform: uppercase;
-  color: #5a3d18;
+  color: rgba(246, 222, 166, 0.88);
 }
 
 .wyniki-page .wyniki-meta {
@@ -161,14 +164,14 @@
   gap: 8px;
   margin: 16px 0 0;
   padding: 6px 14px;
-  border: 1px solid rgba(90, 61, 24, 0.35);
+  border: 1px solid rgba(214, 170, 84, 0.34);
   border-radius: 999px;
-  background: rgba(255, 248, 230, 0.4);
+  background: rgba(18, 14, 8, 0.58);
   font-family: 'Cinzel', serif;
   font-size: 0.78rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: #5a3d18;
+  color: #e8d29b;
 }
 
 .wyniki-page .wyniki-meta-dot {
@@ -198,12 +201,14 @@
   width: 100%;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
-  border: 1px solid rgba(98, 68, 28, 0.24);
+  border: 1px solid rgba(86, 52, 15, 0.66);
   border-radius: 4px;
-  background: rgba(255, 239, 196, 0.36);
+  background:
+    linear-gradient(135deg, rgba(249, 228, 181, 0.94), rgba(204, 160, 88, 0.84));
   box-shadow:
-    0 14px 34px rgba(67, 40, 13, 0.18),
-    inset 0 0 0 1px rgba(255, 246, 220, 0.2);
+    0 20px 46px rgba(0, 0, 0, 0.38),
+    0 0 0 1px rgba(255, 242, 203, 0.18),
+    inset 0 1px 0 rgba(255, 245, 210, 0.55);
 }
 
 .wyniki-page #wyniki {
@@ -496,10 +501,8 @@
 
   .wyniki-page .results-board {
     width: 100%;
-    padding: 18px 8px;
-    background:
-      linear-gradient(90deg, rgba(97, 59, 22, 0.12), transparent 11%, transparent 89%, rgba(97, 59, 22, 0.12)),
-      rgba(240, 222, 180, 0.92);
+    padding: 0;
+    background: transparent;
   }
 
   .wyniki-page .wyniki-title {
