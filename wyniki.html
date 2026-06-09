@@ -8,7 +8,7 @@
   <link rel="icon" type="image/png" href="assets/icons/favicon.png">
   <link rel="stylesheet" href="styles.css?v=15">
   <link rel="stylesheet" href="styles-index.css?v=10">
-  <link rel="stylesheet" href="styles-wyniki.css?v=1">
+  <link rel="stylesheet" href="styles-wyniki.css?v=2">
 </head>
 <body class="greek-page greek-home-redesign wyniki-page">
   <!-- Navbar (struktura zachowana dla auth.js) -->
@@ -42,13 +42,19 @@
   </div>
 
   <main class="wyniki-stage">
-    <!-- LEWA dekoracja: amfora na cokole -->
-    <aside class="wyniki-side wyniki-side-left" aria-hidden="true">
-      <img src="assets/decorations/amphora-black-gold.png" alt="" class="wyniki-side-img">
-    </aside>
-
-    <!-- ŚRODEK: pergaminowa karta z tabelą -->
+    <!-- Pergaminowa karta z tabelą + dekoracjami wkomponowanymi w tlo -->
     <div class="wyniki-parchment">
+      <!-- DEKORACJE: za zawartoscia, subtelne, jak fresk grawerowany -->
+      <div class="wyniki-decor wyniki-decor-statue" aria-hidden="true">
+        <img src="assets/decorations/results-statue-faded.png" alt="">
+      </div>
+      <div class="wyniki-decor wyniki-decor-amphora" aria-hidden="true">
+        <img src="assets/decorations/amphora-black-gold.png" alt="">
+      </div>
+      <div class="wyniki-decor wyniki-decor-philosopher" aria-hidden="true">
+        <img src="assets/decorations/figure-philosopher.png" alt="">
+      </div>
+
       <header class="wyniki-header">
         <span class="laurel-pair laurel-pair--section" aria-hidden="true">
           <img src="assets/decorations/laurel-divider.png" alt="" class="laurel-mirror">
@@ -94,11 +100,6 @@
         <img src="assets/decorations/herald-trumpet.png" alt="" class="wyniki-herald wyniki-herald-right">
       </section>
     </div>
-
-    <!-- PRAWA dekoracja: filozof -->
-    <aside class="wyniki-side wyniki-side-right" aria-hidden="true">
-      <img src="assets/decorations/figure-philosopher.png" alt="" class="wyniki-side-img">
-    </aside>
   </main>
 
   <!-- Greek border ozdobny u dołu -->

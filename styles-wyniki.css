@@ -24,48 +24,13 @@
 }
 
 /* ==========================================================
-   STAGE — 3 kolumny: amfora | pergamin | filozof
+   STAGE — jeden kontener z pergaminem
    ========================================================== */
 .wyniki-page .wyniki-stage {
   position: relative;
-  width: min(1680px, calc(100% - 24px));
+  width: min(1480px, calc(100% - 24px));
   margin: 0 auto;
   padding: clamp(20px, 3vw, 40px) 0;
-  display: grid;
-  grid-template-columns: minmax(0, 0.16fr) minmax(0, 1fr) minmax(0, 0.16fr);
-  align-items: stretch;
-  gap: clamp(8px, 1.4vw, 20px);
-}
-
-/* Boczne sidebary z dekoracjami */
-.wyniki-page .wyniki-side {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.wyniki-page .wyniki-side-img {
-  max-width: 100%;
-  height: auto;
-  max-height: 720px;
-  object-fit: contain;
-  filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.6)) sepia(0.3) hue-rotate(-10deg) saturate(1.2);
-  opacity: 0.95;
-}
-
-/* Filozof: niewielkie odwrocenie zeby patrzyl w srodek */
-.wyniki-page .wyniki-side-right .wyniki-side-img {
-  transform: scaleX(-1);
-}
-
-@media (max-width: 1180px) {
-  .wyniki-page .wyniki-stage {
-    grid-template-columns: 1fr;
-  }
-  .wyniki-page .wyniki-side {
-    display: none;
-  }
 }
 
 /* ==========================================================
@@ -86,6 +51,100 @@
     0 24px 70px rgba(0, 0, 0, 0.5),
     inset 0 0 0 1px rgba(255, 248, 230, 0.18),
     inset 0 0 90px rgba(123, 78, 28, 0.2);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* ==========================================================
+   DEKORACJE WEWNĄTRZ pergaminu — jak fresk/grawerunek.
+   Subtelne, blend-multiply, nigdy nie konkuruja z tabela.
+   ========================================================== */
+.wyniki-page .wyniki-decor {
+  position: absolute;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.wyniki-page .wyniki-decor img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: bottom center;
+  display: block;
+}
+
+/* Centralny posąg (results-statue-faded) — wielki, w samym środku za tabela
+   bardzo subtelny, jak wyblakły fresk. */
+.wyniki-page .wyniki-decor-statue {
+  top: 8%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(64%, 720px);
+  height: 88%;
+}
+
+.wyniki-page .wyniki-decor-statue img {
+  opacity: 0.14;
+  mix-blend-mode: multiply;
+  filter: sepia(0.85) saturate(1.4) contrast(1.05) brightness(0.92);
+}
+
+/* Amfora w lewym dolnym rogu, jakby część fresku na marginesie */
+.wyniki-page .wyniki-decor-amphora {
+  bottom: 4%;
+  left: -2%;
+  width: clamp(140px, 18vw, 280px);
+  height: clamp(220px, 28vw, 420px);
+}
+
+.wyniki-page .wyniki-decor-amphora img {
+  object-position: bottom left;
+  opacity: 0.28;
+  mix-blend-mode: multiply;
+  filter: sepia(0.9) saturate(1.6) contrast(1.1) brightness(0.85) hue-rotate(-8deg);
+}
+
+/* Filozof w prawym dolnym rogu, mirror w lewo (patrzy do środka) */
+.wyniki-page .wyniki-decor-philosopher {
+  bottom: 4%;
+  right: -2%;
+  width: clamp(140px, 18vw, 280px);
+  height: clamp(260px, 32vw, 480px);
+}
+
+.wyniki-page .wyniki-decor-philosopher img {
+  object-position: bottom right;
+  transform: scaleX(-1);
+  opacity: 0.24;
+  mix-blend-mode: multiply;
+  filter: sepia(0.9) saturate(1.4) contrast(1.05) brightness(0.88) hue-rotate(-8deg);
+}
+
+/* Wszystko ponad dekoracjami */
+.wyniki-page .wyniki-header,
+.wyniki-page .wyniki-table-wrap,
+.wyniki-page .wyniki-legend,
+.wyniki-page .wyniki-info {
+  position: relative;
+  z-index: 2;
+}
+
+/* Na mobilkach dekoracje schowane (nie ma sensu) */
+@media (max-width: 760px) {
+  .wyniki-page .wyniki-decor-amphora,
+  .wyniki-page .wyniki-decor-philosopher {
+    opacity: 0.5;
+  }
+  .wyniki-page .wyniki-decor-amphora img {
+    opacity: 0.18;
+  }
+  .wyniki-page .wyniki-decor-philosopher img {
+    opacity: 0.16;
+  }
+  .wyniki-page .wyniki-decor-statue img {
+    opacity: 0.1;
+  }
 }
 
 /* Header */
@@ -396,10 +455,12 @@
 
 .wyniki-page .wyniki-herald {
   width: 100%;
-  max-width: 140px;
+  max-width: 120px;
   height: auto;
   justify-self: center;
-  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.4)) sepia(0.3) saturate(1.2) hue-rotate(-10deg);
+  opacity: 0.35;
+  mix-blend-mode: multiply;
+  filter: sepia(0.9) saturate(1.5) contrast(1.1) brightness(0.88) hue-rotate(-10deg);
 }
 
 .wyniki-page .wyniki-herald-right {
