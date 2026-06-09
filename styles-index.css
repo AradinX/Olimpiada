@@ -1,0 +1,950 @@
+/* ==========================================================
+   INDEX REDESIGN 2026-06-08
+   Klimat: czarny marmur + zloto + pergamin + grecki ornament.
+   Izolowane w .greek-home-redesign zeby nie psuc innych stron.
+   Ladowane PO styles.css zeby override'owac.
+   ========================================================== */
+
+.greek-home-redesign {
+  --gold-deep:   #b9872f;
+  --gold-light:  #e6c270;
+  --gold-pale:   #f2d181;
+  --marble-bg:   #0a0807;
+  --marble-card: #16110a;
+  --parchment:   #ead4a3;
+  --ink-dark:    #1d1308;
+  --shadow-deep: 0 30px 80px rgba(0, 0, 0, 0.55);
+  background:
+    url('assets/backgrounds/bg-dark-marble-gold.png') center / cover fixed no-repeat,
+    var(--marble-bg);
+  color: #e6dcc4;
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+}
+
+.greek-home-redesign::before { display: none; }
+
+/* Ukrywam stare ozdoby ambient */
+.greek-home-redesign .greek-ambient,
+.greek-home-redesign .gold-orb,
+.greek-home-redesign .greek-column { display: none; }
+
+/* ==========================================================
+   NAVBAR
+   ========================================================== */
+.greek-home-redesign .index-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 14px clamp(20px, 4vw, 60px);
+  border: 0;
+  border-bottom: 2px solid var(--gold-deep);
+  border-radius: 0;
+  background: linear-gradient(180deg, rgba(10, 8, 7, 0.96), rgba(22, 17, 10, 0.92));
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  gap: clamp(14px, 2vw, 36px);
+}
+
+.greek-home-redesign .navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.greek-home-redesign .site-logo {
+  width: 56px;
+  height: 56px;
+  border: 2px solid var(--gold-deep);
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(230, 194, 112, 0.3), 0 8px 20px rgba(0, 0, 0, 0.7);
+  object-fit: cover;
+}
+
+.greek-home-redesign .navbar-brand-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  line-height: 1;
+}
+
+.greek-home-redesign .navbar-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.05rem, 1.6vw, 1.4rem);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold-pale);
+}
+
+.greek-home-redesign .navbar-tagline {
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+}
+
+.greek-home-redesign .navbar-tagline::before { content: '\2014\00a0'; opacity: 0.7; }
+.greek-home-redesign .navbar-tagline::after  { content: '\00a0\2014'; opacity: 0.7; }
+
+.greek-home-redesign .nav-links {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  list-style: none;
+  padding: 0;
+}
+
+.greek-home-redesign .nav-links a {
+  position: relative;
+  padding: 10px 14px;
+  border-radius: 0;
+  color: #d9c79a;
+  font-family: 'Cinzel', serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: color 200ms ease;
+}
+
+.greek-home-redesign .nav-links a:hover,
+.greek-home-redesign .nav-links a.active {
+  color: var(--gold-pale);
+  background: transparent;
+}
+
+.greek-home-redesign .nav-links a.active::after {
+  content: '';
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 4px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold-deep), transparent);
+}
+
+/* Auth nav item w stylu nowego navbara */
+.greek-home-redesign .auth-nav-item {
+  margin-left: 8px;
+  border-left: 1px solid rgba(230, 194, 112, 0.25);
+  padding-left: 14px;
+}
+
+.greek-home-redesign .auth-nav-btn,
+.greek-home-redesign .auth-nav-trigger {
+  border: 1px solid var(--gold-deep);
+  background: transparent;
+  color: var(--gold-pale);
+  font-family: 'Cinzel', serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.greek-home-redesign .auth-nav-btn:hover,
+.greek-home-redesign .auth-nav-trigger:hover,
+.greek-home-redesign .auth-nav-user.open .auth-nav-trigger {
+  background: var(--gold-deep);
+  color: var(--ink-dark);
+}
+
+.greek-home-redesign .auth-admin-link {
+  border: 1px solid var(--gold-deep);
+  background: rgba(185, 135, 47, 0.18);
+  color: var(--gold-pale) !important;
+  font-family: 'Cinzel', serif;
+}
+
+.greek-home-redesign .auth-admin-link:hover {
+  background: var(--gold-deep);
+  color: var(--ink-dark) !important;
+}
+
+/* ==========================================================
+   HERO
+   ========================================================== */
+.greek-home-redesign .experience-redesign {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.greek-home-redesign .hero-temple {
+  position: relative;
+  width: 100%;
+  min-height: clamp(560px, 80vh, 880px);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  isolation: isolate;
+}
+
+.greek-home-redesign .hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.greek-home-redesign .hero-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.greek-home-redesign .hero-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background:
+    radial-gradient(ellipse at center, transparent 30%, rgba(10, 8, 7, 0.72) 80%),
+    linear-gradient(180deg, rgba(10, 8, 7, 0.35), rgba(10, 8, 7, 0.55) 60%, rgba(10, 8, 7, 0.95));
+  pointer-events: none;
+}
+
+.greek-home-redesign .hero-content {
+  position: relative;
+  z-index: 3;
+  width: min(820px, calc(100% - 40px));
+  padding: clamp(32px, 5vw, 60px) clamp(24px, 4vw, 48px);
+  text-align: center;
+  border: 1px solid rgba(230, 194, 112, 0.3);
+  border-radius: 4px;
+  background: rgba(15, 11, 7, 0.55);
+  backdrop-filter: blur(6px);
+  box-shadow: inset 0 0 0 1px rgba(230, 194, 112, 0.1), 0 30px 80px rgba(0, 0, 0, 0.6);
+}
+
+.greek-home-redesign .hero-laurel-frame {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.greek-home-redesign .hero-laurel {
+  height: 60px;
+  width: auto;
+  opacity: 0.85;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.6));
+}
+
+.greek-home-redesign .hero-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(2.6rem, 7vw, 6rem);
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  color: var(--gold-pale);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(230, 194, 112, 0.25);
+  margin: 0;
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+
+.greek-home-redesign .hero-subtitle {
+  margin: 16px 0 0;
+  font-family: 'Cinzel', serif;
+  font-size: clamp(0.95rem, 1.6vw, 1.3rem);
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+}
+
+.greek-home-redesign .hero-subtitle::before { content: '\2014\00a0'; }
+.greek-home-redesign .hero-subtitle::after  { content: '\00a0\2014'; }
+
+.greek-home-redesign .hero-lead {
+  margin: 22px auto 0;
+  max-width: 560px;
+  font-size: clamp(1rem, 1.4vw, 1.15rem);
+  line-height: 1.6;
+  color: #e8dcb8;
+}
+
+.greek-home-redesign .hero-date {
+  margin: 18px 0 0;
+  font-family: 'Cinzel', serif;
+  font-size: 0.9rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+}
+
+.greek-home-redesign .hero-actions {
+  margin-top: 32px;
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.greek-home-redesign .button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 26px;
+  border-radius: 2px;
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: transform 220ms ease, background 220ms ease, color 220ms ease;
+  border: 1px solid var(--gold-deep);
+}
+
+.greek-home-redesign .button-primary {
+  background: var(--gold-deep);
+  color: var(--ink-dark);
+  border-color: var(--gold-light);
+  box-shadow: 0 6px 18px rgba(185, 135, 47, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.greek-home-redesign .button-primary:hover {
+  background: var(--gold-light);
+  transform: translateY(-2px);
+}
+
+.greek-home-redesign .button-secondary {
+  background: transparent;
+  color: var(--gold-pale);
+}
+
+.greek-home-redesign .button-secondary:hover {
+  background: rgba(185, 135, 47, 0.16);
+  transform: translateY(-2px);
+}
+
+/* ==========================================================
+   COUNTDOWN
+   ========================================================== */
+.greek-home-redesign .countdown-bar {
+  position: relative;
+  padding: 38px clamp(20px, 4vw, 60px);
+  background: linear-gradient(180deg, rgba(15, 11, 7, 0.92), rgba(10, 8, 7, 0.98));
+  border-top: 1px solid rgba(230, 194, 112, 0.25);
+  border-bottom: 1px solid rgba(230, 194, 112, 0.25);
+  text-align: center;
+}
+
+.greek-home-redesign .countdown-border-top,
+.greek-home-redesign .countdown-border-bottom {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 14px;
+  opacity: 0.5;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.greek-home-redesign .countdown-border-top { top: 0; }
+.greek-home-redesign .countdown-border-bottom { bottom: 0; }
+
+.greek-home-redesign .countdown-border-top img,
+.greek-home-redesign .countdown-border-bottom img {
+  width: 100%;
+  height: 14px;
+  object-fit: cover;
+}
+
+.greek-home-redesign .countdown-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(16px, 4vw, 60px);
+  flex-wrap: wrap;
+}
+
+.greek-home-redesign .laurel-deco {
+  height: 64px;
+  width: auto;
+  opacity: 0.7;
+}
+
+.greek-home-redesign .laurel-right { transform: scaleX(-1); }
+
+.greek-home-redesign .countdown-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.greek-home-redesign .countdown-label {
+  margin: 0;
+  font-family: 'Cinzel', serif;
+  font-size: clamp(0.95rem, 1.4vw, 1.1rem);
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+}
+
+.greek-home-redesign #timer {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(70px, 110px));
+  gap: clamp(10px, 1.5vw, 24px);
+  margin: 0;
+}
+
+.greek-home-redesign .time-unit {
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 12px 8px;
+  min-height: auto;
+  border: 0;
+  background: transparent;
+  border-radius: 0;
+  grid-template-columns: none !important;
+}
+
+.greek-home-redesign .time-unit span {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(2.2rem, 4vw, 3.4rem);
+  font-weight: 900;
+  line-height: 1;
+  color: var(--gold-pale);
+  letter-spacing: 0;
+  justify-self: center;
+}
+
+.greek-home-redesign .time-unit small {
+  justify-self: center;
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+}
+
+.greek-home-redesign .countdown-sub {
+  margin: 0;
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(230, 194, 112, 0.7);
+}
+
+/* ==========================================================
+   TRIPLE CARDS (Top5 + Rekord + Ceremonia)
+   ========================================================== */
+.greek-home-redesign .triple-grid {
+  width: min(1400px, calc(100% - 40px));
+  margin: clamp(40px, 6vw, 80px) auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: clamp(18px, 2vw, 28px);
+}
+
+.greek-home-redesign .dark-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 28px 24px;
+  border: 1px solid rgba(230, 194, 112, 0.35);
+  border-radius: 4px;
+  background: linear-gradient(180deg, rgba(22, 17, 10, 0.95), rgba(12, 9, 6, 0.96));
+  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(230, 194, 112, 0.08);
+  color: #e8dcb8;
+  min-height: 360px;
+}
+
+.greek-home-redesign .dark-card-header {
+  text-align: center;
+  margin-bottom: 18px;
+}
+
+.greek-home-redesign .card-laurel-deco {
+  display: block;
+  margin: 0 auto 10px;
+  text-align: center;
+}
+
+.greek-home-redesign .card-laurel-deco img {
+  height: 26px;
+  width: auto;
+  opacity: 0.65;
+}
+
+.greek-home-redesign .dark-card-header h2 {
+  margin: 0;
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.05rem, 1.5vw, 1.3rem);
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold-pale);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.greek-home-redesign .card-icon {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+}
+
+.greek-home-redesign .dark-card-header small {
+  display: block;
+  margin-top: 6px;
+  font-size: 0.7rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: rgba(230, 194, 112, 0.6);
+}
+
+.greek-home-redesign .dark-card-cta {
+  margin-top: auto;
+  padding-top: 18px;
+  border-top: 1px solid rgba(230, 194, 112, 0.18);
+  text-align: center;
+}
+
+.greek-home-redesign .button-ghost {
+  display: inline-block;
+  padding: 10px 18px;
+  font-family: 'Cinzel', serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold-pale);
+  text-decoration: none;
+  border-bottom: 1px solid var(--gold-deep);
+  transition: color 220ms ease;
+}
+
+.greek-home-redesign .button-ghost:hover {
+  color: var(--gold-light);
+}
+
+/* Podium content */
+.greek-home-redesign .podium {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.greek-home-redesign .podium-row.medalist-row {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: rgba(230, 194, 112, 0.06);
+  border: 1px solid rgba(230, 194, 112, 0.15);
+  border-radius: 2px;
+}
+
+.greek-home-redesign .podium-row .podium-rank {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--gold-deep);
+  color: var(--ink-dark);
+  font-family: 'Cinzel', serif;
+  font-weight: 900;
+  font-size: 0.95rem;
+}
+
+.greek-home-redesign .podium-row .podium-name {
+  color: var(--gold-pale);
+  font-weight: 700;
+  font-size: 0.95rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.greek-home-redesign .podium-row .podium-score {
+  display: flex;
+  gap: 8px;
+  font-size: 0.78rem;
+  color: #d9c79a;
+}
+
+.greek-home-redesign .podium-row .podium-score span b {
+  color: var(--gold-deep);
+  margin-right: 3px;
+}
+
+/* Records illustration */
+.greek-home-redesign .records-illustration {
+  margin: 0 0 14px;
+  text-align: center;
+}
+
+.greek-home-redesign .record-illustr {
+  max-width: 180px;
+  width: 60%;
+  height: auto;
+  opacity: 0.9;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.6));
+}
+
+.greek-home-redesign .home-records {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.greek-home-redesign .record-group {
+  border: 1px solid rgba(230, 194, 112, 0.18);
+  background: rgba(230, 194, 112, 0.04);
+  padding: 12px;
+  border-radius: 2px;
+}
+
+.greek-home-redesign .record-group-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(230, 194, 112, 0.15);
+}
+
+.greek-home-redesign .record-group-title strong {
+  color: var(--gold-pale);
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+}
+
+.greek-home-redesign .record-group-title small {
+  color: var(--gold-deep);
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+/* Ceremony */
+.greek-home-redesign .ceremony-content {
+  text-align: center;
+  padding: 12px 0;
+}
+
+.greek-home-redesign .ceremony-date {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.7rem, 3vw, 2.4rem);
+  font-weight: 900;
+  color: var(--gold-pale);
+  margin: 0;
+  letter-spacing: 0.04em;
+}
+
+.greek-home-redesign .ceremony-time {
+  font-family: 'Cinzel', serif;
+  font-size: 0.95rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+  margin: 4px 0 18px;
+}
+
+.greek-home-redesign .ceremony-text {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: #d9c79a;
+  margin: 0;
+}
+
+/* ==========================================================
+   KONKURENCJE SECTION
+   ========================================================== */
+.greek-home-redesign .competitions-section {
+  width: min(1400px, calc(100% - 40px));
+  margin: clamp(40px, 6vw, 80px) auto;
+  padding: clamp(30px, 4vw, 50px) clamp(20px, 3vw, 40px);
+  border: 1px solid rgba(230, 194, 112, 0.3);
+  background: linear-gradient(180deg, rgba(22, 17, 10, 0.95), rgba(12, 9, 6, 0.96));
+  box-shadow: var(--shadow-deep);
+}
+
+.greek-home-redesign .section-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.greek-home-redesign .section-laurel {
+  display: block;
+  margin: 0 auto 14px;
+  height: 36px;
+  opacity: 0.7;
+}
+
+.greek-home-redesign .section-header h2 {
+  margin: 0;
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.7rem, 3.4vw, 2.6rem);
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold-pale);
+}
+
+.greek-home-redesign .section-header p {
+  margin: 8px 0 0;
+  font-size: 0.92rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+}
+
+.greek-home-redesign .competition-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 36px;
+  align-items: start;
+}
+
+.greek-home-redesign .competition-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.greek-home-redesign .timeline-event {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr);
+  gap: 14px;
+  padding: 14px;
+  border: 1px solid rgba(230, 194, 112, 0.2);
+  background: rgba(230, 194, 112, 0.04);
+  border-radius: 2px;
+}
+
+.greek-home-redesign .timeline-event.is-complete {
+  border-color: rgba(230, 194, 112, 0.45);
+  background: rgba(185, 135, 47, 0.1);
+}
+
+.greek-home-redesign .timeline-index {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border: 2px solid var(--gold-deep);
+  border-radius: 50%;
+  background: rgba(10, 8, 7, 0.6);
+  color: var(--gold-pale);
+  font-family: 'Cinzel', serif;
+  font-weight: 900;
+  font-size: 1.4rem;
+}
+
+.greek-home-redesign .timeline-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.greek-home-redesign .timeline-status {
+  font-size: 0.62rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+}
+
+.greek-home-redesign .timeline-card h4 {
+  margin: 0;
+  font-family: 'Cinzel', serif;
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: var(--gold-pale);
+}
+
+.greek-home-redesign .timeline-medals {
+  display: flex;
+  gap: 12px;
+  margin-top: 4px;
+  font-size: 0.78rem;
+  color: #d9c79a;
+}
+
+.greek-home-redesign .competition-poster {
+  margin: 0;
+  text-align: center;
+}
+
+.greek-home-redesign .competition-poster img {
+  width: 100%;
+  max-width: 420px;
+  height: auto;
+  border: 2px solid var(--gold-deep);
+  border-radius: 2px;
+  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.6);
+}
+
+.greek-home-redesign .competition-poster figcaption {
+  margin-top: 12px;
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+}
+
+/* ==========================================================
+   MAPA
+   ========================================================== */
+.greek-home-redesign .map-section {
+  width: min(1400px, calc(100% - 40px));
+  margin: clamp(40px, 6vw, 80px) auto;
+}
+
+.greek-home-redesign .map-card {
+  position: relative;
+  display: block;
+  min-height: 320px;
+  border: 1px solid rgba(230, 194, 112, 0.4);
+  border-radius: 2px;
+  overflow: hidden;
+  text-decoration: none;
+  box-shadow: var(--shadow-deep);
+  isolation: isolate;
+  transition: transform 280ms ease;
+}
+
+.greek-home-redesign .map-card:hover {
+  transform: translateY(-2px);
+}
+
+.greek-home-redesign .map-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.greek-home-redesign .map-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.greek-home-redesign .map-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(10, 8, 7, 0.45) 0%, rgba(10, 8, 7, 0.8) 100%);
+}
+
+.greek-home-redesign .map-info {
+  position: relative;
+  z-index: 2;
+  padding: clamp(30px, 4vw, 50px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 320px;
+  color: var(--gold-pale);
+}
+
+.greek-home-redesign .map-pin-icon img {
+  width: 52px;
+  height: auto;
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.6));
+}
+
+.greek-home-redesign .map-info h3 {
+  margin: 14px 0 6px;
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.6rem, 2.8vw, 2.4rem);
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.greek-home-redesign .map-info p {
+  margin: 0;
+  font-size: 0.85rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+}
+
+/* ==========================================================
+   TICKER
+   ========================================================== */
+.greek-home-redesign .complaint-ticker {
+  background: linear-gradient(180deg, rgba(15, 11, 7, 0.96), rgba(10, 8, 7, 0.99));
+  border-top: 1px solid rgba(230, 194, 112, 0.25);
+  color: var(--gold-pale);
+}
+
+/* ==========================================================
+   RESPONSIVE
+   ========================================================== */
+@media (max-width: 980px) {
+  .greek-home-redesign .index-navbar {
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 12px 18px;
+  }
+  .greek-home-redesign .nav-links {
+    width: 100%;
+    margin-left: 0;
+    flex-wrap: wrap;
+    justify-content: center;
+    border-top: 1px solid rgba(230, 194, 112, 0.18);
+    padding-top: 12px;
+  }
+  .greek-home-redesign .auth-nav-item {
+    margin-left: 0;
+    border-left: 0;
+    padding-left: 0;
+  }
+  .greek-home-redesign .competition-layout {
+    grid-template-columns: 1fr;
+  }
+  .greek-home-redesign .competition-poster {
+    order: -1;
+  }
+}
+
+@media (max-width: 640px) {
+  .greek-home-redesign .hero-title {
+    font-size: clamp(2rem, 12vw, 3.4rem);
+    white-space: normal;
+  }
+  .greek-home-redesign .laurel-deco {
+    height: 42px;
+  }
+  .greek-home-redesign #timer {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+  }
+  .greek-home-redesign .time-unit span {
+    font-size: clamp(1.5rem, 7vw, 2rem);
+  }
+  .greek-home-redesign .navbar-tagline {
+    display: none;
+  }
+}

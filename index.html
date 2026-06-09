@@ -3,26 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Alkoolimpiada – Strona Główna</title>
-  <link rel="stylesheet" href="styles.css?v=14"/>
+  <title>Alkoolimpiada MMXXVI – 25 lipca 2026, Sobin</title>
+  <meta name="description" content="Alkoolimpiada MMXXVI – sześć prób, jedna chwała. Dołącz do najepickiejszej rywalizacji.">
+  <link rel="icon" type="image/png" href="assets/icons/favicon.png">
+  <link rel="stylesheet" href="styles.css?v=15"/>
+  <link rel="stylesheet" href="styles-index.css?v=1"/>
 </head>
-<body class="home-page greek-home">
+<body class="home-page greek-home greek-home-redesign">
+  <!-- Temple loader -->
   <div class="temple-loader" id="temple-loader" aria-label="Ładowanie strony" role="status">
-    <img src="ChatGPT Image 18 maj 2026, 22_40_39.png" alt="" class="loader-image">
+    <img src="assets/logo/alkoolimpiada-logo.png" alt="" class="loader-image">
     <p>Alkoolimpiada MMXXVI</p>
   </div>
 
-  <div class="greek-ambient" aria-hidden="true">
-    <div class="greek-column column-left"></div>
-    <div class="greek-column column-right"></div>
-    <div class="gold-orb orb-one"></div>
-    <div class="gold-orb orb-two"></div>
-  </div>
-
-  <nav class="navbar navbar-with-brand">
+  <!-- Navbar (struktura zachowana dla auth.js) -->
+  <nav class="navbar navbar-with-brand index-navbar" id="topnav">
     <a class="navbar-brand" href="index.html">
-      <img src="logo-olimpijskie.png" alt="Alkoolimpiada Logo" class="site-logo">
-      <span class="navbar-title">Alkoolimpiada 2026</span>
+      <img src="assets/logo/alkoolimpiada-logo.png" alt="Alkoolimpiada" class="site-logo">
+      <span class="navbar-brand-text">
+        <span class="navbar-title">Alkoolimpiada</span>
+        <span class="navbar-tagline">Edycja MMXXVI</span>
+      </span>
     </a>
     <button class="hamburger" aria-label="Menu">
       <span class="bar"></span>
@@ -30,6 +31,7 @@
       <span class="bar"></span>
     </button>
     <ul class="nav-links">
+      <li><a href="index.html" class="active">Strona główna</a></li>
       <li><a href="wyniki.html">Wyniki</a></li>
       <li><a href="zespoly.html">Zespoły</a></li>
       <li><a href="flanki.html">Flanki</a></li>
@@ -39,131 +41,174 @@
     </ul>
   </nav>
 
-  <main class="experience">
-    <section class="olympus-hero arena-temple">
-      <article class="hero-module olympus-copy">
-        <div class="module-label">
-          <span>Edycja MMXXVI</span>
-          <small>25.07.2026 • Sobin</small>
-        </div>
-        <h2>ALKOOLIMPIADA</h2>
-        <p class="hero-lead">
-          Citius, Altius, Fortius. Pochodnia, arena i chwała
-          zapisane w tabelach igrzysk.
-        </p>
-        <div class="hero-actions">
-          <a class="button button-primary" href="wyniki.html">Tablica wyników</a>
-          <a class="button button-secondary" href="#arena">Wejdź na arenę</a>
-        </div>
-      </article>
+  <main class="experience experience-redesign">
 
-      <aside class="hero-module countdown-temple">
-        <div class="module-label">
-          <span id="event-status-label">Odliczanie do startu</span>
-          <small id="event-status-copy">25 lipca 2026, 16:00</small>
+    <!-- HERO -->
+    <section class="hero-temple" data-spotlight>
+      <div class="hero-bg" aria-hidden="true">
+        <img src="assets/hero/hero-index-bg.png" alt="">
+      </div>
+      <div class="hero-overlay" aria-hidden="true"></div>
+      <div class="hero-content">
+        <div class="hero-laurel-frame" aria-hidden="true">
+          <img src="assets/decorations/laurel-divider.png" alt="" class="hero-laurel">
         </div>
-        <div id="timer" aria-live="polite">
-          <div class="time-unit">
-            <span id="days">00</span>
-            <small>dni</small>
-          </div>
-          <div class="time-unit">
-            <span id="hours">00</span>
-            <small>godz</small>
-          </div>
-          <div class="time-unit">
-            <span id="minutes">00</span>
-            <small>min</small>
-          </div>
-          <div class="time-unit">
-            <span id="seconds">00</span>
-            <small>sek</small>
-          </div>
+        <h1 class="hero-title">Alkoolimpiada</h1>
+        <p class="hero-subtitle">To nie sport. To tradycja.</p>
+        <p class="hero-lead">
+          Sześć prób. Jedna chwała.<br>
+          Dołącz do najbardziej epickiej rywalizacji w dziejach ludzkości.
+        </p>
+        <p class="hero-date">25 lipca 2026 · Sobin</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#konkurencje">Zobacz konkurencje</a>
+          <a class="button button-secondary" href="typuj.html">Dołącz do typowania</a>
         </div>
-      </aside>
+      </div>
     </section>
 
-    <section class="arena-temple" id="arena">
-      <article class="podium-module marble-panel" data-animate>
-        <div class="module-label">
-          <span>Top 5 medalistów</span>
-          <small>złoto / srebro / brąz</small>
+    <!-- COUNTDOWN -->
+    <section class="countdown-bar" data-animate>
+      <div class="countdown-border-top" aria-hidden="true">
+        <img src="assets/decorations/greek-border-horizontal.png" alt="">
+      </div>
+      <div class="countdown-row">
+        <img src="assets/decorations/laurel-divider.png" alt="" class="laurel-deco laurel-left">
+        <div class="countdown-inner">
+          <p class="countdown-label" id="event-status-label">Start Alkoolimpiady za</p>
+          <div id="timer" aria-live="polite">
+            <div class="time-unit"><span id="days">00</span><small>dni</small></div>
+            <div class="time-unit"><span id="hours">00</span><small>godzin</small></div>
+            <div class="time-unit"><span id="minutes">00</span><small>minut</small></div>
+            <div class="time-unit"><span id="seconds">00</span><small>sekund</small></div>
+          </div>
+          <p class="countdown-sub" id="event-status-copy">Start: 25 lipca 2026, godz. 16:00</p>
         </div>
+        <img src="assets/decorations/laurel-divider.png" alt="" class="laurel-deco laurel-right">
+      </div>
+      <div class="countdown-border-bottom" aria-hidden="true">
+        <img src="assets/decorations/greek-border-horizontal.png" alt="">
+      </div>
+    </section>
+
+    <!-- TRIPLE CARDS -->
+    <section class="triple-grid" id="arena">
+      <article class="dark-card podium-module" data-animate>
+        <header class="dark-card-header">
+          <span class="card-laurel-deco" aria-hidden="true">
+            <img src="assets/decorations/laurel-divider.png" alt="">
+          </span>
+          <h2>
+            <img src="assets/icons/trophy.png" alt="" class="card-icon">
+            Top 5 medalistów
+          </h2>
+          <small>złoto · srebro · brąz</small>
+        </header>
         <div id="home-podium" class="podium">
           <div class="loading-line"></div>
           <div class="loading-line"></div>
           <div class="loading-line"></div>
         </div>
+        <footer class="dark-card-cta">
+          <a href="wyniki.html" class="button-ghost">Pełen ranking →</a>
+        </footer>
       </article>
 
-      <article class="records-module marble-panel" data-animate>
-        <div class="module-label">
-          <span>Rekord: Sprint na 500</span>
+      <article class="dark-card records-module" data-animate>
+        <header class="dark-card-header">
+          <span class="card-laurel-deco" aria-hidden="true">
+            <img src="assets/decorations/laurel-divider.png" alt="">
+          </span>
+          <h2>
+            <img src="assets/icons/icon-records.png" alt="" class="card-icon">
+            Rekord Sprint na 500
+          </h2>
           <small>najnowszy dostępny rok</small>
+        </header>
+        <div class="records-illustration" aria-hidden="true">
+          <img src="assets/hero/sprint-record-illustration.png" alt="" class="record-illustr">
         </div>
         <div id="home-records" class="home-records">
           <div class="loading-line"></div>
           <div class="loading-line"></div>
           <div class="loading-line"></div>
         </div>
+        <footer class="dark-card-cta">
+          <a href="rekordy.html" class="button-ghost">Wszystkie rekordy →</a>
+        </footer>
+      </article>
+
+      <article class="dark-card ceremony-module" data-animate>
+        <header class="dark-card-header">
+          <span class="card-laurel-deco" aria-hidden="true">
+            <img src="assets/decorations/laurel-divider.png" alt="">
+          </span>
+          <h2>🔥 Najbliższa ceremonia</h2>
+          <small>otwarcie igrzysk</small>
+        </header>
+        <div class="ceremony-content">
+          <p class="ceremony-date">25.07.2026</p>
+          <p class="ceremony-time">godz. 16:00</p>
+          <p class="ceremony-text">
+            Uroczyste otwarcie Alkoolimpiady MMXXVI w Sobinie.
+            Zbiórka zawodników, złożenie przysięgi i zapalenie znicza olimpijskiego.
+          </p>
+        </div>
+        <footer class="dark-card-cta">
+          <a href="#mapa" class="button-ghost">Mapa dojazdu →</a>
+        </footer>
       </article>
     </section>
 
-    <section class="competition-chronicle" data-animate>
-      <div class="chronicle-heading">
-        <span class="section-kicker">Przebieg igrzysk</span>
-        <h3>Konkurencje</h3>
-        <p>Sześć prób, jedna arena i medale dopisywane z tabeli wyników.</p>
-      </div>
+    <!-- KONKURENCJE -->
+    <section class="competitions-section" id="konkurencje" data-animate>
+      <header class="section-header">
+        <img src="assets/decorations/laurel-divider.png" alt="" class="section-laurel">
+        <h2>Konkurencje</h2>
+        <p>Sześć prób, jedna arena, jedna chwała.</p>
+      </header>
       <div class="competition-layout">
-        <figure class="competition-poster">
-          <img
-            src="ChatGPT Image 21 maj 2026, 22_39_02.png"
-            alt="Oficjalna tablica konkurencji Alkoolimpiady"
-          >
-        </figure>
         <div id="competition-timeline" class="competition-timeline" aria-live="polite">
           <div class="loading-line"></div>
           <div class="loading-line"></div>
           <div class="loading-line"></div>
         </div>
+        <figure class="competition-poster">
+          <img src="assets/decorations/poster-alkoolimpiada-mmxxvi.png" alt="Plakat Alkoolimpiady MMXXVI">
+          <figcaption>Plakat oficjalny · MMXXVI</figcaption>
+        </figure>
       </div>
     </section>
 
-    <section class="procession" data-animate data-spotlight>
-      <div class="procession-art parallax" data-depth="-0.04">
-        <img
-          src="ChatGPT Image 19 maj 2026, 20_21_51.png"
-          alt="Antyczna rycina z postacią trzymającą pochodnię"
-        >
-      </div>
-      <div class="procession-copy">
-        <span class="section-kicker">Ceremonia</span>
-        <h3>25 lipca 2026</h3>
-        <p>
-          Start o 16:00. Złota pochodnia, laury, rywalizacja i arkusz wyników
-          robiący za wyrocznię punktacji.
-        </p>
-      </div>
-    </section>
-
-    <section class="map-showcase" id="lokalizacja" data-animate>
-      <a class="map-frame magnetic" href="https://maps.app.goo.gl/9E5ipbBy2KBdhq6e7" target="_blank" rel="noopener">
-        <img src="mapka.png" alt="Mapa dojazdu do Ośrodka olimpiojskiego w Sobin" class="map-image">
+    <!-- MAPA -->
+    <section class="map-section" id="mapa" data-animate>
+      <header class="section-header">
+        <img src="assets/decorations/laurel-divider.png" alt="" class="section-laurel">
+        <h2>Mapa dojazdu</h2>
+        <p>Sobin — punkt zbiórki 25 lipca, 16:00.</p>
+      </header>
+      <a class="map-card" href="https://maps.app.goo.gl/9E5ipbBy2KBdhq6e7" target="_blank" rel="noopener">
+        <div class="map-bg" aria-hidden="true">
+          <img src="assets/backgrounds/map-antique-bg.png" alt="">
+        </div>
+        <div class="map-info">
+          <span class="map-pin-icon" aria-hidden="true">
+            <img src="assets/icons/map-pin-gold.png" alt="">
+          </span>
+          <h3>Sobin</h3>
+          <p>Otwórz w Google Maps</p>
+        </div>
       </a>
-      <div class="map-copy marble-panel">
-        <span class="section-kicker">Mapa areny</span>
-        <h3>Sobin, punkt zbiórki</h3>
-        <p>Duży hitbox, minimum gadania, jedna akcja: klik i trasa otwarta.</p>
-      </div>
     </section>
+
   </main>
 
+  <!-- Ticker zażaleń -->
   <div class="complaint-ticker" id="complaint-ticker" aria-label="Najnowsze zażalenia">
     <div class="ticker-track" id="complaint-ticker-track"></div>
   </div>
 
-  <!-- Wszystkie skrypty, w tym countdown -->
+  <!-- Skrypty (zachowane bez zmian) -->
   <script src="scripts.js?v=2"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js?v=2"></script>
