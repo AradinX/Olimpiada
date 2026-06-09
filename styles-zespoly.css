@@ -1,0 +1,335 @@
+/* ==========================================================
+   Zespoly page
+   Shared visual system with wyniki.html + team roster cards.
+   ========================================================== */
+
+.zespoly-page.greek-home-redesign {
+  display: block;
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse at center top, rgba(196, 139, 56, 0.12), transparent 44%),
+    url('assets/backgrounds/bg-dark-marble-gold.png') center / cover fixed,
+    #090705;
+}
+
+.zespoly-page .teams-stage {
+  position: relative;
+  width: 100%;
+  min-height: calc(100vh - 90px);
+  margin: 0;
+  padding: clamp(42px, 5vw, 78px) clamp(16px, 4vw, 64px);
+  display: block;
+  overflow: hidden;
+  isolation: isolate;
+  background-image:
+    linear-gradient(rgba(12, 9, 5, 0.12), rgba(12, 9, 5, 0.30)),
+    url('assets/teams-page-stage-bg.png'),
+    url('assets/backgrounds/bg-dark-marble-gold.png');
+  background-size:
+    auto,
+    cover,
+    cover;
+  background-position:
+    center top,
+    center top,
+    center center;
+  background-repeat:
+    no-repeat,
+    no-repeat,
+    no-repeat;
+  background-attachment:
+    scroll,
+    fixed,
+    fixed;
+}
+
+.zespoly-page .teams-stage::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(5, 4, 3, 0.54), rgba(5, 4, 3, 0.06) 28%, rgba(5, 4, 3, 0.04) 72%, rgba(5, 4, 3, 0.56)),
+    radial-gradient(ellipse at 50% 26%, rgba(255, 224, 154, 0.12), transparent 46%),
+    linear-gradient(180deg, rgba(8, 6, 4, 0.08), rgba(8, 6, 4, 0.38));
+}
+
+.zespoly-page .teams-content {
+  position: relative;
+  z-index: 2;
+  max-width: 1420px;
+  margin: 0 auto;
+}
+
+.zespoly-page .teams-board {
+  position: relative;
+  z-index: 2;
+  width: min(100%, 1420px);
+  margin: 0 auto;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color: #281b0b;
+  box-shadow: none;
+  backdrop-filter: none;
+  overflow: visible;
+}
+
+.zespoly-page .teams-board::before {
+  content: none;
+}
+
+.zespoly-page .teams-board,
+.zespoly-page .teams-panel,
+.zespoly-page .teams-content-panel,
+.zespoly-page .roster-board {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+  backdrop-filter: none !important;
+}
+
+.zespoly-page .teams-header,
+.zespoly-page .groups-container {
+  position: relative;
+  z-index: 2;
+}
+
+.zespoly-page .teams-header {
+  margin: 0 0 clamp(24px, 3vw, 40px);
+  text-align: center;
+  color: #ead39b;
+  text-shadow: 0 3px 18px rgba(0, 0, 0, 0.55);
+}
+
+.zespoly-page .teams-header .laurel-pair {
+  margin-bottom: 14px;
+}
+
+.zespoly-page .teams-header .laurel-pair img {
+  height: 36px;
+  opacity: 0.75;
+  filter: brightness(0.7) sepia(1) saturate(2);
+}
+
+.zespoly-page .teams-header h1 {
+  margin: 0;
+  color: #f0d89d;
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  line-height: 1.05;
+  text-transform: uppercase;
+  text-shadow:
+    0 2px 0 rgba(42, 25, 6, 0.58),
+    0 14px 34px rgba(0, 0, 0, 0.62);
+}
+
+.zespoly-page .teams-header p {
+  margin: 8px 0 0;
+  color: rgba(246, 222, 166, 0.88);
+  font-family: 'Cinzel', serif;
+  font-size: clamp(0.78rem, 1vw, 0.95rem);
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+.zespoly-page .groups-container {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(16px, 2vw, 26px);
+  margin-top: 0;
+}
+
+.zespoly-page .team-card {
+  --team-card-bg: none;
+  position: relative;
+  min-height: 250px;
+  overflow: hidden;
+  padding: clamp(18px, 2.3vw, 28px);
+  border: 1px solid rgba(86, 52, 15, 0.66);
+  border-radius: 6px;
+  background:
+    linear-gradient(135deg, rgba(249, 228, 181, 0.94), rgba(204, 160, 88, 0.84));
+  box-shadow:
+    0 20px 46px rgba(0, 0, 0, 0.38),
+    0 0 0 1px rgba(255, 242, 203, 0.18),
+    inset 0 1px 0 rgba(255, 245, 210, 0.55);
+  color: #261808;
+}
+
+.zespoly-page .team-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(255, 244, 214, 0.56), rgba(255, 244, 214, 0.24) 48%, rgba(111, 70, 24, 0.12)),
+    radial-gradient(ellipse at 12% 0%, rgba(255, 250, 231, 0.28), transparent 58%);
+}
+
+.zespoly-page .team-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background-image: var(--team-card-bg);
+  background-size: cover;
+  background-position: right center;
+  background-repeat: no-repeat;
+  opacity: 0.16;
+  filter: sepia(0.45) saturate(0.75) contrast(0.85) brightness(0.96);
+}
+
+.zespoly-page .team-card > * {
+  position: relative;
+  z-index: 2;
+}
+
+.zespoly-page .team-card:nth-child(1) { --team-card-bg: url('assets/team-card-bg-01.png'); }
+.zespoly-page .team-card:nth-child(2) { --team-card-bg: url('assets/team-card-bg-02.png'); }
+.zespoly-page .team-card:nth-child(3) { --team-card-bg: url('assets/team-card-bg-03.png'); }
+.zespoly-page .team-card:nth-child(4) { --team-card-bg: url('assets/team-card-bg-04.png'); }
+.zespoly-page .team-card:nth-child(5) { --team-card-bg: url('assets/team-card-bg-05.png'); }
+.zespoly-page .team-card:nth-child(6) { --team-card-bg: url('assets/team-card-bg-06.png'); }
+
+.zespoly-page .team-card-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: clamp(18px, 2vw, 24px);
+}
+
+.zespoly-page .team-number {
+  display: inline-grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  border: 2px solid rgba(92, 56, 15, 0.82);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 32% 28%, #ffe7a4, #c48a2c 62%, #7b4a13 100%);
+  color: #1d1207;
+  box-shadow:
+    0 8px 18px rgba(61, 35, 9, 0.28),
+    inset 0 0 0 2px rgba(255, 246, 210, 0.24);
+  font-family: 'Cinzel', serif;
+  font-size: 1.55rem;
+  font-weight: 900;
+}
+
+.zespoly-page .team-card-title p {
+  margin: 0 0 3px;
+  color: #6a4619;
+  font-family: 'Cinzel', serif;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.zespoly-page .team-card-title h2 {
+  margin: 0;
+  color: #251807;
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.25rem, 1.7vw, 1.7rem);
+  line-height: 1.05;
+  text-transform: uppercase;
+}
+
+.zespoly-page .team-members {
+  display: grid;
+  gap: 9px;
+  max-width: 72%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.zespoly-page .team-members li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 34px;
+  padding: 7px 10px;
+  border: 1px solid rgba(90, 58, 20, 0.18);
+  border-radius: 4px;
+  background: rgba(255, 244, 214, 0.46);
+  color: #2a1a08;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 0.98rem;
+  font-weight: 800;
+}
+
+.zespoly-page .member-index {
+  display: inline-grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(36, 23, 7, 0.88);
+  color: #e6c06a;
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  font-weight: 900;
+}
+
+@media (max-width: 1050px) {
+  .zespoly-page .groups-container {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .zespoly-page .teams-stage {
+    min-height: calc(100vh - 76px);
+    padding: 24px 12px;
+    background-position:
+      center top,
+      center top,
+      center center;
+    background-size:
+      auto,
+      auto 100vh,
+      cover;
+  }
+
+  .zespoly-page .teams-stage::before {
+    background:
+      linear-gradient(rgba(10, 7, 4, 0.24), rgba(10, 7, 4, 0.44)),
+      radial-gradient(ellipse at 50% 18%, rgba(255, 232, 180, 0.12), transparent 52%);
+  }
+
+  .zespoly-page .teams-board {
+    width: 100%;
+    padding: 0;
+    background: transparent;
+  }
+}
+
+@media (max-width: 680px) {
+  .zespoly-page .groups-container {
+    grid-template-columns: 1fr;
+  }
+
+  .zespoly-page .team-card {
+    min-height: 235px;
+  }
+
+  .zespoly-page .team-card::after {
+    opacity: 0.16;
+    background-position: right center;
+  }
+
+  .zespoly-page .team-members {
+    max-width: 78%;
+  }
+}
