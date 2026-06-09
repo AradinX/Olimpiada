@@ -7,7 +7,7 @@
   <meta name="description" content="Alkoolimpiada MMXXVI – sześć prób, jedna chwała. Dołącz do najepickiejszej rywalizacji.">
   <link rel="icon" type="image/png" href="assets/icons/favicon.png">
   <link rel="stylesheet" href="styles.css?v=15"/>
-  <link rel="stylesheet" href="styles-index.css?v=1"/>
+  <link rel="stylesheet" href="styles-index.css?v=10"/>
 </head>
 <body class="home-page greek-home greek-home-redesign">
   <!-- Temple loader -->
@@ -51,7 +51,10 @@
       <div class="hero-overlay" aria-hidden="true"></div>
       <div class="hero-content">
         <div class="hero-laurel-frame" aria-hidden="true">
-          <img src="assets/decorations/laurel-divider.png" alt="" class="hero-laurel">
+          <span class="laurel-pair laurel-pair--hero">
+            <img src="assets/decorations/laurel-divider.png" alt="" class="laurel-mirror">
+            <img src="assets/decorations/laurel-divider.png" alt="">
+          </span>
         </div>
         <h1 class="hero-title">Alkoolimpiada</h1>
         <p class="hero-subtitle">To nie sport. To tradycja.</p>
@@ -95,7 +98,8 @@
     <section class="triple-grid" id="arena">
       <article class="dark-card podium-module" data-animate>
         <header class="dark-card-header">
-          <span class="card-laurel-deco" aria-hidden="true">
+          <span class="card-laurel-deco laurel-pair laurel-pair--card" aria-hidden="true">
+            <img src="assets/decorations/laurel-divider.png" alt="" class="laurel-mirror">
             <img src="assets/decorations/laurel-divider.png" alt="">
           </span>
           <h2>
@@ -116,7 +120,8 @@
 
       <article class="dark-card records-module" data-animate>
         <header class="dark-card-header">
-          <span class="card-laurel-deco" aria-hidden="true">
+          <span class="card-laurel-deco laurel-pair laurel-pair--card" aria-hidden="true">
+            <img src="assets/decorations/laurel-divider.png" alt="" class="laurel-mirror">
             <img src="assets/decorations/laurel-divider.png" alt="">
           </span>
           <h2>
@@ -125,9 +130,6 @@
           </h2>
           <small>najnowszy dostępny rok</small>
         </header>
-        <div class="records-illustration" aria-hidden="true">
-          <img src="assets/hero/sprint-record-illustration.png" alt="" class="record-illustr">
-        </div>
         <div id="home-records" class="home-records">
           <div class="loading-line"></div>
           <div class="loading-line"></div>
@@ -140,7 +142,8 @@
 
       <article class="dark-card ceremony-module" data-animate>
         <header class="dark-card-header">
-          <span class="card-laurel-deco" aria-hidden="true">
+          <span class="card-laurel-deco laurel-pair laurel-pair--card" aria-hidden="true">
+            <img src="assets/decorations/laurel-divider.png" alt="" class="laurel-mirror">
             <img src="assets/decorations/laurel-divider.png" alt="">
           </span>
           <h2>🔥 Najbliższa ceremonia</h2>
@@ -163,40 +166,60 @@
     <!-- KONKURENCJE -->
     <section class="competitions-section" id="konkurencje" data-animate>
       <header class="section-header">
-        <img src="assets/decorations/laurel-divider.png" alt="" class="section-laurel">
+        <span class="section-laurel laurel-pair laurel-pair--section" aria-hidden="true">
+          <img src="assets/decorations/laurel-divider.png" alt="" class="laurel-mirror">
+          <img src="assets/decorations/laurel-divider.png" alt="">
+        </span>
         <h2>Konkurencje</h2>
         <p>Sześć prób, jedna arena, jedna chwała.</p>
       </header>
-      <div class="competition-layout">
-        <div id="competition-timeline" class="competition-timeline" aria-live="polite">
-          <div class="loading-line"></div>
-          <div class="loading-line"></div>
-          <div class="loading-line"></div>
-        </div>
-        <figure class="competition-poster">
-          <img src="assets/decorations/poster-alkoolimpiada-mmxxvi.png" alt="Plakat Alkoolimpiady MMXXVI">
-          <figcaption>Plakat oficjalny · MMXXVI</figcaption>
-        </figure>
+      <div id="competition-timeline" class="competition-timeline" aria-live="polite">
+        <div class="loading-line"></div>
+        <div class="loading-line"></div>
+        <div class="loading-line"></div>
       </div>
     </section>
 
     <!-- MAPA -->
     <section class="map-section" id="mapa" data-animate>
       <header class="section-header">
-        <img src="assets/decorations/laurel-divider.png" alt="" class="section-laurel">
+        <span class="section-laurel laurel-pair laurel-pair--section" aria-hidden="true">
+          <img src="assets/decorations/laurel-divider.png" alt="" class="laurel-mirror">
+          <img src="assets/decorations/laurel-divider.png" alt="">
+        </span>
         <h2>Mapa dojazdu</h2>
         <p>Sobin — punkt zbiórki 25 lipca, 16:00.</p>
       </header>
       <a class="map-card" href="https://maps.app.goo.gl/9E5ipbBy2KBdhq6e7" target="_blank" rel="noopener">
-        <div class="map-bg" aria-hidden="true">
-          <img src="assets/backgrounds/map-antique-bg.png" alt="">
-        </div>
-        <div class="map-info">
-          <span class="map-pin-icon" aria-hidden="true">
-            <img src="assets/icons/map-pin-gold.png" alt="">
-          </span>
-          <h3>Sobin</h3>
-          <p>Otwórz w Google Maps</p>
+        <div class="map-corner map-corner-tl" aria-hidden="true"></div>
+        <div class="map-corner map-corner-tr" aria-hidden="true"></div>
+        <div class="map-corner map-corner-bl" aria-hidden="true"></div>
+        <div class="map-corner map-corner-br" aria-hidden="true"></div>
+
+        <div class="map-content">
+          <div class="map-left">
+            <span class="map-eyebrow">Punkt zbiórki</span>
+            <h3 class="map-place">Sobin</h3>
+            <div class="map-divider" aria-hidden="true">
+              <span></span><span class="map-divider-orn">❖</span><span></span>
+            </div>
+            <p class="map-when"><strong>25 lipca 2026</strong><br>godz. <strong>16:00</strong></p>
+            <p class="map-coords">50° 41' N · 16° 11' E</p>
+            <span class="map-cta">
+              <img src="assets/icons/map-pin-gold.png" alt="" class="map-cta-pin">
+              Otwórz w Google Maps →
+            </span>
+          </div>
+
+          <div class="map-right" aria-hidden="true">
+            <div class="map-preview">
+              <img src="assets/backgrounds/map-antique-bg.png" alt="" class="map-preview-bg">
+              <div class="map-preview-pin">
+                <img src="assets/icons/map-pin-gold.png" alt="">
+                <span class="map-preview-label">Stadion olimpijski w sobinie</span>
+              </div>
+            </div>
+          </div>
         </div>
       </a>
     </section>

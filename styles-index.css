@@ -29,16 +29,17 @@
 .greek-home-redesign .greek-column { display: none; }
 
 /* ==========================================================
-   NAVBAR
+   NAVBAR (override z !important bo bazowa reguła .site-header,.navbar,main
+   z styles.css ma `width: min(--container, calc(100% - 32px))` ktore zwęża pasek)
    ========================================================== */
 .greek-home-redesign .index-navbar {
   position: sticky;
   top: 0;
   z-index: 50;
-  width: 100%;
-  max-width: 100%;
-  margin: 0;
-  padding: 14px clamp(20px, 4vw, 60px);
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 14px clamp(20px, 4vw, 60px) !important;
   border: 0;
   border-bottom: 2px solid var(--gold-deep);
   border-radius: 0;
@@ -48,6 +49,13 @@
   display: flex;
   align-items: center;
   gap: clamp(14px, 2vw, 36px);
+}
+
+/* body globalny reset zeby navbar dotykal krawedzi */
+.greek-home-redesign,
+.greek-home-redesign body {
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 .greek-home-redesign .navbar-brand {
@@ -234,16 +242,45 @@
   margin-bottom: 16px;
 }
 
-.greek-home-redesign .hero-laurel {
-  height: 60px;
+/* === Laurel pair (mirror + oryginal) === */
+.greek-home-redesign .laurel-pair {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 0 auto;
+}
+
+.greek-home-redesign .laurel-pair img {
   width: auto;
+  opacity: 0.7;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+}
+
+.greek-home-redesign .laurel-pair .laurel-mirror {
+  transform: scaleX(-1);
+}
+
+.greek-home-redesign .laurel-pair--hero img {
+  height: clamp(36px, 4vw, 56px);
   opacity: 0.85;
   filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.6));
 }
 
+.greek-home-redesign .laurel-pair--card img {
+  height: 24px;
+  opacity: 0.65;
+}
+
+.greek-home-redesign .laurel-pair--section img {
+  height: 36px;
+  opacity: 0.75;
+}
+
 .greek-home-redesign .hero-title {
   font-family: 'Cinzel', serif;
-  font-size: clamp(2.6rem, 7vw, 6rem);
+  /* 13 znakow * vw -> przy 7vw na 1024px to 93rem, nie miesci sie. Zmniejszam max. */
+  font-size: clamp(2rem, 5.5vw, 4.5rem);
   font-weight: 900;
   letter-spacing: 0.04em;
   line-height: 1;
@@ -252,6 +289,9 @@
   margin: 0;
   white-space: nowrap;
   text-transform: uppercase;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: clip;
 }
 
 .greek-home-redesign .hero-subtitle {
@@ -372,12 +412,16 @@
 }
 
 .greek-home-redesign .laurel-deco {
-  height: 64px;
+  height: clamp(46px, 5vw, 64px);
   width: auto;
   opacity: 0.7;
 }
 
-.greek-home-redesign .laurel-right { transform: scaleX(-1); }
+/* Countdown: nowy obraz wymusza odwrotny mirror.
+   lewa wersja = mirror (skierowana w prawo, do srodka)
+   prawa wersja = oryginal (skierowana w lewo, do srodka) */
+.greek-home-redesign .laurel-left  { transform: scaleX(-1); }
+.greek-home-redesign .laurel-right { transform: none; }
 
 .greek-home-redesign .countdown-inner {
   display: flex;
@@ -592,20 +636,6 @@
   margin-right: 3px;
 }
 
-/* Records illustration */
-.greek-home-redesign .records-illustration {
-  margin: 0 0 14px;
-  text-align: center;
-}
-
-.greek-home-redesign .record-illustr {
-  max-width: 180px;
-  width: 60%;
-  height: auto;
-  opacity: 0.9;
-  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.6));
-}
-
 .greek-home-redesign .home-records {
   display: flex;
   flex-direction: column;
@@ -681,7 +711,9 @@
   margin: clamp(40px, 6vw, 80px) auto;
   padding: clamp(30px, 4vw, 50px) clamp(20px, 3vw, 40px);
   border: 1px solid rgba(230, 194, 112, 0.3);
-  background: linear-gradient(180deg, rgba(22, 17, 10, 0.95), rgba(12, 9, 6, 0.96));
+  background:
+    radial-gradient(ellipse at top, rgba(185, 135, 47, 0.08), transparent 60%),
+    linear-gradient(180deg, rgba(22, 17, 10, 0.96), rgba(12, 9, 6, 0.98));
   box-shadow: var(--shadow-deep);
 }
 
@@ -715,52 +747,187 @@
   color: var(--gold-deep);
 }
 
-.greek-home-redesign .competition-layout {
+/* Siatka 3x2 kart konkurencji */
+.greek-home-redesign .competition-timeline {
   display: grid;
-  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
-  gap: 36px;
-  align-items: start;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(16px, 2vw, 26px);
+  counter-reset: comp;
 }
 
-.greek-home-redesign .competition-timeline {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+@media (max-width: 980px) {
+  .greek-home-redesign .competition-timeline {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .greek-home-redesign .competition-timeline {
+    grid-template-columns: 1fr;
+  }
 }
 
 .greek-home-redesign .timeline-event {
-  display: grid;
-  grid-template-columns: 56px minmax(0, 1fr);
-  gap: 14px;
-  padding: 14px;
-  border: 1px solid rgba(230, 194, 112, 0.2);
-  background: rgba(230, 194, 112, 0.04);
-  border-radius: 2px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 18px;
+  padding: 22px 24px 24px;
+  border: 1px solid rgba(230, 194, 112, 0.25);
+  border-radius: 4px;
+  background:
+    linear-gradient(180deg, rgba(28, 22, 14, 0.92), rgba(14, 11, 8, 0.96));
+  text-align: left;
+  overflow: hidden;
+  transition: transform 240ms ease, border-color 240ms ease, box-shadow 240ms ease;
+  counter-increment: comp;
+}
+
+/* Tarcza z numerem rzymskim usunieta na zyczenie usera */
+.greek-home-redesign .timeline-index {
+  display: none !important;
+}
+
+/* Subtelna ikona PNG konkurencji jako duza dekoracja w tle */
+.greek-home-redesign .timeline-event::after {
+  content: '';
+  position: absolute;
+  right: -30px;
+  bottom: -30px;
+  width: 180px;
+  height: 180px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  opacity: 0.18;
+  pointer-events: none;
+  z-index: 0;
+  filter: drop-shadow(0 0 12px rgba(0, 0, 0, 0.5));
+  transition: opacity 240ms ease, transform 240ms ease;
+}
+
+.greek-home-redesign .timeline-event:hover {
+  transform: translateY(-3px);
+  border-color: rgba(230, 194, 112, 0.5);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6);
+}
+
+.greek-home-redesign .timeline-event:hover::after {
+  opacity: 0.28;
+  transform: scale(1.05);
 }
 
 .greek-home-redesign .timeline-event.is-complete {
-  border-color: rgba(230, 194, 112, 0.45);
-  background: rgba(185, 135, 47, 0.1);
+  border-color: rgba(230, 194, 112, 0.5);
+  background:
+    radial-gradient(ellipse at top right, rgba(185, 135, 47, 0.18), transparent 70%),
+    linear-gradient(180deg, rgba(28, 22, 14, 0.95), rgba(14, 11, 8, 0.98));
 }
 
+.greek-home-redesign .timeline-event.is-complete::after {
+  opacity: 0.28;
+}
+
+/* Numer rzymski w eleganckiej tarczy laurowej (lewa kolumna karty) */
 .greek-home-redesign .timeline-index {
+  position: relative;
+  z-index: 2;
   display: grid;
   place-items: center;
-  width: 56px;
-  height: 56px;
+  width: 64px;
+  height: 64px;
+  margin: 0;
   border: 2px solid var(--gold-deep);
   border-radius: 50%;
-  background: rgba(10, 8, 7, 0.6);
-  color: var(--gold-pale);
+  background: rgba(10, 8, 7, 0.85);
+  color: transparent;
+  font-size: 0;
+  box-shadow:
+    inset 0 0 0 1px rgba(230, 194, 112, 0.25),
+    0 6px 16px rgba(0, 0, 0, 0.5);
+  justify-self: start;
+  align-self: start;
+}
+
+/* Numer rzymski wstawiany przez CSS counter (I, II, III...) */
+.greek-home-redesign .timeline-index::before {
+  content: counter(comp, upper-roman);
   font-family: 'Cinzel', serif;
+  font-size: 1.5rem;
   font-weight: 900;
-  font-size: 1.4rem;
+  letter-spacing: 0.04em;
+  color: var(--gold-pale);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+/* Ikony konkurencji jako dekoracyjne tło karty (nth-child) */
+.greek-home-redesign .timeline-event:nth-child(1)::after {
+  background-image: url('assets/icons/competition-flanki.png');
+}
+.greek-home-redesign .timeline-event:nth-child(2)::after {
+  background-image: url('assets/icons/competition-sprint-na-500.png');
+}
+.greek-home-redesign .timeline-event:nth-child(3)::after {
+  background-image: url('assets/icons/competition-na-pol.png');
+}
+.greek-home-redesign .timeline-event:nth-child(4)::after {
+  background-image: url('assets/icons/competition-smakosz.png');
+}
+.greek-home-redesign .timeline-event:nth-child(5)::after {
+  background-image: url('assets/icons/competition-spacer.png');
+}
+.greek-home-redesign .timeline-event:nth-child(6)::after {
+  background-image: url('assets/icons/competition-inwestor.png');
 }
 
 .greek-home-redesign .timeline-card {
-  display: flex;
+  position: relative;
+  z-index: 2;
+  display: flex !important;
   flex-direction: column;
-  gap: 4px;
+  align-items: flex-start;
+  gap: 8px;
+  width: 100%;
+  /* Wyzeruj bazowe jasne tlo i obramowanie z styles.css */
+  min-height: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+}
+
+.greek-home-redesign .timeline-status {
+  display: inline-flex !important;
+  align-self: flex-start !important;
+  margin: 10px !important;
+  min-height: 0 !important;
+  padding: 4px 12px !important;
+  border: 1px solid rgba(230, 194, 112, 0.3) !important;
+  border-radius: 999px;
+  background: rgba(10, 8, 7, 0.55) !important;
+  color: var(--gold-deep) !important;
+  font-size: 0.62rem !important;
+  font-weight: 800;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+.greek-home-redesign .timeline-event.is-complete .timeline-status {
+  background: rgba(40, 90, 50, 0.35) !important;
+  border-color: rgba(135, 201, 140, 0.4) !important;
+  color: #87c98c !important;
+}
+
+/* Wyzeruj bazowy span layout w timeline-medals */
+.greek-home-redesign .timeline-medals span {
+  border: 0 !important;
+  background: transparent !important;
+  padding: 0 !important;
+  color: inherit !important;
+  font-size: inherit !important;
+  font-weight: inherit !important;
+  text-transform: none !important;
+  justify-content: flex-start !important;
 }
 
 .greek-home-redesign .timeline-status {
@@ -770,44 +937,110 @@
   color: var(--gold-deep);
 }
 
+.greek-home-redesign .timeline-event.is-complete .timeline-status {
+  color: #87c98c;
+}
+
 .greek-home-redesign .timeline-card h4 {
-  margin: 0;
+  margin: 10px !important;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(230, 194, 112, 0.18);
   font-family: 'Cinzel', serif;
-  font-size: 1.1rem;
-  font-weight: 800;
-  letter-spacing: 0.04em;
-  color: var(--gold-pale);
+  font-size: clamp(1.15rem, 1.5vw, 1.4rem) !important;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  line-height: 1.2 !important;
+  text-transform: uppercase;
+  text-align: left;
+  color: var(--gold-pale) !important;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+  /* width 100% nie nadawac - zaburza margin 10px po prawej */
 }
 
 .greek-home-redesign .timeline-medals {
-  display: flex;
-  gap: 12px;
-  margin-top: 4px;
-  font-size: 0.78rem;
+  display: flex !important;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  margin: 6px 0 0 !important;
+  padding: 0;
+  width: 100%;
+  font-size: 0.95rem;
   color: #d9c79a;
 }
 
-.greek-home-redesign .competition-poster {
-  margin: 0;
-  text-align: center;
-}
-
-.greek-home-redesign .competition-poster img {
+/* Tabelka: ikona | label (sztywne 64px) | nazwisko. Wszystko do LEWEJ krawedzi. */
+.greek-home-redesign .timeline-medal-line {
+  display: grid !important;
+  grid-template-columns: 30px 64px minmax(0, 1fr);
+  align-items: center;
+  gap: 18px;
+  margin: 10px !important;
+  padding: 2px 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  text-align: left;
+  border-bottom: 0 !important;
   width: 100%;
-  max-width: 420px;
-  height: auto;
-  border: 2px solid var(--gold-deep);
-  border-radius: 2px;
-  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.6);
 }
 
-.greek-home-redesign .competition-poster figcaption {
-  margin-top: 12px;
+.greek-home-redesign .timeline-medal-line i {
+  display: inline-block;
+  width: 33px;
+  height: 30px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.7));
+}
+
+.greek-home-redesign .timeline-medal-line b {
   font-family: 'Cinzel', serif;
-  font-size: 0.72rem;
-  letter-spacing: 0.24em;
+  font-size: 0.78rem !important;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.greek-home-redesign .timeline-medal-line em {
+  font-style: normal;
+  font-size: 0.9rem !important;
+  color: #cdbb85;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.greek-home-redesign .timeline-medal-line.gold i {
+  background-image: url('assets/icons/medal-gold.png');
+}
+.greek-home-redesign .timeline-medal-line.silver i {
+  background-image: url('assets/icons/medal-silver.png');
+}
+.greek-home-redesign .timeline-medal-line.bronze i {
+  background-image: url('assets/icons/medal-bronze.png');
+}
+
+.greek-home-redesign .timeline-medal-line b {
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--gold-deep);
+}
+
+.greek-home-redesign .timeline-medal-line.gold b   { color: #f2d181; }
+.greek-home-redesign .timeline-medal-line.silver b { color: #cfcfd3; }
+.greek-home-redesign .timeline-medal-line.bronze b { color: #d4a574; }
+
+.greek-home-redesign .timeline-medal-line em {
+  font-style: normal;
+  font-size: 0.82rem;
+  color: #cdbb85;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* ==========================================================
@@ -818,76 +1051,253 @@
   margin: clamp(40px, 6vw, 80px) auto;
 }
 
+/* === MAPA — antyczna karta z 2 kolumnami i ozdobnymi rogami === */
 .greek-home-redesign .map-card {
   position: relative;
   display: block;
-  min-height: 320px;
-  border: 1px solid rgba(230, 194, 112, 0.4);
-  border-radius: 2px;
-  overflow: hidden;
+  padding: clamp(24px, 3vw, 40px);
+  border: 1px solid rgba(230, 194, 112, 0.35);
+  border-radius: 4px;
   text-decoration: none;
+  background:
+    radial-gradient(ellipse at top, rgba(185, 135, 47, 0.1), transparent 60%),
+    linear-gradient(180deg, rgba(28, 22, 14, 0.95), rgba(14, 11, 8, 0.98));
   box-shadow: var(--shadow-deep);
+  transition: transform 280ms ease, border-color 280ms ease, box-shadow 280ms ease;
+  overflow: hidden;
   isolation: isolate;
-  transition: transform 280ms ease;
 }
 
 .greek-home-redesign .map-card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  border-color: rgba(230, 194, 112, 0.6);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7);
 }
 
-.greek-home-redesign .map-bg {
+/* Ozdobne narozniki — male greckie ornamenty */
+.greek-home-redesign .map-corner {
+  position: absolute;
+  width: 38px;
+  height: 38px;
+  pointer-events: none;
+  z-index: 3;
+  border-style: solid;
+  border-color: var(--gold-deep);
+}
+
+.greek-home-redesign .map-corner-tl {
+  top: 10px; left: 10px;
+  border-width: 2px 0 0 2px;
+}
+.greek-home-redesign .map-corner-tr {
+  top: 10px; right: 10px;
+  border-width: 2px 2px 0 0;
+}
+.greek-home-redesign .map-corner-bl {
+  bottom: 10px; left: 10px;
+  border-width: 0 0 2px 2px;
+}
+.greek-home-redesign .map-corner-br {
+  bottom: 10px; right: 10px;
+  border-width: 0 2px 2px 0;
+}
+
+.greek-home-redesign .map-content {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+  gap: clamp(28px, 4vw, 50px);
+  align-items: center;
+  padding: clamp(10px, 2vw, 20px);
+}
+
+/* LEWA kolumna — info */
+.greek-home-redesign .map-left {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.greek-home-redesign .map-eyebrow {
+  font-family: 'Cinzel', serif;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+}
+
+.greek-home-redesign .map-place {
+  margin: 0;
+  font-family: 'Cinzel', serif;
+  font-size: clamp(2.2rem, 4vw, 3.4rem);
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold-pale);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6), 0 0 30px rgba(230, 194, 112, 0.2);
+  line-height: 1;
+}
+
+.greek-home-redesign .map-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 4px 0;
+}
+
+.greek-home-redesign .map-divider span:first-child,
+.greek-home-redesign .map-divider span:last-child {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(230, 194, 112, 0.5), transparent);
+}
+
+.greek-home-redesign .map-divider-orn {
+  color: var(--gold-deep);
+  font-size: 1rem;
+  flex: 0 0 auto;
+}
+
+.greek-home-redesign .map-when {
+  margin: 4px 0;
+  font-size: 1rem;
+  color: #e8dcb8;
+  line-height: 1.6;
+}
+
+.greek-home-redesign .map-when strong {
+  color: var(--gold-pale);
+  font-family: 'Cinzel', serif;
+  letter-spacing: 0.04em;
+}
+
+.greek-home-redesign .map-coords {
+  margin: 0;
+  font-family: 'Cinzel', serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  color: rgba(230, 194, 112, 0.6);
+}
+
+.greek-home-redesign .map-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 16px;
+  padding: 12px 18px;
+  border: 1px solid var(--gold-deep);
+  border-radius: 2px;
+  background: rgba(185, 135, 47, 0.12);
+  color: var(--gold-pale);
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  align-self: flex-start;
+  transition: background 220ms ease, color 220ms ease;
+}
+
+.greek-home-redesign .map-card:hover .map-cta {
+  background: var(--gold-deep);
+  color: var(--ink-dark);
+}
+
+.greek-home-redesign .map-cta-pin {
+  width: 18px;
+  height: auto;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+}
+
+/* PRAWA kolumna — antyczny podglad mapy z pinem */
+.greek-home-redesign .map-right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.greek-home-redesign .map-preview {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border: 1px solid rgba(230, 194, 112, 0.45);
+  border-radius: 2px;
+  overflow: hidden;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6), inset 0 0 0 2px rgba(10, 8, 7, 0.5);
+  isolation: isolate;
+}
+
+.greek-home-redesign .map-preview-bg {
   position: absolute;
   inset: 0;
-  z-index: 1;
-}
-
-.greek-home-redesign .map-bg img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  filter: sepia(0.3) brightness(0.9);
 }
 
-.greek-home-redesign .map-bg::after {
+.greek-home-redesign .map-preview::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(10, 8, 7, 0.45) 0%, rgba(10, 8, 7, 0.8) 100%);
+  background:
+    radial-gradient(circle at 60% 50%, transparent 0%, transparent 20%, rgba(10, 8, 7, 0.4) 80%),
+    linear-gradient(135deg, rgba(10, 8, 7, 0.1), rgba(10, 8, 7, 0.3));
+  z-index: 1;
 }
 
-.greek-home-redesign .map-info {
-  position: relative;
+.greek-home-redesign .map-preview-pin {
+  position: absolute;
+  top: 42%;
+  left: 58%;
+  transform: translate(-50%, -100%);
   z-index: 2;
-  padding: clamp(30px, 4vw, 50px);
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  text-align: center;
-  min-height: 320px;
-  color: var(--gold-pale);
+  gap: 6px;
+  animation: mapPinPulse 2.4s ease-in-out infinite;
 }
 
-.greek-home-redesign .map-pin-icon img {
-  width: 52px;
+.greek-home-redesign .map-preview-pin img {
+  width: clamp(36px, 4vw, 56px);
   height: auto;
-  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.6));
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.8));
 }
 
-.greek-home-redesign .map-info h3 {
-  margin: 14px 0 6px;
+.greek-home-redesign .map-preview-label {
+  display: inline-block;
+  padding: 4px 10px;
+  border: 1px solid var(--gold-deep);
+  border-radius: 2px;
+  background: rgba(10, 8, 7, 0.85);
+  color: var(--gold-pale);
   font-family: 'Cinzel', serif;
-  font-size: clamp(1.6rem, 2.8vw, 2.4rem);
-  font-weight: 900;
-  letter-spacing: 0.12em;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
+  white-space: nowrap;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
 }
 
-.greek-home-redesign .map-info p {
-  margin: 0;
-  font-size: 0.85rem;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
-  color: var(--gold-deep);
+@keyframes mapPinPulse {
+  0%, 100% { transform: translate(-50%, -100%); }
+  50%      { transform: translate(-50%, -108%); }
+}
+
+/* Mobilna wersja: pionowo, podglad nad info */
+@media (max-width: 780px) {
+  .greek-home-redesign .map-content {
+    grid-template-columns: 1fr;
+  }
+  .greek-home-redesign .map-right {
+    order: -1;
+  }
+  .greek-home-redesign .map-preview {
+    aspect-ratio: 16 / 10;
+  }
 }
 
 /* ==========================================================
@@ -921,11 +1331,8 @@
     border-left: 0;
     padding-left: 0;
   }
-  .greek-home-redesign .competition-layout {
+  .greek-home-redesign .competition-timeline {
     grid-template-columns: 1fr;
-  }
-  .greek-home-redesign .competition-poster {
-    order: -1;
   }
 }
 
