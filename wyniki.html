@@ -3,49 +3,114 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Wyniki – Alkoolimpiada</title>
-  <link rel="stylesheet" href="styles.css?v=5">
+  <title>Wyniki – Alkoolimpiada MMXXVI</title>
+  <meta name="description" content="Klasyfikacja indywidualna Alkoolimpiady MMXXVI — wyniki ze wszystkich konkurencji.">
+  <link rel="icon" type="image/png" href="assets/icons/favicon.png">
+  <link rel="stylesheet" href="styles.css?v=15">
+  <link rel="stylesheet" href="styles-index.css?v=10">
+  <link rel="stylesheet" href="styles-wyniki.css?v=1">
 </head>
-<body class="greek-page">
-    <header class="site-header">
-    <img src="logo-olimpijskie.png" alt="Alkoolimpiada Logo" class="site-logo">
-    <h1>Alkoolimpiada 2026</h1>
-  </header>
-  <nav class="navbar">
-  <button class="hamburger" aria-label="Menu">
-    <span class="bar"></span>
-    <span class="bar"></span>
-    <span class="bar"></span>
-  </button>
-  <ul class="nav-links">
-    <li><a href="index.html" >Start</a></li>
-    <li><a href="wyniki.html">Wyniki</a></li>
-    <li><a href="zespoly.html">Zespoły</a></li>
-    <li><a href="flanki.html">Flanki</a></li>
-    <li><a href="rekordy.html">Rekordy</a></li>
-    <li><a href="typuj.html">Typuj</a></li>
-    <li><a href="zazalenia.html">Zażalenia</a></li>
-  </ul>
-</nav>
+<body class="greek-page greek-home-redesign wyniki-page">
+  <!-- Navbar (struktura zachowana dla auth.js) -->
+  <nav class="navbar navbar-with-brand index-navbar" id="topnav">
+    <a class="navbar-brand" href="index.html">
+      <img src="assets/logo/alkoolimpiada-logo.png" alt="Alkoolimpiada" class="site-logo">
+      <span class="navbar-brand-text">
+        <span class="navbar-title">Alkoolimpiada</span>
+        <span class="navbar-tagline">Edycja MMXXVI</span>
+      </span>
+    </a>
+    <button class="hamburger" aria-label="Menu">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </button>
+    <ul class="nav-links">
+      <li><a href="index.html">Strona główna</a></li>
+      <li><a href="wyniki.html" class="active">Wyniki</a></li>
+      <li><a href="zespoly.html">Zespoły</a></li>
+      <li><a href="flanki.html">Flanki</a></li>
+      <li><a href="rekordy.html">Rekordy</a></li>
+      <li><a href="typuj.html">Typuj</a></li>
+      <li><a href="zazalenia.html">Zażalenia</a></li>
+    </ul>
+  </nav>
 
-  <main>
-    <h1>Wyniki</h1>
-    <p class="wyniki-hint">Przesuń tabelę w bok jeśli kolumny nie mieszczą się na ekranie.</p>
-    <div class="wyniki-scroll">
-      <table id="wyniki">
-        <thead>
-          <tr><th>Miejsce</th><th>Zespół</th><th>Punkty</th></tr>
-        </thead>
-        <tbody></tbody>
-      </table>
+  <!-- Greek border ozdobny pod navbar -->
+  <div class="wyniki-border-top" aria-hidden="true">
+    <img src="assets/decorations/greek-border-horizontal.png" alt="">
+  </div>
+
+  <main class="wyniki-stage">
+    <!-- LEWA dekoracja: amfora na cokole -->
+    <aside class="wyniki-side wyniki-side-left" aria-hidden="true">
+      <img src="assets/decorations/amphora-black-gold.png" alt="" class="wyniki-side-img">
+    </aside>
+
+    <!-- ŚRODEK: pergaminowa karta z tabelą -->
+    <div class="wyniki-parchment">
+      <header class="wyniki-header">
+        <span class="laurel-pair laurel-pair--section" aria-hidden="true">
+          <img src="assets/decorations/laurel-divider.png" alt="" class="laurel-mirror">
+          <img src="assets/decorations/laurel-divider.png" alt="">
+        </span>
+        <h1 class="wyniki-title">Klasyfikacja indywidualna</h1>
+        <p class="wyniki-subtitle">Wyniki ze wszystkich konkurencji</p>
+        <p class="wyniki-meta">
+          <span class="wyniki-meta-dot" aria-hidden="true">↻</span>
+          Auto-refresh za: <span id="wyniki-refresh-countdown">60</span>s
+        </p>
+      </header>
+
+      <div class="wyniki-table-wrap">
+        <p class="wyniki-hint">Przesuń tabelę w bok jeśli kolumny nie mieszczą się na ekranie.</p>
+        <div class="wyniki-scroll">
+          <table id="wyniki">
+            <thead>
+              <tr><th>Miejsce</th><th>Uczestnik</th><th>Drużyna</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Legenda medali -->
+      <div class="wyniki-legend">
+        <span><img src="assets/icons/medal-gold.png" alt=""> Złoto</span>
+        <span><img src="assets/icons/medal-silver.png" alt=""> Srebro</span>
+        <span><img src="assets/icons/medal-bronze.png" alt=""> Brąz</span>
+      </div>
+
+      <!-- Sekcja informacje z heraldami -->
+      <section class="wyniki-info">
+        <img src="assets/decorations/herald-trumpet.png" alt="" class="wyniki-herald wyniki-herald-left">
+        <div class="wyniki-info-text">
+          <h2>Informacje</h2>
+          <p>
+            Medale za konkurencje drużynowe (Flanki, Spacer na ścieżkę) są
+            przyznawane każdemu członkowi zwycięskiej drużyny.
+          </p>
+        </div>
+        <img src="assets/decorations/herald-trumpet.png" alt="" class="wyniki-herald wyniki-herald-right">
+      </section>
     </div>
+
+    <!-- PRAWA dekoracja: filozof -->
+    <aside class="wyniki-side wyniki-side-right" aria-hidden="true">
+      <img src="assets/decorations/figure-philosopher.png" alt="" class="wyniki-side-img">
+    </aside>
   </main>
+
+  <!-- Greek border ozdobny u dołu -->
+  <div class="wyniki-border-bottom" aria-hidden="true">
+    <img src="assets/decorations/greek-border-horizontal.png" alt="">
+  </div>
 
   <script src="scripts.js?v=2"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js?v=2"></script>
   <script src="auth.js?v=6"></script>
   <script src="data.js?v=5"></script>
-  <script src="wyniki.js?v=3"></script>
+  <script src="wyniki.js?v=4"></script>
 </body>
 </html>

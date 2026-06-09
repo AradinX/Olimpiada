@@ -86,34 +86,67 @@
       a.person.localeCompare(b.person, 'pl')
     );
 
+    // Ikonki konkurencji (klucze pasujace do plikow w assets/icons/)
+    const COMPETITION_ICONS = {
+      sprint500: 'competition-sprint-na-500',
+      flanki:    'competition-flanki',
+      napol:     'competition-na-pol',
+      smakosz:   'competition-smakosz',
+      beerpong:  'competition-spacer',
+      inwestor:  'competition-inwestor'
+    };
+
+    function medalCell(m) {
+      if (!m) return '<td class="wyniki-medal-cell"></td>';
+      const file = m === 'gold' ? 'medal-gold' : m === 'silver' ? 'medal-silver' : 'medal-bronze';
+      return `<td class="wyniki-medal-cell"><img src="assets/icons/${file}.png" alt="${m}" class="wyniki-medal-img"></td>`;
+    }
+
+    function initialFor(person) {
+      const trimmed = String(person || '').trim();
+      const first = trimmed.charAt(0).toUpperCase() || '?';
+      return first;
+    }
+
     const thead = table.querySelector('thead');
     thead.innerHTML = `
       <tr>
         <th>Miejsce</th>
         <th>Uczestnik</th>
         <th>Drużyna</th>
-        ${COMPETITIONS.map(c => `<th>${escapeHTML(c.name)}</th>`).join('')}
-        <th>🥇</th><th>🥈</th><th>🥉</th><th>Suma</th>
+        ${COMPETITIONS.map(c => `
+          <th class="wyniki-comp-th">
+            ${COMPETITION_ICONS[c.id] ? `<img src="assets/icons/${COMPETITION_ICONS[c.id]}.png" alt="" class="wyniki-comp-icon">` : ''}
+            <span>${escapeHTML(c.name)}</span>
+          </th>
+        `).join('')}
+        <th class="wyniki-medal-th"><img src="assets/icons/medal-gold.png" alt="Złoto"></th>
+        <th class="wyniki-medal-th"><img src="assets/icons/medal-silver.png" alt="Srebro"></th>
+        <th class="wyniki-medal-th"><img src="assets/icons/medal-bronze.png" alt="Brąz"></th>
+        <th>Suma</th>
       </tr>
     `;
 
     const tbody = table.querySelector('tbody');
-    tbody.innerHTML = stats.map((s, idx) => `
-      <tr>
-        <td>${idx + 1}</td>
-        <td><strong>${escapeHTML(s.person)}</strong></td>
-        <td>${escapeHTML(s.team || '—')}</td>
-        ${COMPETITIONS.map(c => {
-          const m = s.perComp[c.id];
-          const cell = m === 'gold' ? '🥇' : m === 'silver' ? '🥈' : m === 'bronze' ? '🥉' : '';
-          return `<td>${cell}</td>`;
-        }).join('')}
-        <td>${s.gold}</td>
-        <td>${s.silver}</td>
-        <td>${s.bronze}</td>
-        <td><strong>${s.total}</strong></td>
+    tbody.innerHTML = stats.map((s, idx) => {
+      const place = idx + 1;
+      const placeClass = place === 1 ? 'wyniki-place-1' : place === 2 ? 'wyniki-place-2' : place === 3 ? 'wyniki-place-3' : '';
+      return `
+      <tr class="${placeClass}">
+        <td class="wyniki-place-cell"><strong>${place}</strong></td>
+        <td class="wyniki-name-cell">
+          <span class="wyniki-avatar" aria-hidden="true">${escapeHTML(initialFor(s.person))}</span>
+          <strong>${escapeHTML(s.person)}</strong>
+        </td>
+        <td class="wyniki-team-cell">${escapeHTML(s.team || '—')}</td>
+        ${COMPETITIONS.map(c => medalCell(s.perComp[c.id])).join('')}
+        <td class="wyniki-count">${s.gold}</td>
+        <td class="wyniki-count">${s.silver}</td>
+        <td class="wyniki-count">${s.bronze}</td>
+        <td class="wyniki-sum"><strong>${s.total}</strong></td>
       </tr>
-    `).join('');
+    `;
+    }).join('');
   }
 
   async function load() {

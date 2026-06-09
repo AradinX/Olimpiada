@@ -1,0 +1,450 @@
+/* ==========================================================
+   WYNIKI REDESIGN 2026-06-08
+   Antyczny pergamin + amfora (lewo) + filozof (prawo) + heraldzi.
+   Korzystamy z .greek-home-redesign (dark navbar, marble bg).
+   Specyficzne style izolowane w .wyniki-page.
+   ========================================================== */
+
+/* Greek border tuz pod navbar */
+.wyniki-page .wyniki-border-top,
+.wyniki-page .wyniki-border-bottom {
+  width: 100%;
+  height: 28px;
+  overflow: hidden;
+  opacity: 0.65;
+  pointer-events: none;
+}
+
+.wyniki-page .wyniki-border-top img,
+.wyniki-page .wyniki-border-bottom img {
+  width: 100%;
+  height: 28px;
+  object-fit: cover;
+  display: block;
+}
+
+/* ==========================================================
+   STAGE — 3 kolumny: amfora | pergamin | filozof
+   ========================================================== */
+.wyniki-page .wyniki-stage {
+  position: relative;
+  width: min(1680px, calc(100% - 24px));
+  margin: 0 auto;
+  padding: clamp(20px, 3vw, 40px) 0;
+  display: grid;
+  grid-template-columns: minmax(0, 0.16fr) minmax(0, 1fr) minmax(0, 0.16fr);
+  align-items: stretch;
+  gap: clamp(8px, 1.4vw, 20px);
+}
+
+/* Boczne sidebary z dekoracjami */
+.wyniki-page .wyniki-side {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wyniki-page .wyniki-side-img {
+  max-width: 100%;
+  height: auto;
+  max-height: 720px;
+  object-fit: contain;
+  filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.6)) sepia(0.3) hue-rotate(-10deg) saturate(1.2);
+  opacity: 0.95;
+}
+
+/* Filozof: niewielkie odwrocenie zeby patrzyl w srodek */
+.wyniki-page .wyniki-side-right .wyniki-side-img {
+  transform: scaleX(-1);
+}
+
+@media (max-width: 1180px) {
+  .wyniki-page .wyniki-stage {
+    grid-template-columns: 1fr;
+  }
+  .wyniki-page .wyniki-side {
+    display: none;
+  }
+}
+
+/* ==========================================================
+   PERGAMIN — glowny kontener
+   ========================================================== */
+.wyniki-page .wyniki-parchment {
+  position: relative;
+  padding: clamp(28px, 4vw, 52px) clamp(24px, 3vw, 44px);
+  border: 1px solid rgba(123, 78, 28, 0.5);
+  border-radius: 4px;
+  background:
+    radial-gradient(ellipse at center top, rgba(255, 248, 230, 0.08), transparent 60%),
+    url('assets/backgrounds/bg-parchment-antique.png') center / cover,
+    linear-gradient(180deg, #e7d3a8, #c9a974);
+  background-blend-mode: normal;
+  color: #2a1c0a;
+  box-shadow:
+    0 24px 70px rgba(0, 0, 0, 0.5),
+    inset 0 0 0 1px rgba(255, 248, 230, 0.18),
+    inset 0 0 90px rgba(123, 78, 28, 0.2);
+}
+
+/* Header */
+.wyniki-page .wyniki-header {
+  text-align: center;
+  margin-bottom: clamp(24px, 3vw, 40px);
+}
+
+.wyniki-page .wyniki-header .laurel-pair {
+  margin-bottom: 14px;
+}
+
+.wyniki-page .wyniki-header .laurel-pair img {
+  height: 36px;
+  opacity: 0.75;
+  filter: brightness(0.7) sepia(1) saturate(2);
+}
+
+.wyniki-page .wyniki-title {
+  margin: 0;
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #2a1c0a;
+  text-shadow: 0 1px 0 rgba(255, 248, 230, 0.4);
+  line-height: 1.05;
+}
+
+.wyniki-page .wyniki-subtitle {
+  margin: 6px 0 0;
+  font-family: 'Cinzel', serif;
+  font-size: clamp(0.78rem, 1vw, 0.95rem);
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: #5a3d18;
+}
+
+.wyniki-page .wyniki-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 16px 0 0;
+  padding: 6px 14px;
+  border: 1px solid rgba(90, 61, 24, 0.35);
+  border-radius: 999px;
+  background: rgba(255, 248, 230, 0.4);
+  font-family: 'Cinzel', serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #5a3d18;
+}
+
+.wyniki-page .wyniki-meta-dot {
+  display: inline-block;
+  animation: wynikiSpin 2.4s linear infinite;
+}
+
+@keyframes wynikiSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* ==========================================================
+   TABELA
+   ========================================================== */
+.wyniki-page .wyniki-table-wrap {
+  margin: 0;
+}
+
+.wyniki-page .wyniki-hint {
+  display: none;
+  margin: 0 0 10px;
+  font-size: 0.78rem;
+  font-style: italic;
+  color: #5a3d18;
+  text-align: center;
+}
+
+.wyniki-page .wyniki-scroll {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 4px;
+  border: 1px solid rgba(90, 61, 24, 0.25);
+  background: rgba(255, 248, 230, 0.18);
+}
+
+.wyniki-page #wyniki {
+  width: 100%;
+  min-width: 820px;
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: auto;
+  color: #2a1c0a;
+}
+
+.wyniki-page #wyniki thead {
+  background: linear-gradient(180deg, #1a1208, #0a0807);
+}
+
+.wyniki-page #wyniki thead th {
+  padding: 10px 8px;
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #e8d29b;
+  border-bottom: 2px solid #b9872f;
+  border-right: 1px solid rgba(230, 194, 112, 0.15);
+  text-align: center;
+  vertical-align: middle;
+}
+
+.wyniki-page #wyniki thead th:last-child {
+  border-right: 0;
+}
+
+.wyniki-page #wyniki .wyniki-comp-th {
+  padding: 8px 4px;
+  line-height: 1.15;
+}
+
+.wyniki-page .wyniki-comp-icon {
+  display: block;
+  margin: 0 auto 4px;
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.5));
+}
+
+.wyniki-page #wyniki .wyniki-medal-th img {
+  display: block;
+  margin: 0 auto;
+  width: 28px;
+  height: auto;
+}
+
+.wyniki-page #wyniki tbody td {
+  padding: 10px 8px;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 0.92rem;
+  border-bottom: 1px solid rgba(123, 78, 28, 0.18);
+  border-right: 1px solid rgba(123, 78, 28, 0.08);
+  text-align: center;
+  vertical-align: middle;
+  color: #2a1c0a;
+}
+
+.wyniki-page #wyniki tbody td:last-child {
+  border-right: 0;
+}
+
+.wyniki-page #wyniki tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.wyniki-page #wyniki tbody tr:nth-child(even) td {
+  background: rgba(123, 78, 28, 0.05);
+}
+
+.wyniki-page #wyniki tbody tr:hover td {
+  background: rgba(185, 135, 47, 0.18);
+}
+
+/* Top 3 highlight */
+.wyniki-page #wyniki tbody tr.wyniki-place-1 td {
+  background: linear-gradient(90deg, rgba(248, 195, 58, 0.22), rgba(248, 195, 58, 0.08));
+}
+.wyniki-page #wyniki tbody tr.wyniki-place-2 td {
+  background: linear-gradient(90deg, rgba(192, 192, 192, 0.2), rgba(192, 192, 192, 0.06));
+}
+.wyniki-page #wyniki tbody tr.wyniki-place-3 td {
+  background: linear-gradient(90deg, rgba(205, 127, 50, 0.18), rgba(205, 127, 50, 0.06));
+}
+
+.wyniki-page .wyniki-place-cell strong {
+  font-family: 'Cinzel', serif;
+  font-size: 1.15rem;
+  color: #5a3d18;
+}
+
+.wyniki-page .wyniki-name-cell {
+  text-align: left !important;
+}
+
+.wyniki-page .wyniki-name-cell strong {
+  font-family: 'Cinzel', serif;
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #2a1c0a;
+}
+
+/* Avatar z inicjalem (opcja C) */
+.wyniki-page .wyniki-avatar {
+  display: inline-grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  margin-right: 10px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 30% 30%, #f2d181, #b9872f 80%);
+  color: #1d1308;
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+  font-weight: 900;
+  border: 2px solid #5a3d18;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3), 0 4px 8px rgba(0, 0, 0, 0.3);
+  vertical-align: middle;
+}
+
+.wyniki-page .wyniki-team-cell {
+  font-family: 'Cinzel', serif;
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #5a3d18;
+}
+
+.wyniki-page .wyniki-medal-cell {
+  padding: 6px !important;
+}
+
+.wyniki-page .wyniki-medal-img {
+  display: block;
+  width: 38px;
+  height: auto;
+  margin: 0 auto;
+  filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.45));
+  transition: transform 220ms ease;
+}
+
+.wyniki-page #wyniki tbody tr:hover .wyniki-medal-img {
+  transform: scale(1.1);
+}
+
+.wyniki-page .wyniki-count {
+  font-family: 'Cinzel', serif;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #5a3d18;
+}
+
+.wyniki-page .wyniki-sum strong {
+  font-family: 'Cinzel', serif;
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: #2a1c0a;
+  background: rgba(248, 195, 58, 0.25);
+  padding: 4px 10px;
+  border-radius: 4px;
+  border: 1px solid rgba(185, 135, 47, 0.5);
+}
+
+/* ==========================================================
+   LEGENDA
+   ========================================================== */
+.wyniki-page .wyniki-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: clamp(16px, 3vw, 36px);
+  margin: clamp(20px, 2.5vw, 30px) 0;
+  padding: 14px 20px;
+  border: 1px solid rgba(90, 61, 24, 0.35);
+  border-radius: 4px;
+  background: rgba(20, 14, 6, 0.85);
+}
+
+.wyniki-page .wyniki-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Cinzel', serif;
+  font-size: 0.82rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #e8d29b;
+}
+
+.wyniki-page .wyniki-legend img {
+  width: 28px;
+  height: auto;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
+}
+
+/* ==========================================================
+   SEKCJA INFORMACJE z heraldami
+   ========================================================== */
+.wyniki-page .wyniki-info {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(80px, 1fr) minmax(0, 3fr) minmax(80px, 1fr);
+  align-items: center;
+  gap: clamp(12px, 2vw, 24px);
+  margin-top: clamp(20px, 3vw, 36px);
+  padding: clamp(20px, 3vw, 36px) clamp(20px, 3vw, 36px);
+  border: 1px solid rgba(90, 61, 24, 0.35);
+  border-radius: 4px;
+  background: rgba(255, 248, 230, 0.35);
+}
+
+.wyniki-page .wyniki-herald {
+  width: 100%;
+  max-width: 140px;
+  height: auto;
+  justify-self: center;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.4)) sepia(0.3) saturate(1.2) hue-rotate(-10deg);
+}
+
+.wyniki-page .wyniki-herald-right {
+  transform: scaleX(-1);
+}
+
+.wyniki-page .wyniki-info-text {
+  text-align: center;
+}
+
+.wyniki-page .wyniki-info-text h2 {
+  margin: 0 0 10px;
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.2rem, 1.8vw, 1.6rem);
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #2a1c0a;
+}
+
+.wyniki-page .wyniki-info-text p {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: #3a2812;
+}
+
+@media (max-width: 640px) {
+  .wyniki-page .wyniki-info {
+    grid-template-columns: 1fr;
+  }
+  .wyniki-page .wyniki-herald {
+    max-width: 100px;
+  }
+  .wyniki-page .wyniki-hint {
+    display: block;
+  }
+}
+
+/* ==========================================================
+   Override styles z greek-home-redesign zeby body bylo widoczne
+   (greek-home-redesign ma background fixed dark marble - OK).
+   Wymuszamy display flex na body zeby pasowalo do navbar sticky.
+   ========================================================== */
+.wyniki-page.greek-home-redesign {
+  display: block;
+  min-height: 100vh;
+}
