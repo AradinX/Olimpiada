@@ -1,0 +1,406 @@
+/* ==========================================================
+   Zazalenia page
+   Ancient Greek civic forum + real HTML form/table.
+   ========================================================== */
+
+.zazalenia-page.greek-home-redesign {
+  display: block;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background: #080502;
+}
+
+.zazalenia-page.greek-home-redesign::before,
+.zazalenia-page.greek-home-redesign::after {
+  content: none;
+}
+
+.zazalenia-page .zazalenia-stage {
+  position: relative;
+  left: 50%;
+  width: 100vw !important;
+  max-width: none !important;
+  min-height: calc(100vh - 90px);
+  margin: 0 0 0 -50vw !important;
+  padding: clamp(48px, 5vw, 90px) clamp(20px, 4vw, 72px);
+  border: 0 !important;
+  border-radius: 0 !important;
+  display: block;
+  overflow: hidden;
+  isolation: isolate;
+  background-image:
+    linear-gradient(rgba(8, 5, 2, 0.08), rgba(8, 5, 2, 0.26)),
+    url('assets/backgrounds/zazalenia-page-stage-bg.png');
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  box-shadow: none !important;
+}
+
+.zazalenia-page .zazalenia-stage::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(3, 2, 1, 0.62), rgba(3, 2, 1, 0.06) 30%, rgba(3, 2, 1, 0.07) 70%, rgba(3, 2, 1, 0.64)),
+    radial-gradient(ellipse at 50% 18%, rgba(226, 176, 91, 0.14), transparent 42%),
+    linear-gradient(180deg, rgba(8, 5, 2, 0.03), rgba(8, 5, 2, 0.42));
+}
+
+.zazalenia-page .zazalenia-inner {
+  position: relative;
+  z-index: 2;
+  width: min(1280px, calc(100vw - 64px));
+  margin: 0 auto;
+}
+
+.zazalenia-page .zazalenia-page-header {
+  max-width: 940px;
+  margin: 0 auto clamp(26px, 3.6vw, 48px);
+  text-align: center;
+  color: #ead39b;
+  text-shadow: 0 3px 18px rgba(0, 0, 0, 0.58);
+}
+
+.zazalenia-page .zazalenia-page-header .laurel-pair {
+  margin-bottom: 14px;
+}
+
+.zazalenia-page .zazalenia-page-header .laurel-pair img {
+  height: 36px;
+  opacity: 0.78;
+  filter: brightness(0.72) sepia(1) saturate(2);
+}
+
+.zazalenia-page .zazalenia-page-header h1 {
+  margin: 0;
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.9rem, 4vw, 3.2rem);
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  line-height: 1.05;
+  text-transform: uppercase;
+  color: #f0d89d;
+  text-shadow:
+    0 2px 0 rgba(42, 25, 6, 0.58),
+    0 14px 34px rgba(0, 0, 0, 0.62);
+}
+
+.zazalenia-page .zazalenia-page-header p {
+  margin: 8px 0 0;
+  font-family: 'Cinzel', serif;
+  font-size: clamp(0.78rem, 1vw, 0.95rem);
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(246, 222, 166, 0.88);
+}
+
+.zazalenia-page .zazalenia-page-header > span:last-child {
+  display: block;
+  max-width: 640px;
+  margin: 14px auto 0;
+  color: rgba(246, 226, 181, 0.86);
+  font-size: 1rem;
+  line-height: 1.55;
+}
+
+.zazalenia-page .complaints-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(300px, 0.65fr);
+  gap: clamp(18px, 2.4vw, 30px);
+  margin-bottom: clamp(24px, 3vw, 38px);
+}
+
+.zazalenia-page .complaint-panel {
+  position: relative;
+  z-index: 2;
+  overflow: hidden;
+  border: 1px solid rgba(132, 92, 34, 0.5);
+  border-radius: 4px;
+  background:
+    linear-gradient(135deg, rgba(238, 218, 174, 0.8), rgba(196, 151, 78, 0.68));
+  color: #221609;
+  box-shadow:
+    0 24px 70px rgba(0, 0, 0, 0.42),
+    0 0 0 1px rgba(255, 217, 142, 0.1),
+    inset 0 1px 0 rgba(255, 245, 210, 0.45);
+  backdrop-filter: blur(1.2px);
+}
+
+.zazalenia-page .complaint-panel__header {
+  padding: 15px clamp(16px, 2.4vw, 24px);
+  border-bottom: 1px solid rgba(214, 170, 84, 0.35);
+  background: rgba(14, 10, 6, 0.92);
+  color: #d6aa54;
+}
+
+.zazalenia-page .complaint-panel__header h2 {
+  margin: 0;
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1rem, 1.4vw, 1.28rem);
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  line-height: 1.15;
+  text-transform: uppercase;
+}
+
+.zazalenia-page .complaint-form-body,
+.zazalenia-page .complaint-privacy-body {
+  padding: clamp(18px, 2.6vw, 28px);
+}
+
+.zazalenia-page #zazalenie-form {
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+
+.zazalenia-page #zazalenie-form label {
+  display: grid;
+  gap: 4px;
+  margin: 0 0 8px;
+  color: #3b260d;
+  font-family: 'Cinzel', serif;
+  font-size: 0.82rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.zazalenia-page #zazalenie-form label span {
+  display: inline-block;
+  color: #6b4716;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.zazalenia-page #zazalenie-form input,
+.zazalenia-page #zazalenie-form textarea {
+  width: 100%;
+  min-height: 46px;
+  margin: 0 0 18px;
+  padding: 12px 14px;
+  border: 1px solid rgba(98, 68, 28, 0.28);
+  border-radius: 4px;
+  background: rgba(255, 239, 196, 0.7);
+  color: #1d160d;
+  font: inherit;
+  box-shadow: inset 0 1px 0 rgba(255, 252, 230, 0.38);
+}
+
+.zazalenia-page #zazalenie-form textarea {
+  min-height: 180px;
+  resize: vertical;
+}
+
+.zazalenia-page #zazalenie-form input:focus,
+.zazalenia-page #zazalenie-form textarea:focus {
+  outline: 2px solid rgba(214, 170, 84, 0.42);
+  outline-offset: 2px;
+  border-color: #7d5519;
+  background: rgba(255, 248, 221, 0.92);
+}
+
+.zazalenia-page #zazalenie-form button,
+.zazalenia-page .submit-button {
+  min-height: 46px;
+  padding: 12px 22px;
+  border: 1px solid rgba(214, 170, 84, 0.55);
+  border-radius: 4px;
+  background: #120e08;
+  color: #d6aa54;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 160ms ease, filter 160ms ease, opacity 160ms ease;
+}
+
+.zazalenia-page #zazalenie-form button:hover:not(:disabled),
+.zazalenia-page #zazalenie-form button:focus-visible {
+  transform: translateY(-1px);
+  filter: brightness(1.12);
+}
+
+.zazalenia-page #zazalenie-form button:disabled {
+  opacity: 0.62;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.zazalenia-page .complaint-privacy {
+  align-self: start;
+}
+
+.zazalenia-page .complaint-privacy-body {
+  display: grid;
+  gap: 12px;
+}
+
+.zazalenia-page .complaint-privacy-body p {
+  margin: 0;
+  padding: 12px 14px;
+  border: 1px solid rgba(98, 68, 28, 0.18);
+  border-radius: 4px;
+  background: rgba(255, 239, 196, 0.36);
+  color: #31200c;
+  line-height: 1.45;
+}
+
+.zazalenia-page .complaint-privacy-body strong {
+  color: #5f3f13;
+  font-family: 'Cinzel', serif;
+}
+
+.zazalenia-page #msg {
+  margin: 0 clamp(18px, 2.6vw, 28px) clamp(18px, 2.6vw, 28px);
+  padding: 12px 14px;
+  border: 1px solid rgba(214, 170, 84, 0.36);
+  border-radius: 4px;
+  background: rgba(18, 13, 7, 0.86);
+  color: #f3dfb0;
+  font-weight: 800;
+}
+
+.zazalenia-page .complaints-table-panel {
+  margin-bottom: clamp(20px, 3vw, 34px);
+}
+
+.zazalenia-page .complaints-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: clamp(14px, 2vw, 20px);
+}
+
+.zazalenia-page .complaints-table {
+  width: 100%;
+  min-width: 720px;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid rgba(86, 52, 15, 0.58);
+  border-radius: 4px;
+  overflow: hidden;
+  background: transparent;
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.24);
+}
+
+.zazalenia-page .complaints-table th,
+.zazalenia-page .complaints-table td {
+  padding: 13px 14px;
+  border-right: 1px solid rgba(98, 68, 28, 0.18);
+  border-bottom: 1px solid rgba(98, 68, 28, 0.18);
+  text-align: left;
+  vertical-align: top;
+}
+
+.zazalenia-page .complaints-table th {
+  background: #120e08;
+  color: #d6aa54;
+  font-family: 'Cinzel', serif;
+  font-size: 0.82rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.zazalenia-page .complaints-table td {
+  background: rgba(255, 239, 196, 0.62);
+  color: #251807;
+  line-height: 1.45;
+}
+
+.zazalenia-page .complaints-table tr:nth-child(even) td {
+  background: rgba(244, 221, 174, 0.66);
+}
+
+.zazalenia-page .complaints-table th:last-child,
+.zazalenia-page .complaints-table td:last-child {
+  border-right: 0;
+}
+
+.zazalenia-page .complaints-table tr:last-child td {
+  border-bottom: 0;
+}
+
+.zazalenia-page .complaints-table .complaint-date {
+  width: 150px;
+  color: #5f3f13;
+  font-family: 'Cinzel', serif;
+  font-size: 0.82rem;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.zazalenia-page .complaints-table .complaint-author {
+  width: 180px;
+  color: #201406;
+  font-family: 'Cinzel', serif;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.zazalenia-page .complaint-footer-note {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 14px 18px;
+  border: 1px solid rgba(214, 170, 84, 0.38);
+  border-radius: 4px;
+  background: rgba(18, 13, 7, 0.78);
+  color: #f2d996;
+  font-family: 'Cinzel', serif;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-align: center;
+  text-transform: uppercase;
+  box-shadow: 0 18px 46px rgba(0, 0, 0, 0.34);
+}
+
+@media (max-width: 900px) {
+  .zazalenia-page .zazalenia-stage {
+    min-height: calc(100vh - 76px);
+    padding: 30px 12px 42px;
+    background-position: center top;
+    background-attachment: scroll;
+  }
+
+  .zazalenia-page .zazalenia-inner {
+    width: min(100%, calc(100vw - 24px));
+  }
+
+  .zazalenia-page .complaints-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .zazalenia-page .zazalenia-page-header h1 {
+    font-size: clamp(1.5rem, 9vw, 2.2rem);
+  }
+
+  .zazalenia-page .zazalenia-page-header p,
+  .zazalenia-page .complaint-footer-note {
+    letter-spacing: 0.12em;
+  }
+
+  .zazalenia-page .complaint-form-body,
+  .zazalenia-page .complaint-privacy-body,
+  .zazalenia-page .complaints-table-wrap {
+    padding: 16px 12px;
+  }
+
+  .zazalenia-page #zazalenie-form button {
+    width: 100%;
+  }
+
+  .zazalenia-page .complaints-table {
+    min-width: 620px;
+  }
+}

@@ -766,6 +766,53 @@ function saveStoredComplaints(complaints) {
   }
 }
 
+function formatComplaintDate(value) {
+  if (!value) return '—';
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return '—';
+  return date.toLocaleDateString('pl-PL', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric'
+  });
+}
+
+function renderComplaintsTable(complaints) {
+  const tbody = document.getElementById('complaints-table-body');
+  if (!tbody) return;
+
+  const rows = (complaints || [])
+    .slice()
+    .reverse()
+    .slice(0, 8);
+
+  if (!rows.length) {
+    tbody.innerHTML = '<tr><td colspan="3">Brak zgłoszeń. Cisza na forum.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = rows.map(item => `
+    <tr>
+      <td class="complaint-date">${escapeHTML(formatComplaintDate(item.createdAt))}</td>
+      <td class="complaint-author">${escapeHTML(item.name || 'Anonim')}</td>
+      <td>${escapeHTML(item.text || '')}</td>
+    </tr>
+  `).join('');
+}
+
+async function initComplaintsTable() {
+  const tbody = document.getElementById('complaints-table-body');
+  if (!tbody) return;
+
+  const localComplaints = getStoredComplaints();
+  renderComplaintsTable(localComplaints);
+
+  const globalComplaints = await fetchGlobalComplaints().catch(() => null);
+  if (Array.isArray(globalComplaints)) {
+    renderComplaintsTable(globalComplaints);
+  }
+}
+
 async function fetchGlobalComplaints() {
   if (!COMPLAINTS_API_URL) return null;
 
@@ -795,9 +842,9 @@ function initComplaintForm() {
     event.preventDefault();
     if (form.dataset.submitting === 'true') return;
 
-    const name = form.querySelector('#imie')?.value.trim();
+    const name = form.querySelector('#imie')?.value.trim() || 'Anonim';
     const text = form.querySelector('#tekst')?.value.trim();
-    if (!name || !text) return;
+    if (!text) return;
 
     const submitButton = form.querySelector('button[type="submit"]');
     const message = document.getElementById('msg');
@@ -882,9 +929,13 @@ async function initComplaintTicker() {
 }
 
 initComplaintForm();
+initComplaintsTable();
 initComplaintTicker();
 window.addEventListener('storage', event => {
-  if (event.key === COMPLAINTS_STORAGE_KEY) initComplaintTicker();
+  if (event.key === COMPLAINTS_STORAGE_KEY) {
+    initComplaintsTable();
+    initComplaintTicker();
+  }
 });
 
 // Status wydarzenia do 25.07.2026 16:00

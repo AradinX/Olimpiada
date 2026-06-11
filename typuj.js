@@ -238,22 +238,23 @@
 
     const rows = ranking.map((entry, idx) => {
       const isMe = entry.user_id === currentUserId;
-      const medal = idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : '';
       const breakdownItems = Object.entries(entry.breakdown)
         .filter(([, v]) => v.points > 0)
         .map(([comp, v]) => `<li>${escapeHTML(compMap[comp] || comp)}: <strong>${v.points} pkt</strong></li>`)
         .join('');
       return `
-        <li class="typuj-rank-row${isMe ? ' me' : ''}">
-          <span class="typuj-rank-place">${medal || '#' + (idx + 1)}</span>
+        <tr class="typuj-rank-row${isMe ? ' me' : ''}">
+          <td class="typuj-rank-place">${idx + 1}</td>
+          <td>
           <details class="typuj-rank-details">
             <summary>
               <span class="typuj-rank-name">${escapeHTML(entry.display_name)}${isMe ? ' <em>(Ty)</em>' : ''}</span>
-              <span class="typuj-rank-points">${entry.points} pkt</span>
             </summary>
             ${breakdownItems ? `<ul class="typuj-rank-breakdown">${breakdownItems}</ul>` : '<p class="typuj-rank-breakdown-empty">Same pudła jak na razie.</p>'}
           </details>
-        </li>
+          </td>
+          <td class="typuj-rank-points">${entry.points} pkt</td>
+        </tr>
       `;
     }).join('');
 
@@ -263,7 +264,18 @@
         <h2>🏆 Klasyfikacja typujących</h2>
         <span class="typuj-leaderboard-meta">Wyniki: ${resultsCount} / ${COMPETITIONS.length}</span>
       </div>
-      <ol class="typuj-rank-list">${rows}</ol>
+      <div class="typuj-rank-table-wrap">
+        <table class="typuj-rank-table">
+          <thead>
+            <tr>
+              <th>Miejsce</th>
+              <th>Typujacy</th>
+              <th>Punkty</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
     `;
   }
 

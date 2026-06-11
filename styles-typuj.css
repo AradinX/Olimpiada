@@ -1,0 +1,714 @@
+/* ==========================================================
+   Typuj page
+   Ancient Greek oracle stage + real HTML betting UI.
+   ========================================================== */
+
+.typuj-page.greek-home-redesign {
+  display: block;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background: #080502;
+}
+
+.typuj-page.greek-home-redesign::before,
+.typuj-page.greek-home-redesign::after {
+  content: none;
+}
+
+.typuj-page .typuj-stage {
+  position: relative;
+  left: 50%;
+  width: 100vw !important;
+  max-width: none !important;
+  min-height: calc(100vh - 90px);
+  margin: 0 0 0 -50vw !important;
+  padding: clamp(48px, 5vw, 90px) clamp(20px, 4vw, 72px);
+  border: 0 !important;
+  border-radius: 0 !important;
+  display: block;
+  overflow: hidden;
+  isolation: isolate;
+  background-image:
+    linear-gradient(rgba(8, 5, 2, 0.08), rgba(8, 5, 2, 0.26)),
+    url('assets/backgrounds/typuj-page-stage-bg.png');
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  box-shadow: none !important;
+}
+
+.typuj-page .typuj-stage::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(3, 2, 1, 0.62), rgba(3, 2, 1, 0.06) 30%, rgba(3, 2, 1, 0.07) 70%, rgba(3, 2, 1, 0.64)),
+    radial-gradient(ellipse at 50% 18%, rgba(226, 176, 91, 0.14), transparent 42%),
+    linear-gradient(180deg, rgba(8, 5, 2, 0.03), rgba(8, 5, 2, 0.42));
+}
+
+.typuj-page .typuj-inner {
+  position: relative;
+  z-index: 2;
+  width: min(1380px, calc(100vw - 64px));
+  margin: 0 auto;
+}
+
+.typuj-page .typuj-page-header {
+  text-align: center;
+  margin-bottom: clamp(26px, 3.6vw, 48px);
+  color: #ead39b;
+  text-shadow: 0 3px 18px rgba(0, 0, 0, 0.58);
+}
+
+.typuj-page .typuj-page-header .laurel-pair {
+  margin-bottom: 14px;
+}
+
+.typuj-page .typuj-page-header .laurel-pair img {
+  height: 36px;
+  opacity: 0.78;
+  filter: brightness(0.72) sepia(1) saturate(2);
+}
+
+.typuj-page .typuj-page-header h1 {
+  margin: 0;
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.9rem, 4vw, 3.2rem);
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  line-height: 1.05;
+  text-transform: uppercase;
+  color: #f0d89d;
+  text-shadow:
+    0 2px 0 rgba(42, 25, 6, 0.58),
+    0 14px 34px rgba(0, 0, 0, 0.62);
+}
+
+.typuj-page .typuj-page-header p {
+  margin: 8px 0 0;
+  font-family: 'Cinzel', serif;
+  font-size: clamp(0.78rem, 1vw, 0.95rem);
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(246, 222, 166, 0.88);
+}
+
+.typuj-page .typuj-panel,
+.typuj-page .typuj-leaderboard {
+  position: relative;
+  z-index: 2;
+  margin: 0 0 clamp(22px, 3vw, 36px);
+  padding: clamp(18px, 2.8vw, 34px);
+  border: 1px solid rgba(184, 132, 42, 0.42);
+  border-radius: 4px;
+  background:
+    linear-gradient(180deg, rgba(28, 20, 10, 0.82), rgba(12, 8, 4, 0.8));
+  color: #f3dfb0;
+  box-shadow:
+    0 24px 70px rgba(0, 0, 0, 0.44),
+    0 0 0 1px rgba(255, 217, 142, 0.08),
+    inset 0 1px 0 rgba(255, 226, 160, 0.12);
+  backdrop-filter: blur(1.25px);
+}
+
+.typuj-page .typuj-section-heading {
+  display: grid;
+  gap: 5px;
+  margin-bottom: 14px;
+}
+
+.typuj-page .typuj-section-heading span {
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(214, 170, 84, 0.84);
+}
+
+.typuj-page .typuj-section-heading h2,
+.typuj-page .typuj-leaderboard-header h2 {
+  margin: 0;
+  color: #f2d996;
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.22rem, 2.2vw, 2rem);
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  line-height: 1.08;
+  text-transform: uppercase;
+}
+
+.typuj-page .typuj-intro {
+  max-width: none;
+}
+
+.typuj-page .typuj-intro p {
+  max-width: 900px;
+  margin: 0;
+  color: rgba(246, 226, 181, 0.9);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.typuj-page .typuj-intro p strong {
+  color: #f6d682;
+}
+
+.typuj-page .typuj-rules {
+  margin-top: 20px;
+  padding: clamp(14px, 2vw, 22px);
+  border: 1px solid rgba(214, 170, 84, 0.28);
+  border-radius: 4px;
+  background: rgba(255, 239, 196, 0.12);
+  color: rgba(246, 226, 181, 0.9);
+}
+
+.typuj-page .typuj-rules > summary {
+  cursor: pointer;
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+  color: #d6aa54;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  list-style: none;
+  user-select: none;
+}
+
+.typuj-page .typuj-rules > summary::-webkit-details-marker {
+  display: none;
+}
+
+.typuj-page .typuj-rules > summary::before,
+.typuj-page .typuj-current details summary::before,
+.typuj-page .typuj-rank-details > summary::after {
+  color: #d6aa54;
+}
+
+.typuj-page .typuj-rules-list {
+  margin: 16px 0 18px;
+  padding-left: 22px;
+  color: rgba(246, 226, 181, 0.88);
+  line-height: 1.65;
+}
+
+.typuj-page .typuj-points-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.typuj-page .typuj-points-card {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  min-height: 126px;
+  padding: 16px 10px;
+  border: 1px solid rgba(184, 132, 42, 0.38);
+  border-radius: 4px;
+  background: rgba(255, 239, 196, 0.14);
+  color: #f3dfb0;
+  text-align: center;
+}
+
+.typuj-page .typuj-points-card.bonus {
+  border-color: rgba(214, 170, 84, 0.55);
+  background: rgba(214, 170, 84, 0.15);
+}
+
+.typuj-page .typuj-points-icon {
+  color: #d6aa54;
+  font-family: 'Cinzel', serif;
+  font-size: 1.35rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.typuj-page .typuj-points-card strong {
+  color: #f2d996;
+  font-family: 'Cinzel', serif;
+  font-size: 1.12rem;
+}
+
+.typuj-page .typuj-points-card small {
+  color: rgba(246, 226, 181, 0.78);
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
+.typuj-page .typuj-rules-note {
+  margin: 16px 0 0;
+  padding-top: 14px;
+  border-top: 1px dashed rgba(214, 170, 84, 0.28);
+  color: rgba(246, 226, 181, 0.82);
+  font-size: 0.92rem;
+}
+
+.typuj-page .typuj-rules-note strong {
+  color: #f2d996;
+}
+
+.typuj-page .typuj-lock-banner {
+  margin: 0 0 clamp(18px, 2.4vw, 28px);
+  padding: 14px 18px;
+  border: 1px solid rgba(214, 170, 84, 0.42);
+  border-radius: 4px;
+  background: rgba(18, 13, 7, 0.82);
+  box-shadow: 0 18px 46px rgba(0, 0, 0, 0.34);
+  color: #f2d996;
+  font-family: 'Cinzel', serif;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.typuj-page .typuj-lock-banner.open {
+  border-color: rgba(83, 194, 113, 0.5);
+  color: #c8f0c8;
+}
+
+.typuj-page .typuj-lock-banner.closed {
+  border-color: rgba(214, 91, 91, 0.54);
+  color: #ffd1c8;
+}
+
+.typuj-page .typuj-locked {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.typuj-page .typuj-locked span {
+  color: #f3dfb0;
+  font-weight: 800;
+}
+
+.typuj-page .typuj-locked button,
+.typuj-page .typuj-card button {
+  min-height: 44px;
+  padding: 11px 22px;
+  border: 1px solid rgba(214, 170, 84, 0.55);
+  border-radius: 4px;
+  background: linear-gradient(180deg, #d6aa54, #956c20);
+  color: #160f06;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: transform 160ms ease, filter 160ms ease, opacity 160ms ease;
+}
+
+.typuj-page .typuj-locked button:hover,
+.typuj-page .typuj-card button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  filter: brightness(1.08);
+}
+
+.typuj-page .typuj-card button:disabled,
+.typuj-page .typuj-card.locked select {
+  opacity: 0.58;
+  cursor: not-allowed;
+}
+
+.typuj-page .typuj-leaderboard-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 16px;
+}
+
+.typuj-page .typuj-leaderboard-meta {
+  color: rgba(246, 226, 181, 0.72);
+  font-family: 'Cinzel', serif;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.typuj-page .typuj-leaderboard-empty {
+  margin: 0;
+  color: rgba(246, 226, 181, 0.82);
+}
+
+.typuj-page .typuj-rank-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid rgba(184, 132, 42, 0.42);
+  border-radius: 4px;
+  background: rgba(18, 13, 7, 0.72);
+}
+
+.typuj-page .typuj-rank-table {
+  width: 100%;
+  min-width: 620px;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.typuj-page .typuj-rank-table th,
+.typuj-page .typuj-rank-table td {
+  padding: 13px 14px;
+  border-right: 1px solid rgba(98, 68, 28, 0.18);
+  border-bottom: 1px solid rgba(98, 68, 28, 0.18);
+  text-align: left;
+  vertical-align: top;
+}
+
+.typuj-page .typuj-rank-table th {
+  background: #120e08;
+  color: #d6aa54;
+  font-family: 'Cinzel', serif;
+  font-size: 0.82rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.typuj-page .typuj-rank-table td {
+  background: rgba(255, 239, 196, 0.58);
+  color: #2a1c0a;
+  font-weight: 800;
+}
+
+.typuj-page .typuj-rank-row.me td {
+  background: rgba(224, 178, 86, 0.34);
+}
+
+.typuj-page .typuj-rank-place,
+.typuj-page .typuj-rank-points {
+  width: 120px;
+  color: #4c310d;
+  font-family: 'Cinzel', serif;
+  font-weight: 900;
+  text-align: center !important;
+  white-space: nowrap;
+}
+
+.typuj-page .typuj-rank-details > summary {
+  cursor: pointer;
+  list-style: none;
+}
+
+.typuj-page .typuj-rank-details > summary::-webkit-details-marker {
+  display: none;
+}
+
+.typuj-page .typuj-rank-details > summary::after {
+  content: '▾';
+  margin-left: 8px;
+  font-size: 0.8rem;
+}
+
+.typuj-page .typuj-rank-details[open] > summary::after {
+  content: '▴';
+}
+
+.typuj-page .typuj-rank-name {
+  color: #201406;
+  font-family: 'Cinzel', serif;
+  font-weight: 900;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.typuj-page .typuj-rank-name em {
+  color: #6b4716;
+  font-style: normal;
+}
+
+.typuj-page .typuj-rank-breakdown,
+.typuj-page .typuj-rank-breakdown-empty {
+  margin: 10px 0 0;
+  color: #3a2812;
+}
+
+.typuj-page .typuj-rank-breakdown {
+  padding-left: 18px;
+}
+
+.typuj-page .typuj-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(16px, 2vw, 24px);
+  margin-top: clamp(20px, 3vw, 34px);
+}
+
+.typuj-page .typuj-card {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+  padding: 0 18px 20px;
+  border: 1px solid rgba(126, 84, 29, 0.52);
+  border-radius: 4px;
+  background:
+    linear-gradient(135deg, rgba(245, 223, 174, 0.9), rgba(213, 178, 112, 0.76));
+  color: #261909;
+  box-shadow:
+    0 18px 44px rgba(0, 0, 0, 0.34),
+    inset 0 1px 0 rgba(255, 245, 210, 0.55);
+}
+
+.typuj-page .typuj-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 -18px;
+  padding: 14px 18px;
+  border-bottom: 1px solid rgba(214, 170, 84, 0.28);
+  background: #120e08;
+}
+
+.typuj-page .typuj-card h3 {
+  margin: 0;
+  color: #d6aa54;
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1rem, 1.25vw, 1.22rem);
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  line-height: 1.15;
+  text-transform: uppercase;
+}
+
+.typuj-page .typuj-card-tag {
+  flex: 0 0 auto;
+  padding: 4px 9px;
+  border: 1px solid rgba(214, 170, 84, 0.42);
+  border-radius: 999px;
+  background: rgba(214, 170, 84, 0.12);
+  color: #e8d29b;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.typuj-page .typuj-card-desc,
+.typuj-page .typuj-result-podium,
+.typuj-page .typuj-current {
+  border: 1px solid rgba(98, 68, 28, 0.18);
+  border-radius: 4px;
+  background: rgba(255, 239, 196, 0.44);
+  color: #33220c;
+}
+
+.typuj-page .typuj-card-desc {
+  margin: 0;
+  padding: 11px 13px;
+  border-left: 3px solid #8e621e;
+  font-size: 0.92rem;
+  font-style: italic;
+  line-height: 1.45;
+}
+
+.typuj-page .typuj-result-podium {
+  display: grid;
+  gap: 8px;
+  padding: 12px 13px;
+}
+
+.typuj-page .typuj-result-label {
+  color: #295a28;
+  font-size: 0.76rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.typuj-page .typuj-result-places {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px 14px;
+}
+
+.typuj-page .typuj-result-place,
+.typuj-page .typuj-result-place strong {
+  color: #231707;
+}
+
+.typuj-page .typuj-podium-form {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.typuj-page .typuj-podium-slot {
+  display: grid;
+  gap: 6px;
+}
+
+.typuj-page .typuj-podium-label {
+  color: #5f3f13;
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.typuj-page .typuj-card select,
+.typuj-page .typuj-card input {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 38px 10px 12px;
+  border: 1px solid rgba(73, 45, 11, 0.4);
+  border-radius: 4px;
+  background-color: rgba(255, 249, 229, 0.92);
+  color: #1e1407;
+  font: inherit;
+}
+
+.typuj-page .typuj-card select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path fill='%23533310' d='M6 8L0 0h12z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  cursor: pointer;
+}
+
+.typuj-page .typuj-card select:focus,
+.typuj-page .typuj-card input:focus {
+  outline: 2px solid rgba(214, 170, 84, 0.42);
+  outline-offset: 2px;
+  border-color: #7d5519;
+  background-color: #fff8dd;
+}
+
+.typuj-page .typuj-card select option {
+  background: #fff8dd;
+  color: #1e1407;
+}
+
+.typuj-page .typuj-podium-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 2px;
+}
+
+.typuj-page .typuj-current {
+  padding: 10px 12px;
+  font-size: 0.9rem;
+}
+
+.typuj-page .typuj-current details summary {
+  cursor: pointer;
+  color: #2a1c0a;
+  font-weight: 900;
+  list-style: none;
+  user-select: none;
+}
+
+.typuj-page .typuj-current details summary::-webkit-details-marker {
+  display: none;
+}
+
+.typuj-page .typuj-current ul {
+  display: grid;
+  gap: 5px;
+  margin: 10px 0 0;
+  padding-left: 18px;
+}
+
+.typuj-page .typuj-current li,
+.typuj-page .typuj-current li strong {
+  color: #2a1c0a;
+}
+
+.typuj-page .typuj-feedback {
+  min-height: 1em;
+  margin: 0;
+  color: #295a28;
+  font-weight: 800;
+}
+
+.typuj-page .typuj-feedback.error {
+  color: #8e2525;
+}
+
+.typuj-page .typuj-toast {
+  border: 1px solid rgba(214, 170, 84, 0.42);
+  border-radius: 4px;
+  background: rgba(18, 13, 7, 0.94);
+  color: #f3dfb0;
+  box-shadow: 0 18px 46px rgba(0, 0, 0, 0.38);
+}
+
+@media (max-width: 1180px) {
+  .typuj-page .typuj-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .typuj-page .typuj-points-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .typuj-page .typuj-stage {
+    min-height: calc(100vh - 76px);
+    padding: 30px 12px 42px;
+    background-position: center top;
+    background-attachment: scroll;
+  }
+
+  .typuj-page .typuj-inner {
+    width: min(100%, calc(100vw - 24px));
+  }
+
+  .typuj-page .typuj-leaderboard-header,
+  .typuj-page .typuj-locked {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 680px) {
+  .typuj-page .typuj-page-header h1 {
+    font-size: clamp(1.5rem, 9vw, 2.2rem);
+  }
+
+  .typuj-page .typuj-page-header p {
+    letter-spacing: 0.12em;
+  }
+
+  .typuj-page .typuj-panel,
+  .typuj-page .typuj-leaderboard {
+    padding: 16px 12px;
+  }
+
+  .typuj-page .typuj-list,
+  .typuj-page .typuj-points-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .typuj-page .typuj-podium-actions,
+  .typuj-page .typuj-podium-actions button,
+  .typuj-page .typuj-locked button {
+    width: 100%;
+  }
+
+  .typuj-page .typuj-card-head {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .typuj-page .typuj-rank-table {
+    min-width: 560px;
+  }
+}
