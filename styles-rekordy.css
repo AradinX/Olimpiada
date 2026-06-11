@@ -1,0 +1,456 @@
+/* ==========================================================
+   Rekordy page
+   Dark Hall of Fame stage + real HTML records.
+   ========================================================== */
+
+.rekordy-page.greek-home-redesign {
+  display: block;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background: #080502;
+}
+
+.rekordy-page.greek-home-redesign::before,
+.rekordy-page.greek-home-redesign::after {
+  content: none;
+}
+
+.rekordy-page .records-stage {
+  position: relative;
+  left: 50%;
+  width: 100vw !important;
+  max-width: none !important;
+  min-height: calc(100vh - 90px);
+  margin: 0 0 0 -50vw !important;
+  padding: clamp(48px, 5vw, 90px) clamp(20px, 4vw, 72px);
+  border: 0 !important;
+  border-radius: 0 !important;
+  display: block;
+  overflow: hidden;
+  isolation: isolate;
+  background-image:
+    linear-gradient(rgba(8, 5, 2, 0.08), rgba(8, 5, 2, 0.28)),
+    url('assets/backgrounds/records-page-stage-bg.png');
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  box-shadow: none !important;
+}
+
+.rekordy-page .records-stage::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(3, 2, 1, 0.62), rgba(3, 2, 1, 0.06) 30%, rgba(3, 2, 1, 0.07) 70%, rgba(3, 2, 1, 0.64)),
+    radial-gradient(ellipse at 50% 18%, rgba(226, 176, 91, 0.14), transparent 42%),
+    linear-gradient(180deg, rgba(8, 5, 2, 0.03), rgba(8, 5, 2, 0.42));
+}
+
+.rekordy-page .records-inner {
+  position: relative;
+  z-index: 2;
+  width: min(1380px, calc(100vw - 64px));
+  margin: 0 auto;
+}
+
+.rekordy-page .records-page-header {
+  text-align: center;
+  margin-bottom: clamp(26px, 3.6vw, 48px);
+  color: #ead39b;
+  text-shadow: 0 3px 18px rgba(0, 0, 0, 0.58);
+}
+
+.rekordy-page .records-page-header .laurel-pair {
+  margin-bottom: 14px;
+}
+
+.rekordy-page .records-page-header .laurel-pair img {
+  height: 36px;
+  opacity: 0.78;
+  filter: brightness(0.72) sepia(1) saturate(2);
+}
+
+.rekordy-page .records-page-header h1 {
+  margin: 0;
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.9rem, 4vw, 3.2rem);
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  line-height: 1.05;
+  text-transform: uppercase;
+  color: #f0d89d;
+  text-shadow:
+    0 2px 0 rgba(42, 25, 6, 0.58),
+    0 14px 34px rgba(0, 0, 0, 0.62);
+}
+
+.rekordy-page .records-page-header p {
+  margin: 8px 0 0;
+  font-family: 'Cinzel', serif;
+  font-size: clamp(0.78rem, 1vw, 0.95rem);
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(246, 222, 166, 0.88);
+}
+
+.rekordy-page .records-panel {
+  position: relative;
+  z-index: 2;
+  overflow: hidden;
+  margin: 0 0 clamp(24px, 3vw, 40px);
+  padding: clamp(18px, 2.8vw, 34px);
+  border: 1px solid rgba(184, 132, 42, 0.42);
+  border-radius: 4px;
+  background:
+    linear-gradient(180deg, rgba(28, 20, 10, 0.78), rgba(12, 8, 4, 0.78));
+  color: #f3dfb0;
+  box-shadow:
+    0 24px 70px rgba(0, 0, 0, 0.44),
+    0 0 0 1px rgba(255, 217, 142, 0.08),
+    inset 0 1px 0 rgba(255, 226, 160, 0.12);
+  backdrop-filter: blur(1.25px);
+}
+
+.rekordy-page .records-panel > * {
+  position: relative;
+  z-index: 3;
+}
+
+.rekordy-page .records-section-heading {
+  position: relative;
+  display: grid;
+  gap: 5px;
+  margin-bottom: clamp(18px, 2.2vw, 30px);
+}
+
+.rekordy-page .records-section-heading span {
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(214, 170, 84, 0.84);
+}
+
+.rekordy-page .records-section-heading h2 {
+  margin: 0;
+  color: #f2d996;
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.22rem, 2.2vw, 2rem);
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  line-height: 1.08;
+  text-transform: uppercase;
+}
+
+.rekordy-page .records-top3-section {
+  min-height: 410px;
+}
+
+.rekordy-page .records-top3-section::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 50% 18%, rgba(226, 185, 102, 0.14), transparent 34%),
+    linear-gradient(180deg, rgba(255, 220, 146, 0.04), transparent 44%);
+}
+
+.rekordy-page .records-top3 {
+  position: relative;
+  display: grid;
+  grid-template-columns: 0.9fr 1.15fr 0.9fr;
+  gap: clamp(16px, 2.5vw, 32px);
+  align-items: stretch;
+  margin: clamp(28px, 4vw, 48px) 0 0;
+  overflow: hidden;
+}
+
+.rekordy-page .records-top3 > * {
+  position: relative;
+  z-index: 2;
+}
+
+.rekordy-page .record-card {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto 1fr auto auto;
+  justify-items: center;
+  gap: 12px;
+  min-height: 238px;
+  padding: 0 18px 24px;
+  border: 1px solid rgba(184, 132, 42, 0.48);
+  border-radius: 4px;
+  background:
+    linear-gradient(180deg, rgba(34, 25, 13, 0.9), rgba(16, 11, 6, 0.86));
+  color: #f3dfb0;
+  box-shadow:
+    0 22px 56px rgba(0, 0, 0, 0.42),
+    inset 0 1px 0 rgba(255, 224, 154, 0.12);
+  text-align: center;
+}
+
+.rekordy-page .record-card:nth-child(1) {
+  grid-column: 2;
+  grid-row: 1;
+  min-height: 270px;
+  transform: translateY(-10px);
+  border-color: rgba(214, 170, 84, 0.75);
+  background:
+    linear-gradient(180deg, rgba(47, 34, 16, 0.94), rgba(18, 12, 6, 0.9));
+  box-shadow:
+    0 30px 72px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(214, 170, 84, 0.18),
+    inset 0 1px 0 rgba(255, 232, 176, 0.18);
+}
+
+.rekordy-page .record-card:nth-child(2) {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.rekordy-page .record-card:nth-child(3) {
+  grid-column: 3;
+  grid-row: 1;
+}
+
+.rekordy-page .record-card::before {
+  content: '';
+  position: absolute;
+  inset: 9px;
+  border: 1px solid rgba(214, 170, 84, 0.14);
+  pointer-events: none;
+}
+
+.rekordy-page .record-medal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(100% + 36px);
+  min-height: 48px;
+  margin: 0 -18px 10px;
+  padding: 10px 14px;
+  border-bottom: 1px solid rgba(214, 170, 84, 0.28);
+  background:
+    linear-gradient(180deg, rgba(11, 8, 4, 0.92), rgba(22, 15, 7, 0.9));
+  color: #d6aa54;
+  font-size: 0;
+  line-height: 1;
+}
+
+.rekordy-page .record-card:nth-child(1) .record-medal::before { content: 'I miejsce'; }
+.rekordy-page .record-card:nth-child(2) .record-medal::before { content: 'II miejsce'; }
+.rekordy-page .record-card:nth-child(3) .record-medal::before { content: 'III miejsce'; }
+
+.rekordy-page .record-medal::before {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(0.82rem, 1vw, 0.96rem);
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+.rekordy-page .record-holder {
+  align-self: end;
+  max-width: 100%;
+  color: #f2dfad;
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.02rem, 1.45vw, 1.34rem);
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+  text-transform: uppercase;
+}
+
+.rekordy-page .record-value {
+  color: #e6bd64;
+  font-family: 'Cinzel', serif;
+  font-size: clamp(2rem, 4vw, 4rem);
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  line-height: 0.95;
+  text-shadow: 0 6px 18px rgba(0, 0, 0, 0.36);
+}
+
+.rekordy-page .record-card:nth-child(1) .record-value {
+  font-size: clamp(2.35rem, 5vw, 4.7rem);
+}
+
+.rekordy-page .record-card > div:last-child:not(.record-value):not(.record-holder):not(.record-medal) {
+  color: rgba(242, 217, 150, 0.74) !important;
+  font-family: 'Cinzel', serif;
+  font-size: 0.82rem !important;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+}
+
+.rekordy-page .status-copy {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 16px;
+  border: 1px solid rgba(184, 132, 42, 0.36);
+  border-radius: 4px;
+  background: rgba(18, 13, 7, 0.72);
+  color: #f3dfb0;
+  font-weight: 800;
+  text-align: center;
+}
+
+.rekordy-page .records-history-section {
+  padding: clamp(18px, 2.8vw, 34px);
+}
+
+.rekordy-page .records-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid rgba(184, 132, 42, 0.42);
+  border-radius: 4px;
+  background: rgba(18, 13, 7, 0.72);
+  box-shadow:
+    0 18px 46px rgba(0, 0, 0, 0.34),
+    inset 0 1px 0 rgba(255, 224, 154, 0.1);
+}
+
+.rekordy-page #rekordy {
+  width: 100%;
+  min-width: 680px;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 0;
+  background: transparent;
+  color: #2a1c0a;
+  box-shadow: none;
+}
+
+.rekordy-page #rekordy thead {
+  background: #120e08;
+}
+
+.rekordy-page #rekordy th,
+.rekordy-page #rekordy td {
+  padding: 13px 14px;
+  border: 0;
+  border-right: 1px solid rgba(98, 68, 28, 0.18);
+  border-bottom: 1px solid rgba(98, 68, 28, 0.18);
+  color: #2a1c0a;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: clamp(0.92rem, 1.05vw, 1.05rem);
+  font-weight: 800;
+  line-height: 1.2;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.rekordy-page #rekordy th {
+  border-bottom: 2px solid rgba(214, 170, 84, 0.7);
+  border-right-color: rgba(214, 170, 84, 0.28);
+  background: #120e08;
+  color: #d6aa54;
+  font-family: 'Cinzel', serif;
+  font-size: clamp(0.78rem, 0.9vw, 0.92rem);
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.rekordy-page #rekordy th:first-child,
+.rekordy-page #rekordy td:first-child {
+  min-width: 220px;
+  text-align: left;
+}
+
+.rekordy-page #rekordy td {
+  background: rgba(255, 239, 196, 0.58);
+}
+
+.rekordy-page #rekordy tbody tr:nth-child(even) td {
+  background: rgba(244, 221, 174, 0.62);
+}
+
+.rekordy-page #rekordy tbody tr:hover td {
+  background: rgba(224, 178, 86, 0.28);
+}
+
+.rekordy-page #rekordy tr:last-child td {
+  border-bottom: 0;
+}
+
+.rekordy-page #rekordy th:last-child,
+.rekordy-page #rekordy td:last-child {
+  border-right: 0;
+}
+
+.rekordy-page #rekordy td strong {
+  color: #201406;
+  font-family: 'Cinzel', serif;
+  font-size: 0.95em;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 900px) {
+  .rekordy-page .records-stage {
+    min-height: calc(100vh - 76px);
+    padding: 30px 12px 42px;
+    background-position: center top;
+    background-attachment: scroll;
+  }
+
+  .rekordy-page .records-inner {
+    width: min(100%, calc(100vw - 24px));
+  }
+
+  .rekordy-page .records-top3-section {
+    min-height: 0;
+  }
+
+  .rekordy-page .records-top3 {
+    grid-template-columns: 1fr;
+    margin-top: 20px;
+  }
+
+  .rekordy-page .record-card,
+  .rekordy-page .record-card:nth-child(1),
+  .rekordy-page .record-card:nth-child(2),
+  .rekordy-page .record-card:nth-child(3) {
+    grid-column: auto;
+    grid-row: auto;
+    min-height: 0;
+    transform: none;
+  }
+
+}
+
+@media (max-width: 640px) {
+  .rekordy-page .records-page-header h1 {
+    font-size: clamp(1.55rem, 10vw, 2.25rem);
+  }
+
+  .rekordy-page .records-page-header p {
+    letter-spacing: 0.12em;
+  }
+
+  .rekordy-page .records-panel {
+    padding: 16px 12px;
+  }
+
+  .rekordy-page #rekordy {
+    min-width: 620px;
+  }
+
+  .rekordy-page #rekordy th,
+  .rekordy-page #rekordy td {
+    padding: 10px 9px;
+    font-size: 0.88rem;
+  }
+}
